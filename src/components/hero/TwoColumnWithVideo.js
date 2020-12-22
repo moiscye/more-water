@@ -4,8 +4,6 @@ import tw from "twin.macro";
 //eslint-disable-next-line
 import { css } from "styled-components/macro";
 
-import Header from "../headers/light.js";
-
 import ReactModalAdapter from "../../helpers/ReactModalAdapter.js";
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
 
@@ -59,12 +57,13 @@ const StyledModal = styled(ReactModalAdapter)`
 const CloseModalButton = tw.button`absolute top-0 right-0 mt-8 mr-8 hocus:text-primary-500`;
 
 export default ({
+  id = "",
   heading = "Modern React Templates, Just For You",
   description = "Our templates are easy to setup, understand and customize. Fully modular components with a variety of pages and components.",
   primaryButtonText = "Get Started",
-  primaryButtonUrl = "#",
+  primaryButtonUrl = "#nosotros",
   watchVideoButtonText = "Watch Video",
-  watchVideoYoutubeUrl = "https://www.youtube.com/embed/_GuOjXYl5ew",
+  watchVideoYoutubeUrl = "https://www.youtube.com/embed/nbmJnCHXaW8",
   imageSrc = DesignIllustration,
   imageCss = null,
   imageDecoratorBlob = false,
@@ -74,48 +73,45 @@ export default ({
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
 
   return (
-    <>
-      <Header />
-      <Container>
-        <TwoColumn>
-          <LeftColumn>
-            <Heading>{heading}</Heading>
-            <Paragraph>{description}</Paragraph>
-            <Actions>
-              <PrimaryButton as="a" href={primaryButtonUrl}>
-                {primaryButtonText}
-              </PrimaryButton>
-              <WatchVideoButton onClick={toggleModal}>
-                <span className="playIconContainer">
-                  <PlayIcon className="playIcon" />
-                </span>
-                <span className="playText">{watchVideoButtonText}</span>
-              </WatchVideoButton>
-            </Actions>
-          </LeftColumn>
-          <RightColumn>
-            <IllustrationContainer>
-              <img css={imageCss} src={imageSrc} alt="Hero" />
-              {imageDecoratorBlob && <DecoratorBlob2 />}
-            </IllustrationContainer>
-          </RightColumn>
-        </TwoColumn>
-        <DecoratorBlob1 />
-        <StyledModal
-          closeTimeoutMS={300}
-          className="mainHeroModal"
-          isOpen={modalIsOpen}
-          onRequestClose={toggleModal}
-          shouldCloseOnOverlayClick={true}
-        >
-          <CloseModalButton onClick={toggleModal}>
-            <CloseIcon tw="w-6 h-6" />
-          </CloseModalButton>
-          <div className="content">
-            <ResponsiveVideoEmbed url={watchVideoYoutubeUrl} tw="w-full" />
-          </div>
-        </StyledModal>
-      </Container>
-    </>
+    <Container id={id}>
+      <TwoColumn>
+        <LeftColumn>
+          <Heading>{heading}</Heading>
+          <Paragraph>{description}</Paragraph>
+          <Actions>
+            <PrimaryButton as="a" href={primaryButtonUrl}>
+              {primaryButtonText}
+            </PrimaryButton>
+            <WatchVideoButton onClick={toggleModal}>
+              <span className="playIconContainer">
+                <PlayIcon className="playIcon" />
+              </span>
+              <span className="playText">{watchVideoButtonText}</span>
+            </WatchVideoButton>
+          </Actions>
+        </LeftColumn>
+        <RightColumn>
+          <IllustrationContainer>
+            <img css={imageCss} src={imageSrc} alt="Hero" />
+            {imageDecoratorBlob && <DecoratorBlob2 />}
+          </IllustrationContainer>
+        </RightColumn>
+      </TwoColumn>
+      <DecoratorBlob1 />
+      <StyledModal
+        closeTimeoutMS={300}
+        className="mainHeroModal"
+        isOpen={modalIsOpen}
+        onRequestClose={toggleModal}
+        shouldCloseOnOverlayClick={true}
+      >
+        <CloseModalButton onClick={toggleModal}>
+          <CloseIcon tw="w-6 h-6" />
+        </CloseModalButton>
+        <div className="content">
+          <ResponsiveVideoEmbed url={watchVideoYoutubeUrl} tw="w-full" />
+        </div>
+      </StyledModal>
+    </Container>
   );
 };

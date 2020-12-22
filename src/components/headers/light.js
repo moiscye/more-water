@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import AnchorLink from "react-anchor-link-smooth-scroll";
 // import { Link } from "react-router-dom";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -10,8 +11,11 @@ import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
 import logo from "../../images/logo.svg";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
+import { ReactComponent as SvgPhone } from "images/phone.svg";
 
-const Header = tw.header`
+const PhoneIcon = tw(SvgPhone)`w-6 h-6 inline-block mr-2 `;
+const Container = tw.div`top-0 fixed bg-white shadow-md  z-50 w-full py-4 px-8 mb-2`;
+const Header = tw.header` 
   flex justify-between items-center
   max-w-screen-xl mx-auto
 `;
@@ -21,8 +25,8 @@ export const NavLinks = tw.div`inline-block`;
 /* hocus: stands for "on hover or focus"
  * hocus:bg-primary-700 will apply the bg-primary-700 class on hover or focus
  */
-export const NavLink = tw.a`
-  text-lg my-2 lg:text-sm lg:mx-6 lg:my-0
+export const NavLink = tw(AnchorLink)`
+  text-lg my-2 lg:text-sm  xl:text-base lg:mx-2 xl:mx-4 lg:my-0
   font-semibold tracking-wide transition duration-300
   pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
 `;
@@ -33,6 +37,9 @@ export const PrimaryLink = tw(NavLink)`
   hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline
   border-b-0
 `;
+export const SecondaryLink = tw(
+  NavLink
+)`lg:mx-0  lg:px-0 py-3 text-primary-100  text-lg lg:text-base  xl:text-lg font-bold`;
 
 export const LogoLink = styled(NavLink)`
   ${tw`flex items-center font-black border-b-0 text-2xl! ml-0!`};
@@ -58,6 +65,7 @@ export const DesktopNavLinks = tw.nav`
 `;
 
 export default ({
+  id = "",
   roundedHeaderButton = false,
   logoLink,
   links,
@@ -82,16 +90,27 @@ export default ({
       {/* <NavLink as={Link} to="/contactus">
         Acerca de
       </NavLink> */}
-      <NavLink href="/#">Nosotros</NavLink>
-      <NavLink href="/#">Servicios</NavLink>
-      <NavLink href="/#">Precios</NavLink>
-      <NavLink href="/contactus">Contacto</NavLink>
-      {/* <NavLink href="/#" tw="lg:ml-12!">
-        Login
-      </NavLink> */}
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
-        Cotizacion
-      </PrimaryLink>
+      <NavLink href="#nosotros" css="">
+        Nosotros
+      </NavLink>
+      <NavLink href="#servicios" css="">
+        Servicios
+      </NavLink>
+      <NavLink href="#testimonios" css="">
+        Testimonios
+      </NavLink>
+      <NavLink href="#faq" css="">
+        Preguntas Frecentes
+      </NavLink>
+      <NavLink href="#contacto" css="">
+        Contacto
+      </NavLink>
+      <SecondaryLink href="/#" tw="lg:ml-12!">
+        <PhoneIcon />
+        222-436-2510
+      </SecondaryLink>
+      {/* <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
+      </PrimaryLink> */}
     </NavLinks>,
   ];
 
@@ -100,7 +119,7 @@ export default ({
     collapseBreakPointCssMap[collapseBreakpointClass];
 
   const defaultLogoLink = (
-    <LogoLink href="/">
+    <LogoLink as="a" href="/">
       <img src={logo} alt="logo" />
       Angelopolis
     </LogoLink>
@@ -110,35 +129,38 @@ export default ({
   links = links || defaultLinks;
 
   return (
-    <Header className={className || "header-light"}>
-      <DesktopNavLinks css={collapseBreakpointCss.desktopNavLinks}>
-        {logoLink}
-        {links}
-      </DesktopNavLinks>
-
-      <MobileNavLinksContainer
-        css={collapseBreakpointCss.mobileNavLinksContainer}
-      >
-        {logoLink}
-        <MobileNavLinks
-          initial={{ x: "150%", display: "none" }}
-          animate={animation}
-          css={collapseBreakpointCss.mobileNavLinks}
-        >
+    <Container>
+      <Header id={id} className={className || "header-light"}>
+        <DesktopNavLinks css={collapseBreakpointCss.desktopNavLinks}>
+          {logoLink}
           {links}
-        </MobileNavLinks>
-        <NavToggle
-          onClick={toggleNavbar}
-          className={showNavLinks ? "open" : "closed"}
+        </DesktopNavLinks>
+
+        <MobileNavLinksContainer
+          css={collapseBreakpointCss.mobileNavLinksContainer}
         >
-          {showNavLinks ? (
-            <CloseIcon tw="w-6 h-6" />
-          ) : (
-            <MenuIcon tw="w-6 h-6" />
-          )}
-        </NavToggle>
-      </MobileNavLinksContainer>
-    </Header>
+          {logoLink}
+          <MobileNavLinks
+            initial={{ x: "150%", display: "none" }}
+            animate={animation}
+            css={collapseBreakpointCss.mobileNavLinks}
+          >
+            {links}
+          </MobileNavLinks>
+          <NavToggle
+            onClick={toggleNavbar}
+            onBlur={toggleNavbar}
+            className={showNavLinks ? "open" : "closed"}
+          >
+            {showNavLinks ? (
+              <CloseIcon tw="w-6 h-6" />
+            ) : (
+              <MenuIcon tw="w-6 h-6" />
+            )}
+          </NavToggle>
+        </MobileNavLinksContainer>
+      </Header>
+    </Container>
   );
 };
 

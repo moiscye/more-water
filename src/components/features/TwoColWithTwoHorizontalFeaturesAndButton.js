@@ -65,6 +65,7 @@ const PrimaryButton = styled(PrimaryButtonBase)((props) => [
 ]);
 
 export default ({
+  id = "",
   subheading = "Our Expertise",
   heading = (
     <>
@@ -112,7 +113,7 @@ export default ({
   if (!features) features = defaultFeatures;
 
   return (
-    <Container>
+    <Container id={id}>
       <TwoColumn>
         <ImageColumn>
           <Image

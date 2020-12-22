@@ -2,7 +2,10 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import { SectionHeading, Subheading as SubheadingBase } from "components/misc/Headings.js";
+import {
+  SectionHeading,
+  Subheading as SubheadingBase,
+} from "components/misc/Headings.js";
 import { SectionDescription } from "components/misc/Typography.js";
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts.js";
@@ -20,7 +23,7 @@ const Plan = styled.div`
     ${tw`rounded-t-lg absolute top-0 inset-x-0 h-2`}
   }
 
-  ${props =>
+  ${(props) =>
     props.featured &&
     css`
       background: rgb(100,21,255);
@@ -81,13 +84,13 @@ const DecoratorBlob = styled(SvgDecoratorBlob)`
   ${tw`pointer-events-none -z-20 absolute left-0 bottom-0 h-64 w-64 opacity-25 transform -translate-x-1/2 translate-y-1/2`}
 `;
 
-
 export default ({
   subheading = "Pricing",
   heading = "Flexible Plans.",
   description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   plans = null,
-  primaryButtonText = "Buy Now"
+  primaryButtonText = "Buy Now",
+  id = "threePlans",
 }) => {
   const defaultPlans = [
     {
@@ -95,14 +98,24 @@ export default ({
       price: "$17.99",
       duration: "Monthly",
       mainFeature: "Suited for Personal Blogs",
-      features: ["30 Templates", "7 Landing Pages", "12 Internal Pages", "Basic Assistance"],
+      features: [
+        "30 Templates",
+        "7 Landing Pages",
+        "12 Internal Pages",
+        "Basic Assistance",
+      ],
     },
     {
       name: "Business",
       price: "$37.99",
       duration: "Monthly",
       mainFeature: "Suited for Production Websites",
-      features: ["60 Templates", "8 Landing Pages", "22 Internal Pages", "Priority Assistance"],
+      features: [
+        "60 Templates",
+        "8 Landing Pages",
+        "22 Internal Pages",
+        "Priority Assistance",
+      ],
       featured: true,
     },
     {
@@ -110,7 +123,12 @@ export default ({
       price: "$57.99",
       duration: "Monthly",
       mainFeature: "Suited for Big Companies",
-      features: ["90 Templates", "9 Landing Pages", "37 Internal Pages", "Personal Assistance"],
+      features: [
+        "90 Templates",
+        "9 Landing Pages",
+        "37 Internal Pages",
+        "Personal Assistance",
+      ],
     },
   ];
 
@@ -119,20 +137,35 @@ export default ({
   const highlightGradientsCss = [
     css`
       background: rgb(56, 178, 172);
-      background: linear-gradient(115deg, rgba(56, 178, 172, 1) 0%, rgba(129, 230, 217, 1) 100%);
+      background: linear-gradient(
+        115deg,
+        rgba(56, 178, 172, 1) 0%,
+        rgba(129, 230, 217, 1) 100%
+      );
     `,
     css`
       background: rgb(56, 178, 172);
-      background-image: linear-gradient(115deg, #6415ff, #7431ff, #8244ff, #8e56ff, #9a66ff);
+      background-image: linear-gradient(
+        115deg,
+        #6415ff,
+        #7431ff,
+        #8244ff,
+        #8e56ff,
+        #9a66ff
+      );
     `,
     css`
       background: rgb(245, 101, 101);
-      background: linear-gradient(115deg, rgba(245, 101, 101, 1) 0%, rgba(254, 178, 178, 1) 100%);
-    `
+      background: linear-gradient(
+        115deg,
+        rgba(245, 101, 101, 1) 0%,
+        rgba(254, 178, 178, 1) 100%
+      );
+    `,
   ];
 
   return (
-    <Container>
+    <Container id={id}>
       <ContentWithPaddingXl>
         <HeaderContainer>
           {subheading && <Subheading>{subheading}</Subheading>}
@@ -142,7 +175,14 @@ export default ({
         <PlansContainer>
           {plans.map((plan, index) => (
             <Plan key={index} featured={plan.featured}>
-              {!plan.featured && <div className="planHighlight" css={highlightGradientsCss[index % highlightGradientsCss.length]} />}
+              {!plan.featured && (
+                <div
+                  className="planHighlight"
+                  css={
+                    highlightGradientsCss[index % highlightGradientsCss.length]
+                  }
+                />
+              )}
               <PlanHeader>
                 <span className="name">{plan.name}</span>
                 <span className="price">{plan.price}</span>
@@ -157,11 +197,15 @@ export default ({
                 ))}
               </PlanFeatures>
               <PlanAction>
-                <BuyNowButton css={!plan.featured && highlightGradientsCss[index]}>{primaryButtonText}</BuyNowButton>
+                <BuyNowButton
+                  css={!plan.featured && highlightGradientsCss[index]}
+                >
+                  {primaryButtonText}
+                </BuyNowButton>
               </PlanAction>
             </Plan>
           ))}
-          <DecoratorBlob/>
+          <DecoratorBlob />
         </PlansContainer>
       </ContentWithPaddingXl>
     </Container>

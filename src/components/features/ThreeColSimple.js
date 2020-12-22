@@ -54,6 +54,7 @@ const DecoratorBlob = styled(SvgDecoratorBlob3)`
 `;
 
 export default ({
+  id = "",
   cards = [
     {
       imageSrc: ShieldIconImage,
@@ -90,7 +91,7 @@ export default ({
    *  4) url - the url that the card should goto on click
    */
   return (
-    <Container>
+    <Container id={id}>
       <ContentWithPaddingXl>
         {subheading && <Subheading>{subheading}</Subheading>}
         {heading && <Heading>{heading}</Heading>}

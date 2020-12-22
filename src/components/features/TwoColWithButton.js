@@ -45,6 +45,7 @@ const PrimaryButton = styled(PrimaryButtonBase)((props) => [
 ]);
 
 export default ({
+  id = "",
   subheading = "Our Expertise",
   heading = (
     <>
@@ -67,7 +68,7 @@ export default ({
   // The textOnLeft boolean prop can be used to display either the text on left or right side of the image.
 
   return (
-    <Container>
+    <Container id={id}>
       <TwoColumn>
         <ImageColumn>
           <Image
