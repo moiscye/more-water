@@ -144,12 +144,13 @@ export default ({
             initial={{ x: "150%", display: "none" }}
             animate={animation}
             css={collapseBreakpointCss.mobileNavLinks}
+            // onClick={toggleNavbar}
           >
             {links}
           </MobileNavLinks>
           <NavToggle
             onClick={toggleNavbar}
-            onBlur={toggleNavbar}
+            // onBlur={toggleNavbar}
             className={showNavLinks ? "open" : "closed"}
           >
             {showNavLinks ? (
