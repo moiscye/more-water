@@ -144,19 +144,15 @@ export default ({
             initial={{ x: "150%", display: "none" }}
             animate={animation}
             css={collapseBreakpointCss.mobileNavLinks}
-            // onClick={toggleNavbar}
+            onClick={() => toggleNavbar(false)}
           >
             {links}
           </MobileNavLinks>
-          <NavToggle
-            onClick={toggleNavbar}
-            // onBlur={toggleNavbar}
-            className={showNavLinks ? "open" : "closed"}
-          >
+          <NavToggle className={showNavLinks ? "open" : "closed"}>
             {showNavLinks ? (
-              <CloseIcon tw="w-6 h-6" />
+              <CloseIcon onClick={() => toggleNavbar(false)} tw="w-6 h-6" />
             ) : (
-              <MenuIcon tw="w-6 h-6" />
+              <MenuIcon onClick={() => toggleNavbar(true)} tw="w-6 h-6" />
             )}
           </NavToggle>
         </MobileNavLinksContainer>
