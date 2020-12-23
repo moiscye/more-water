@@ -41,6 +41,10 @@ export const SecondaryLink = tw(
   NavLink
 )`lg:mx-0  lg:px-0 py-3 text-primary-100  text-lg lg:text-base  xl:text-lg font-bold`;
 
+export const CenterPhoneLink = tw(
+  SecondaryLink
+)`hidden md:inline lg:hidden mr-10`;
+
 export const LogoLink = styled(NavLink)`
   ${tw`flex items-center font-black border-b-0 text-2xl! ml-0!`};
 
@@ -105,7 +109,7 @@ export default ({
       <NavLink href="#contacto" css="">
         Contacto
       </NavLink>
-      <SecondaryLink href="/#" tw="lg:ml-12!">
+      <SecondaryLink as="a" href="tel:2224362510" tw="lg:ml-12!">
         <PhoneIcon />
         222-436-2510
       </SecondaryLink>
@@ -140,6 +144,10 @@ export default ({
           css={collapseBreakpointCss.mobileNavLinksContainer}
         >
           {logoLink}
+          <CenterPhoneLink as="a" href="tel:2224362510">
+            <PhoneIcon />
+            222-436-2510
+          </CenterPhoneLink>
           <MobileNavLinks
             initial={{ x: "150%", display: "none" }}
             animate={animation}

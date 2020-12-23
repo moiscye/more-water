@@ -13,6 +13,7 @@ import FAQ from "components/faqs/SingleCol.js";
 import Header from "../components/headers/light";
 import ContactUsFormFull from "components/forms/TwoColContactUsWithIllustrationFullForm.js";
 import Footer from "components/footers/MiniCenteredFooter.js";
+import { FloatingButton } from "components/misc/Buttons";
 // Images
 import prototypeIllustrationImageSrc from "images/prototype-illustration.svg";
 import { ReactComponent as BriefcaseIcon } from "feather-icons/dist/icons/briefcase.svg";
@@ -23,14 +24,19 @@ import tankIconImageSrc from "images/tank-truck.svg";
 import qualityIconImageSrc from "images/quality.svg";
 import driverImage from "images/foto-2.jpeg";
 import lavadoImage from "images/lavado-cisterna.jpeg";
+import { ReactComponent as SvgPhone } from "images/phone.svg";
 
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
+  const PhoneIcon = tw(SvgPhone)`w-10 h-10 inline-block mr-2 `;
   const imageCss = tw`rounded-4xl`;
   return (
     <>
       <Header />
+      <FloatingButton href="tel:2224362510">
+        <PhoneIcon />
+      </FloatingButton>
       <AnimationRevealPage>
         <Hero
           id="inicio"
@@ -111,7 +117,7 @@ export default () => {
           }
           textOnLeft={false}
           imageSrc={
-            "https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            "https://images.unsplash.com/photo-1574689049597-7e6ed3ca358e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1995&q=80"
           }
           imageDecoratorBlob={true}
           decoratorBlobCss={tw`xl:w-40 xl:h-40 opacity-15 -translate-x-1/2 left-1/2`}

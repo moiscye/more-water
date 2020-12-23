@@ -51,8 +51,10 @@ export default ({ id = "" }) => {
           <AddressText>
             Cruz de Mayo 9511 , Col. Exhacienda Mayorazgo, 72480 Puebla, Puebla
           </AddressText>
+          <AddressText as="a" href="tel:2224362510">
+            Tel: 222-436-2510
+          </AddressText>
           <AddressText>
-            Tel: 222-436-2510{" "}
             <AddressText
               target="_blank"
               as="a"
