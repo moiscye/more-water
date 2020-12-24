@@ -2,6 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
+import AnchorLink from "react-anchor-link-smooth-scroll";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -41,7 +42,7 @@ const Description = tw.p`mt-4 text-center md:text-left text-sm md:text-base lg:t
 
 const PrimaryButton = styled(PrimaryButtonBase)((props) => [
   tw`mt-8 md:mt-8 text-sm inline-block mx-auto md:mx-0`,
-  props.buttonRounded && tw`rounded-full`,
+  props.buttonrounded === "true" && tw`rounded-full`,
 ]);
 
 export default ({
@@ -56,7 +57,7 @@ export default ({
   primaryButtonText = "Learn More",
   primaryButtonUrl = "https://google.com",
   imageSrc = TeamIllustrationSrc,
-  buttonRounded = true,
+  buttonRounded = "true",
   imageRounded = true,
   imageBorder = false,
   imageShadow = false,
@@ -86,8 +87,8 @@ export default ({
             <Heading>{heading}</Heading>
             <Description>{description}</Description>
             <PrimaryButton
-              buttonRounded={buttonRounded}
-              as="a"
+              buttonrounded={buttonRounded}
+              as={AnchorLink}
               href={primaryButtonUrl}
             >
               {primaryButtonText}

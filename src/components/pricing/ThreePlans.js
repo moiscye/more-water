@@ -2,6 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
+import AnchorLink from "react-anchor-link-smooth-scroll";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -24,14 +25,14 @@ const Plan = styled.div`
   }
 
   ${(props) =>
-    props.featured &&
+    props.featured === "true" &&
     css`
       background: rgb(100,21,255);
       background: linear-gradient(135deg, rgba(100,21,255,1) 0%, rgba(128,64,252,1) 100%);
-background: rgb(85,60,154);
-background: linear-gradient(135deg, rgba(85,60,154,1) 0%, rgba(128,90,213,1) 100%);
-background: rgb(76,81,191);
-background: linear-gradient(135deg, rgba(76,81,191,1) 0%, rgba(102,126,234,1) 100%);
+      background: rgb(85,60,154);
+      background: linear-gradient(135deg, rgba(85,60,154,1) 0%, rgba(128,90,213,1) 100%);
+      background: rgb(76,81,191);
+      background: linear-gradient(135deg, rgba(76,81,191,1) 0%, rgba(102,126,234,1) 100%);
       ${tw`bg-primary-500 text-gray-100`}
       .planHighlight {
         ${tw`hidden`}
@@ -199,6 +200,8 @@ export default ({
               <PlanAction>
                 <BuyNowButton
                   css={!plan.featured && highlightGradientsCss[index]}
+                  as={AnchorLink}
+                  href="#contacto"
                 >
                   {primaryButtonText}
                 </BuyNowButton>

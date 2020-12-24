@@ -49,7 +49,7 @@ export default () => {
           imageDecoratorBlob={true}
           primaryButtonText="Pide tu Pipa"
           watchVideoButtonText="Miranos en Accion"
-          primaryButtonUrl="#servicios"
+          primaryButtonUrl="#contacto"
         />
         <Features
           id="nosotros"
@@ -67,21 +67,21 @@ export default () => {
               title: "Vehiculos Modernos",
               description:
                 "Cumplimos con el reglamento de la secretaria de transporte.",
-              url: "https://google.com",
+              url: "#contacto",
             },
             {
               imageSrc: qualityIconImageSrc,
               title: "Calidad en nuestros tanques",
               description:
                 "Nuestros tanques estan construidos con los mas altos estandares de calidad",
-              url: "https://google.com",
+              url: "#contacto",
             },
             {
               imageSrc: mapIconImageSrc,
               title: "Rapidez en el servicio",
               description:
                 "Nuestras pipas cuentan con GPS para facilitar y disminuir el tiempo de entrega",
-              url: "https://google.com",
+              url: "#contacto",
             },
           ]}
           imageContainerCss={tw`p-2!`}
@@ -102,6 +102,7 @@ export default () => {
           imageBorder={true}
           imageDecoratorBlob={true}
           primaryButtonText="Aprende mas"
+          primaryButtonUrl="#contacto"
           textOnLeft={true}
         />
         <FeatureWithSteps
@@ -164,6 +165,7 @@ export default () => {
             },
           ]}
           primaryButtonText="Aprende Mas"
+          primaryButtonUrl="#contacto"
         />
 
         <Pricing
@@ -201,7 +203,7 @@ export default () => {
                 "Servicio Empresarial",
                 "Purgamos tu bomba",
               ],
-              featured: true,
+              featured: "true",
             },
             {
               name: "Pipa de",
@@ -229,6 +231,7 @@ export default () => {
           imageBorder={true}
           imageDecoratorBlob={true}
           primaryButtonText="Aprende mas"
+          primaryButtonUrl="#contacto"
           textOnLeft={false}
         />
         <Testimonial

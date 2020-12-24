@@ -2,6 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
+import AnchorLink from "react-anchor-link-smooth-scroll";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -61,7 +62,7 @@ const FeatureDescription = tw.div`mt-4 text-center md:text-left text-gray-600 le
 
 const PrimaryButton = styled(PrimaryButtonBase)((props) => [
   tw`mt-12 text-sm inline-block mx-auto md:mx-0`,
-  props.buttonRounded && tw`rounded-full`,
+  props.buttonrounded === "true" && tw`rounded-full`,
 ]);
 
 export default ({
@@ -76,7 +77,7 @@ export default ({
   primaryButtonText = "Learn More",
   primaryButtonUrl = "https://timerse.com",
   imageSrc = TeamIllustrationSrc,
-  buttonRounded = true,
+  buttonRounded = "true",
   imageRounded = true,
   imageBorder = false,
   imageShadow = false,
@@ -148,8 +149,8 @@ export default ({
             </Features>
 
             <PrimaryButton
-              buttonRounded={buttonRounded}
-              as="a"
+              buttonrounded={buttonRounded}
+              as={AnchorLink}
               href={primaryButtonUrl}
             >
               {primaryButtonText}
