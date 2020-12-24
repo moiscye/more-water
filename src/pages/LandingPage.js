@@ -10,9 +10,7 @@ import FeatureWithSteps from "components/features/TwoColWithSteps.js";
 import Pricing from "components/pricing/ThreePlans.js";
 import Testimonial from "components/testimonials/TwoColumnWithImageAndProfilePictureReview.js";
 import FAQ from "components/faqs/SingleCol.js";
-import Header from "../components/headers/light";
 import ContactUsFormFull from "components/forms/TwoColContactUsWithIllustrationFullForm.js";
-import Footer from "components/footers/MiniCenteredFooter.js";
 import { FloatingButton } from "components/misc/Buttons";
 // Images
 import prototypeIllustrationImageSrc from "images/prototype-illustration.svg";
@@ -33,7 +31,6 @@ export default () => {
   const imageCss = tw`rounded-4xl`;
   return (
     <>
-      <Header />
       <FloatingButton href="tel:2224362510">
         <PhoneIcon />
       </FloatingButton>
@@ -324,7 +321,6 @@ export default () => {
           submitButtonText="Contactanos"
           formMethod="post"
         />
-        <Footer />
       </AnimationRevealPage>
     </>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import {
@@ -9,8 +10,9 @@ import {
 } from "components/misc/Headings.js";
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import EmailIllustrationSrc from "images/email-illustration.svg";
-import { motion } from "framer-motion";
+import { ReactComponent as SvgPhone } from "images/phone.svg";
 
+const PhoneIcon = tw(SvgPhone)`w-6 h-6 md:w-10 md:h-10 inline-block mr-2 `;
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col md:flex-row justify-between max-w-screen-xl mx-auto py-20 md:py-24`;
 const Column = tw.div`w-full max-w-md mx-auto md:max-w-none md:mx-0`;
@@ -42,6 +44,52 @@ const Textarea = styled(Input).attrs({ as: "textarea" })`
 `;
 const SubmitButton = tw(PrimaryButtonBase)`inline-block mt-8`;
 
+const SwitchContainer = tw.div`flex justify-center md:justify-start`;
+const PlanDurationSwitcher = tw.div`w-full max-w-xs sm:inline-block sm:w-auto border-2 rounded-full px-1 py-1 mt-8`;
+const SwitchButton = styled.button`
+  ${tw`w-1/2 sm:w-32 px-4 sm:px-8 py-3 rounded-full focus:outline-none text-sm font-bold text-gray-700 transition duration-300`}
+  ${(props) => props.active && tw`bg-primary-500 text-gray-100`}
+`;
+
+const initialState = {
+  fullName: "",
+  phoneNumber: "",
+  email: "",
+  message: "",
+  subject: "",
+};
+const languageOption = {
+  subheadingEN: "Contact Us",
+  headingEN: (
+    <>
+      Please call us on
+      <br />
+      <span
+        as="a"
+        href="tel:+610481216469"
+        tw="text-2xl sm:text-4xl lg:text-5xl text-primary-500"
+      >
+        <PhoneIcon />
+        (+61) 048-121-6469
+      </span>
+    </>
+  ),
+  descriptionEN:
+    "We are committed to serving our clients in a courteous and efficient manner. Please leave us a message with your questions or suggestions.",
+  submitButtonTextEN: "Contact Us",
+};
+
+const languagePreference = [
+  {
+    text: "Spanish",
+    switcherText: "Español",
+  },
+  {
+    text: "English",
+    switcherText: "English",
+  },
+];
+
 export default ({
   id = "",
   subheading = "Contact Us",
@@ -58,13 +106,7 @@ export default ({
 }) => {
   // The textOnLeft boolean prop can be used to display either the text on left or right side of the image.
 
-  const initialState = {
-    fullName: "",
-    phoneNumber: "",
-    email: "",
-    message: "",
-    subject: "",
-  };
+  const [activeLanguageIndex, setActiveLanguageIndex] = useState(0);
   const [contactDetails, setContactDetails] = useState(initialState);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -83,10 +125,13 @@ export default ({
     e.preventDefault();
     if (!validateFields()) {
       setError(true);
-      setErrorMessage("Llena todos los campos por favor.");
+      setErrorMessage(
+        !activeLanguageIndex
+          ? "Llena todos los campos por favor."
+          : "Fill out all fields please."
+      );
       return;
     }
-
     let res = await axios.post(`.netlify/functions/contact`, contactDetails);
     if (res.status === 200) {
       setContactDetails(initialState);
@@ -95,15 +140,13 @@ export default ({
     } else if (res.status === 500) {
       setError(true);
       setErrorMessage(
-        "Hubo un problema al enviar el correo. Por favor intenta mas tarde."
+        !activeLanguageIndex
+          ? "Hubo un problema al enviar el correo. Por favor intenta mas tarde."
+          : "There was a problem while sending the error. Please try later."
       );
       executeScroll();
     }
-    // setContactDetails(initialState);
-    // setIsSent(true);
-    // executeScroll();
   };
-
   const validateFields = () => {
     return fullName && phoneNumber && email && message;
   };
@@ -111,12 +154,34 @@ export default ({
     setIsSent(false);
     executeScroll();
   };
-
   const formTemplate = () => (
     <TextContent>
-      {subheading && <Subheading>{subheading}</Subheading>}
-      <Heading>{heading}</Heading>
-      {description && <Description>{description}</Description>}
+      {subheading && (
+        <Subheading>
+          {!activeLanguageIndex ? subheading : languageOption.subheadingEN}
+        </Subheading>
+      )}
+      <SwitchContainer>
+        <PlanDurationSwitcher>
+          {languagePreference.map((language, index) => (
+            <SwitchButton
+              active={activeLanguageIndex === index}
+              key={index}
+              onClick={() => setActiveLanguageIndex(index)}
+            >
+              {language.switcherText}
+            </SwitchButton>
+          ))}
+        </PlanDurationSwitcher>
+      </SwitchContainer>
+      <Heading>
+        {!activeLanguageIndex ? heading : languageOption.headingEN}
+      </Heading>
+      {description && (
+        <Description>
+          {!activeLanguageIndex ? description : languageOption.descriptionEN}
+        </Description>
+      )}
 
       <Form onSubmit={handleSubmit} method={formMethod}>
         {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
@@ -124,13 +189,13 @@ export default ({
           onChange={handleChange}
           type="text"
           name="fullName"
-          placeholder="Nombre Completo"
+          placeholder={!activeLanguageIndex ? "Nombre Completo" : "Fullname"}
         />
         <Input
           onChange={handleChange}
           type="text"
           name="phoneNumber"
-          placeholder="Telefono"
+          placeholder={!activeLanguageIndex ? "Telefono" : "Phone"}
         />
         <Input
           onChange={handleChange}
@@ -142,14 +207,22 @@ export default ({
           onChange={handleChange}
           type="text"
           name="subject"
-          placeholder="Motivo"
+          placeholder={!activeLanguageIndex ? "Motivo" : "Subject"}
         />
         <Textarea
           onChange={handleChange}
           name="message"
-          placeholder="Escribe tu mensaje aqui"
+          placeholder={
+            !activeLanguageIndex
+              ? "Escribe tu mensaje aqui"
+              : "Write your message here"
+          }
         />
-        <SubmitButton type="submit">{submitButtonText}</SubmitButton>
+        <SubmitButton type="submit">
+          {!activeLanguageIndex
+            ? submitButtonText
+            : languageOption.submitButtonTextEN}
+        </SubmitButton>
       </Form>
     </TextContent>
   );
@@ -166,18 +239,23 @@ export default ({
       transition={{ type: "spring", damping: 100 }}
     >
       <TextContent>
-        <Subheading>Contacto Exitoso!</Subheading>
-
+        <Subheading>
+          {!activeLanguageIndex
+            ? "Contacto Exitoso!"
+            : "Message Sent Successfully"}
+        </Subheading>
         <Heading>
-          Gracias por ponerte en{" "}
-          <span tw="text-primary-500">Contacto con Nosotros</span>
+          {!activeLanguageIndex
+            ? "Gracias por ponerte en Contacto con Nosotros"
+            : "Thanks for getting in touch with us."}
         </Heading>
         <Description>
-          Te responderemos lo antes posible. Si es algo sumamente urgente por
-          favor llamanos al 222-436-2510
+          {!activeLanguageIndex
+            ? "Te responderemos lo antes posible. Si es algo sumamente urgente por favor llamanos al 222-436-2510"
+            : "We will get back to you as soon as posible. If you need an urgent service please call us on +61-048-121-6469"}
         </Description>
         <SubmitButton onClick={handleSendAgain} type="button">
-          Mandar Otro Mensaje
+          {!activeLanguageIndex ? "Mandar Otro Mensaje" : "Send Again"}
         </SubmitButton>
       </TextContent>
     </motion.section>

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import AnchorLink from "react-anchor-link-smooth-scroll";
-// import { Link } from "react-router-dom";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -14,7 +13,7 @@ import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { ReactComponent as SvgPhone } from "images/phone.svg";
 
 const PhoneIcon = tw(SvgPhone)`w-6 h-6 inline-block mr-2 `;
-const Container = tw.div`top-0 fixed bg-white shadow-md  z-50 w-full py-4 px-8 mb-2`;
+const Container = tw.div`top-0 fixed bg-white shadow-md  z-50 w-full py-1 lg:py-4  px-8 mb-2`;
 const Header = tw.header` 
   flex justify-between items-center
   max-w-screen-xl mx-auto
@@ -31,12 +30,6 @@ export const NavLink = tw(AnchorLink)`
   pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
 `;
 
-export const PrimaryLink = tw(NavLink)`
-  lg:mx-0
-  px-8 py-3 rounded bg-primary-500 text-gray-100
-  hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
-`;
 export const SecondaryLink = tw(
   NavLink
 )`lg:mx-0  lg:px-0 py-3 text-primary-100  text-lg lg:text-base  xl:text-lg font-bold`;
@@ -91,9 +84,6 @@ export default ({
    */
   const defaultLinks = [
     <NavLinks key={1}>
-      {/* <NavLink as={Link} to="/contactus">
-        Acerca de
-      </NavLink> */}
       <NavLink href="#nosotros" css="">
         Nosotros
       </NavLink>
@@ -113,8 +103,6 @@ export default ({
         <PhoneIcon />
         222-436-2510
       </SecondaryLink>
-      {/* <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
-      </PrimaryLink> */}
     </NavLinks>,
   ];
 
@@ -123,7 +111,7 @@ export default ({
     collapseBreakPointCssMap[collapseBreakpointClass];
 
   const defaultLogoLink = (
-    <LogoLink as="a" href="/">
+    <LogoLink href="#inicio">
       <img src={logo} alt="logo" />
       Angelopolis
     </LogoLink>
