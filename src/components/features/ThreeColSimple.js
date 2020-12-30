@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { Link } from "react-router-dom";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import {
   SectionHeading,
@@ -13,7 +14,6 @@ import SupportIconImage from "images/support-icon.svg";
 import ShieldIconImage from "images/shield-icon.svg";
 import CustomizeIconImage from "images/customize-icon.svg";
 import { ReactComponent as SvgDecoratorBlob3 } from "images/svg-decorator-blob-3.svg";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 
 const Heading = tw(SectionHeading)``;
 const Subheading = tw(SubheadingBase)`text-center mb-3`;
@@ -25,7 +25,7 @@ const Column = styled.div`
   ${tw`lg:w-1/3 max-w-xs`}
 `;
 
-const Card = styled(AnchorLink)`
+const Card = styled(Link)`
   ${tw`flex flex-col items-center text-center h-full mx-4 px-4 py-8 rounded transition-transform duration-300 hover:cursor-pointer transform hover:scale-105 `}
   .imageContainer {
     ${tw`text-center rounded-full p-4 bg-gray-100`}
@@ -100,7 +100,7 @@ export default ({
         <ThreeColumnContainer>
           {cards.map((card, i) => (
             <Column key={i}>
-              <Card href={card.url}>
+              <Card to={card.url}>
                 <span className="imageContainer" css={imageContainerCss}>
                   <img src={card.imageSrc} alt="" css={imageCss} />
                 </span>

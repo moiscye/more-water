@@ -7,11 +7,9 @@ import Features from "components/features/ThreeColSimple.js";
 import MainFeature from "components/features/TwoColWithButton.js";
 import MainFeature2 from "components/features/TwoColWithTwoHorizontalFeaturesAndButton.js";
 import FeatureWithSteps from "components/features/TwoColWithSteps.js";
-import Pricing from "components/pricing/ThreePlans.js";
 import Testimonial from "components/testimonials/TwoColumnWithImageAndProfilePictureReview.js";
 import FAQ from "components/faqs/SingleCol.js";
-import ContactUsFormFull from "components/forms/TwoColContactUsWithIllustrationFullForm.js";
-import { FloatingButton } from "components/misc/Buttons";
+import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 // Images
 import prototypeIllustrationImageSrc from "images/prototype-illustration.svg";
 import { ReactComponent as BriefcaseIcon } from "feather-icons/dist/icons/briefcase.svg";
@@ -21,13 +19,11 @@ import mapIconImageSrc from "images/map-gps.svg";
 import tankIconImageSrc from "images/tank-truck.svg";
 import qualityIconImageSrc from "images/quality.svg";
 import driverImage from "images/foto-2.jpeg";
-import lavadoImage from "images/lavado-cisterna.jpeg";
-import { ReactComponent as SvgPhone } from "images/phone.svg";
 
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
-  const PhoneIcon = tw(SvgPhone)`w-10 h-10 inline-block mr-2 `;
+
   const imageCss = tw`rounded-4xl`;
   return (
     <>
@@ -67,21 +63,21 @@ export default () => {
               title: "Vehiculos Modernos",
               description:
                 "Cumplimos con el reglamento de la secretaria de transporte.",
-              url: "#contacto",
+              url: "/contacto",
             },
             {
               imageSrc: qualityIconImageSrc,
               title: "Calidad en nuestros tanques",
               description:
                 "Nuestros tanques estan construidos con los mas altos estandares de calidad",
-              url: "#contacto",
+              url: "/contacto",
             },
             {
               imageSrc: mapIconImageSrc,
               title: "Rapidez en el servicio",
               description:
                 "Nuestras pipas cuentan con GPS para facilitar y disminuir el tiempo de entrega",
-              url: "#contacto",
+              url: "/contacto",
             },
           ]}
           imageContainerCss={tw`p-2!`}
@@ -101,8 +97,8 @@ export default () => {
           imageSrc={driverImage}
           imageBorder={true}
           imageDecoratorBlob={true}
-          primaryButtonText="Aprende mas"
-          primaryButtonUrl="#contacto"
+          primaryButtonText="Pide tu pipa"
+          primaryButtonUrl="/contacto"
           textOnLeft={true}
         />
         <FeatureWithSteps
@@ -164,76 +160,10 @@ export default () => {
               iconContainerCss: tw`bg-red-300 text-red-800`,
             },
           ]}
-          primaryButtonText="Aprende Mas"
-          primaryButtonUrl="#contacto"
+          primaryButtonText="Pide tu Pipa"
+          primaryButtonUrl="/contacto"
         />
 
-        <Pricing
-          id="servicios"
-          subheading={<Subheading>Servicios</Subheading>}
-          description="Rapidez y Servicio al cliente nos distingue."
-          heading={
-            <>
-              Tenemos la pipa del tamaño que tu{" "}
-              <HighlightedText>Necesitas.</HighlightedText>
-            </>
-          }
-          primaryButtonText="Pidela Ya!"
-          plans={[
-            {
-              name: "Pipa de",
-              price: "5,000",
-              duration: "Litros",
-              mainFeature: "Que ofrecemos",
-              features: [
-                "35 mts. de Manguera ",
-                "Ideal para Residencial",
-                "Servicio Empresarial",
-                "Purgamos tu bomba",
-              ],
-            },
-            {
-              name: "Pipa de",
-              price: "10,000",
-              duration: "Litros",
-              mainFeature: "Que ofrecemos",
-              features: [
-                "35 mts. de Manguera ",
-                "Servicio Residencial",
-                "Servicio Empresarial",
-                "Purgamos tu bomba",
-              ],
-              featured: "true",
-            },
-            {
-              name: "Pipa de",
-              price: "20,000",
-              duration: "Litros",
-              mainFeature: "Que ofrecemos",
-              features: [
-                "35 mts. de Manguera ",
-                "Servicio Residencial",
-                "Servicio Empresarial",
-                "Purgamos tu bomba",
-              ],
-            },
-          ]}
-        />
-        <MainFeature
-          subheading={<Subheading>Servicios.</Subheading>}
-          heading={
-            <>
-              Lavado de <HighlightedText>Cisternas y Tinacos.</HighlightedText>
-            </>
-          }
-          description="Lavado a presión con hidro-lavadora usando productos químico biodegradables a base de cloro con minimo impacto ambiental."
-          imageSrc={lavadoImage}
-          imageBorder={true}
-          imageDecoratorBlob={true}
-          primaryButtonText="Aprende mas"
-          primaryButtonUrl="#contacto"
-          textOnLeft={false}
-        />
         <Testimonial
           id="testimonios"
           subheading="Testimonios"
@@ -310,19 +240,6 @@ export default () => {
                 "De preferencia usted necesita estar en casa para que nos de intrucciones donde necesita el agua. Si nos da instruciones precisas o si es usted cliente recurrente nosotros podemos llevarle el agua sin necesidad de que este en casa. Se necesita pago previo para esta opcion.",
             },
           ]}
-        />
-        <ContactUsFormFull
-          id="contacto"
-          subheading="Contactanos"
-          heading={
-            <>
-              No dudes en ponerte en <span tw="text-primary-500">contacto</span>
-              <wbr /> con nosotros.
-            </>
-          }
-          description="Estamos comprometidos con atender a nuestros clientes de manera amable y eficaz. Por favor dejanos un mensaje con tus dudas o sugerencias."
-          submitButtonText="Contactanos"
-          formMethod="post"
         />
       </AnimationRevealPage>
     </>

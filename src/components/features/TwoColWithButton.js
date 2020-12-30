@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import AnchorLink from "react-anchor-link-smooth-scroll";
+import { Link } from "react-router-dom";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -88,8 +88,8 @@ export default ({
             <Description>{description}</Description>
             <PrimaryButton
               buttonrounded={buttonRounded}
-              as={AnchorLink}
-              href={primaryButtonUrl}
+              as={Link}
+              to={primaryButtonUrl}
             >
               {primaryButtonText}
             </PrimaryButton>

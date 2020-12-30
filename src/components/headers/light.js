@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import AnchorLink from "react-anchor-link-smooth-scroll";
+// import AnchorLink from "react-anchor-link-smooth-scroll";
+import { Link } from "react-router-dom";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -24,7 +25,7 @@ export const NavLinks = tw.div`inline-block`;
 /* hocus: stands for "on hover or focus"
  * hocus:bg-primary-700 will apply the bg-primary-700 class on hover or focus
  */
-export const NavLink = tw(AnchorLink)`
+export const NavLink = tw(Link)`
   text-lg my-2 lg:text-sm  xl:text-base lg:mx-2 xl:mx-4 lg:my-0
   font-semibold tracking-wide transition duration-300
   pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
@@ -84,7 +85,7 @@ export default ({
    */
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="#nosotros" css="">
+      {/* <NavLink href="#nosotros" css="">
         Nosotros
       </NavLink>
       <NavLink href="#servicios" css="">
@@ -98,7 +99,11 @@ export default ({
       </NavLink>
       <NavLink href="#contacto" css="">
         Contacto
-      </NavLink>
+      </NavLink> */}
+      <NavLink to="/">Inicio</NavLink>
+      <NavLink to="/servicios">Servicios</NavLink>
+      <NavLink to="/contacto">Contacto</NavLink>
+      <NavLink to="/cotizacion">Cotizacion</NavLink>
       <SecondaryLink as="a" href="tel:2224362510" tw="lg:ml-12!">
         <PhoneIcon />
         222-436-2510
@@ -111,7 +116,7 @@ export default ({
     collapseBreakPointCssMap[collapseBreakpointClass];
 
   const defaultLogoLink = (
-    <LogoLink href="#inicio">
+    <LogoLink to="/">
       <img src={logo} alt="logo" />
       Angelopolis
     </LogoLink>
