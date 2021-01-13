@@ -6,7 +6,7 @@ import DateAndTimeForm from "components/forms/DateAndTimeForm";
 import PersonalInfoForm from "components/forms/PersonalInfoForm";
 import AddressForm from "components/forms/AddressForm";
 import StepWizardSimple from "components/steps/SingleWizardWithRoundSteps";
-import AnimationRevealPage from "helpers/AnimationRevealPage.js";
+import AnimationRevealPage from "../helpers/AnimationRevealPage.js";
 import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import { scrollToTop } from "../helpers/scrollToTop";
