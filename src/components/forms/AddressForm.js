@@ -7,13 +7,16 @@ import { ButtonContainer, SubmitButton } from "../misc/Buttons";
 import { Column, PriceContainer } from "../misc/Layouts";
 import { PriceTag } from "../misc/Headings";
 import { ErrorMessage } from "../misc/Errors";
-import { scrollToTop } from "../../helpers/scrollToTop";
+
 export default (props) => {
   const [error, setError] = useState(false);
   let { address, total } = useSelector((state) => ({
     ...state.addressReducer,
     ...state.cartReducer,
   }));
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleSubmit = () => {
     if (!address) {

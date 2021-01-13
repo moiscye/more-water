@@ -9,7 +9,6 @@ import { Column, PriceContainer } from "../misc/Layouts";
 import { PriceTag } from "../misc/Headings";
 import { ErrorMessage } from "../misc/Errors";
 import { ADD_USER } from "store/actions/authAction";
-import { scrollToTop } from "../../helpers/scrollToTop";
 
 const initialState = {
   fullName: "",
@@ -45,6 +44,9 @@ export default (props) => {
     if (user) setContactDetails(user);
     // eslint-disable-next-line
   }, []);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleChange = (e) => {
     var data = { ...contactDetails };
