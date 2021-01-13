@@ -1,6 +1,5 @@
 import React from "react";
 import tw from "twin.macro";
-
 import { SectionHeading } from "components/misc/Headings.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/svg-decorator-blob-2.svg";

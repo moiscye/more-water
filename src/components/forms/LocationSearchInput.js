@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import tw from "twin.macro";
+import styled from "styled-components";
+import { css } from "styled-components/macro"; //eslint-disable-line
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -9,7 +11,6 @@ import {
   ADD_ADDRESS,
   UPDATE_DISTANCE,
 } from "../../store/actions/addressAction";
-import styled from "styled-components";
 import { UPDATE_TOTAL } from "store/actions/cartAction";
 import calculateTotal from "helpers/calculateTotal";
 

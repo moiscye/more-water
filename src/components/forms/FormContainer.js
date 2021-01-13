@@ -1,6 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 import tw from "twin.macro";
+import styled from "styled-components";
+import { css } from "styled-components/macro"; //eslint-disable-line
 
 const FormContainer = styled.div`
   ${tw`p-0 sm:px-12 sm:pt-4 sm:pb-10 rounded-lg  relative`}
@@ -13,13 +14,6 @@ const FormContainer = styled.div`
   p {
     ${tw`text-lg sm:text-xl md:text-2xl `}
   }
-  /* input,
-  textarea {
-    ${tw`w-full bg-transparent  text-base font-medium tracking-wide border-b-2 py-2  hocus:border-pink-400 focus:outline-none transition duration-200`};
-    ::placeholder {
-      ${tw`text-gray-500`}
-    }
-  } */
 `;
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-4 lg:py-8`;

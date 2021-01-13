@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import tw from "twin.macro";
+import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 
 const Nav = tw.div`mb-2 lg:mb-2 mt-10 lg:mt-12 self-center flex `;
