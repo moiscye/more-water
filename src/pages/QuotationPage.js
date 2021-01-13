@@ -9,12 +9,15 @@ import StepWizardSimple from "components/steps/SingleWizardWithRoundSteps";
 import AnimationRevealPage from "../helpers/AnimationRevealPage.js";
 import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
-import { scrollToTop } from "../helpers/scrollToTop";
+
 import StepWizard from "react-step-wizard";
 import Nav from "components/misc/Nav";
 
 const Steps = tw(StepWizard)`flex flex-col`;
 export default () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <>
       <FloatingButton href="tel:2224362510">
