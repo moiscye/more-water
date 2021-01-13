@@ -1,16 +1,19 @@
 const sgMail = require("@sendgrid/mail");
-const contactEmail = require("./emailTemplates/contactEmail");
-exports.handler = async (event) => {
+const contactEmail = require("./services/emailTemplates/contactEmail");
+const ContactData = require("./models/contactData");
+const connectToDB = require("./startup/db");
+exports.handler = async (event, context) => {
   const sendGridKey = process.env.SEND_GRID_KEY;
-
+  context.callbackWaitsForEmptyEventLoop = false;
+  connectToDB();
   const sendEmail = async (body) => {
-    const { fullName, email } = body;
+    const { subject } = body;
     sgMail.setApiKey(sendGridKey);
 
     const msg = {
       to: "moiscye@gmail.com",
       from: "info@angelopolis.com.au",
-      subject: `Mensaje de ${fullName}`,
+      subject: subject,
       text: "message field",
       html: contactEmail(body),
     };
@@ -32,6 +35,8 @@ exports.handler = async (event) => {
     let response;
     if (body) {
       try {
+        let email = new ContactData(body);
+        email = await email.save();
         body = await sendEmail(body);
         response = {
           statusCode: 200,

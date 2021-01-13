@@ -45,7 +45,7 @@ export default () => {
           imageDecoratorBlob={true}
           primaryButtonText="Pide tu Pipa"
           watchVideoButtonText="Miranos en Accion"
-          primaryButtonUrl="#contacto"
+          primaryButtonUrl="/cotizacion"
         />
         <Features
           id="nosotros"

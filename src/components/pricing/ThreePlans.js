@@ -2,7 +2,10 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import AnchorLink from "react-anchor-link-smooth-scroll";
+import { useHistory } from "react-router-dom";
+import { ADD_PIPA } from "store/actions/cartAction";
+import { useDispatch, useSelector } from "react-redux";
+import calculateTotal from "helpers/calculateTotal";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -93,6 +96,9 @@ export default ({
   primaryButtonText = "Buy Now",
   id = "threePlans",
 }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  let { manguera, extras } = useSelector((state) => ({ ...state.cartReducer }));
   const defaultPlans = [
     {
       name: "Personal",
@@ -105,6 +111,7 @@ export default ({
         "12 Internal Pages",
         "Basic Assistance",
       ],
+      data: null,
     },
     {
       name: "Business",
@@ -118,6 +125,7 @@ export default ({
         "Priority Assistance",
       ],
       featured: true,
+      data: null,
     },
     {
       name: "Enterprise",
@@ -130,6 +138,7 @@ export default ({
         "37 Internal Pages",
         "Personal Assistance",
       ],
+      data: null,
     },
   ];
 
@@ -165,6 +174,17 @@ export default ({
     `,
   ];
 
+  const handleOrder = (data) => {
+    dispatch({
+      type: ADD_PIPA,
+      payload: {
+        pipa: data,
+        total: calculateTotal({ pipa: data, manguera, extras }),
+      },
+    });
+
+    history.push("/cotizacion");
+  };
   return (
     <Container id={id}>
       <ContentWithPaddingXl>
@@ -200,8 +220,7 @@ export default ({
               <PlanAction>
                 <BuyNowButton
                   css={!plan.featured && highlightGradientsCss[index]}
-                  as={AnchorLink}
-                  href="#contacto"
+                  onClick={() => handleOrder(plan.data)}
                 >
                   {primaryButtonText}
                 </BuyNowButton>

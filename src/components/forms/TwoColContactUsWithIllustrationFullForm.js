@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
+import { css } from "styled-components/macro"; //eslint-disable-line
 import { motion } from "framer-motion";
 import axios from "axios";
-import { css } from "styled-components/macro"; //eslint-disable-line
 import {
   SectionHeading,
   Subheading as SubheadingBase,

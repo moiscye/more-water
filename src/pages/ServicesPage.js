@@ -5,6 +5,7 @@ import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import MainFeature from "components/features/TwoColWithButton.js";
 import Pricing from "components/pricing/ThreePlans.js";
 import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
+import { pipas } from "../helpers/data";
 // Images
 
 import lavadoImage from "images/lavado-cisterna.jpeg";
@@ -42,6 +43,7 @@ export default () => {
                 "Servicio Empresarial",
                 "Purgamos tu bomba",
               ],
+              data: pipas[0],
             },
             {
               name: "Pipa de",
@@ -55,6 +57,7 @@ export default () => {
                 "Purgamos tu bomba",
               ],
               featured: "true",
+              data: pipas[1],
             },
             {
               name: "Pipa de",
@@ -67,6 +70,7 @@ export default () => {
                 "Servicio Empresarial",
                 "Purgamos tu bomba",
               ],
+              data: pipas[2],
             },
           ]}
         />
@@ -81,8 +85,8 @@ export default () => {
           imageSrc={lavadoImage}
           imageBorder={true}
           imageDecoratorBlob={true}
-          primaryButtonText="Pidelo Aqui"
-          primaryButtonUrl="#contacto"
+          primaryButtonText="Mas info aqui"
+          primaryButtonUrl="/cotizacion"
           textOnLeft={false}
         />
       </AnimationRevealPage>

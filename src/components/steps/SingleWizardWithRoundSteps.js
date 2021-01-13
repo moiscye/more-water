@@ -1,7 +1,5 @@
 import React from "react";
 import tw from "twin.macro";
-import StepWizard from "react-step-wizard";
-import Nav from "components/misc/Nav";
 
 import { SectionHeading } from "components/misc/Headings.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
@@ -13,9 +11,8 @@ const DecoratorBlob1 = tw(
 const DecoratorBlob2 = tw(SvgDecoratorBlob2)`
   pointer-events-none fill-current text-primary-500 opacity-25 absolute w-32 h-32 right-0 top-0 transform translate-x-16 -translate-y-16 -z-10`;
 
-export const Container = tw.div`relative`;
-export const ContentWithPaddingXl = tw.div`max-w-screen-xl mx-auto py-8 lg:py-12`;
-const Steps = tw(StepWizard)`flex flex-col`;
+const Container = tw.div`relative`;
+const ContentWithPaddingXl = tw.div`max-w-screen-xl mx-auto py-8 lg:py-12`;
 const Heading = tw(SectionHeading)``;
 
 export default ({ children, heading = "Quotation Page" }) => {
@@ -23,7 +20,7 @@ export default ({ children, heading = "Quotation Page" }) => {
     <Container>
       <ContentWithPaddingXl>
         {heading && <Heading>{heading}</Heading>}
-        <Steps nav={<Nav />}>{children}</Steps>
+        {children}
       </ContentWithPaddingXl>
       <DecoratorBlob1 />
       <DecoratorBlob2 />

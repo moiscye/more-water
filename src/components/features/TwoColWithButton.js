@@ -1,7 +1,6 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line
 import { Link } from "react-router-dom";
 import {
   SectionHeading,
@@ -65,6 +64,7 @@ export default ({
   imageDecoratorBlob = false,
   imageDecoratorBlobCss = null,
   textOnLeft = true,
+  history,
 }) => {
   // The textOnLeft boolean prop can be used to display either the text on left or right side of the image.
 

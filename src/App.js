@@ -2,7 +2,7 @@ import "tailwindcss/dist/base.css";
 import "styles/globalStyles.css";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import ScrollToTop from "helpers/ScrollToTop";
+import ScrollToTop from "helpers/useScrollToTop";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import Header from "components/headers/light";
 import Footer from "components/footers/MiniCenteredFooter";
