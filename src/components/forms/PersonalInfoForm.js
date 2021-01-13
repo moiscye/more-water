@@ -8,7 +8,7 @@ import { Column, PriceContainer } from "../misc/Layouts";
 import { PriceTag } from "../misc/Headings";
 import { ErrorMessage } from "../misc/Errors";
 import { ADD_USER } from "store/actions/authAction";
-import { scrollToTop } from "helpers/scrollToTop";
+import { scrollToTop } from "../../helpers/scrollToTop";
 
 const initialState = {
   fullName: "",

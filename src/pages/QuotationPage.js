@@ -9,7 +9,7 @@ import StepWizardSimple from "components/steps/SingleWizardWithRoundSteps";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
-import { scrollToTop } from "helpers/scrollToTop";
+import { scrollToTop } from "../helpers/scrollToTop";
 import StepWizard from "react-step-wizard";
 import Nav from "components/misc/Nav";
 
