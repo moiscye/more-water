@@ -34,15 +34,16 @@ const OrderSchema = new mongoose.Schema(
     user: { type: ObjectId, ref: "User" },
     address: String,
     deliveryDate: Date,
-    orderNumber: Number,
+    orderNumber: { type: Number, default: 0, unique: true },
   },
   { timestamps: true }
 );
-
+autoIncrement.initialize(mongoose.connection);
 OrderSchema.plugin(autoIncrement.plugin, {
   model: "Order",
   field: "orderNumber",
   startAt: 100,
+  incrementBy: 1,
 });
 
 const Order = mongoose.model("Order", OrderSchema);

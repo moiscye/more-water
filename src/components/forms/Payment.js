@@ -93,12 +93,12 @@ export default (props) => {
     let cartList;
     cartList = Object.values(extras).reduce((cartList, item) => {
       if (item.status) {
-        cartList.push({ name: item.name, price: item.price });
+        cartList.push({ name: item.description, price: item.price });
       }
       return cartList;
     }, []);
-    cartList.push({ name: pipa.name, price: pipa.price });
-    cartList.push({ name: manguera.name, price: manguera.price });
+    cartList.unshift({ name: manguera.description, price: manguera.price });
+    cartList.unshift({ name: pipa.name, price: pipa.price });
     return cartList;
   };
 

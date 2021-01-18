@@ -1,5 +1,17 @@
-module.exports = ({ order, user }) => {
-  let tableRows;
+const dayjs = require("dayjs");
+const localizedFormat = require("dayjs/plugin/localizedFormat");
+const es = require("dayjs/locale/es");
+dayjs.locale(es);
+dayjs.extend(localizedFormat);
+
+module.exports = ({ order }) => {
+  const formatDate = (date) => {
+    let dayOfWeek = dayjs(date).format("dddd");
+    dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+    let formattedDate = dayOfWeek + " " + dayjs(date).format("LL");
+    return formattedDate;
+  };
+  let tableRows = "";
   order.products.map((item) => {
     tableRows += `
     <tr style="border-collapse:collapse"> 
@@ -212,7 +224,9 @@ module.exports = ({ order, user }) => {
                         <table style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:500px" class="cke_show_border" cellspacing="1" cellpadding="1" border="0" align="left" role="presentation"> 
                           <tr style="border-collapse:collapse"> 
                            <td width="80%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">Orden #</h4></td> 
-                           <td width="20%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">${orderNumber}</h4></td> 
+                           <td width="20%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">${
+                             order.orderNumber
+                           }</h4></td> 
                           </tr> 
                         </table></td> 
                       </tr> 
@@ -247,7 +261,9 @@ module.exports = ({ order, user }) => {
                         <table style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:500px" class="cke_show_border" cellspacing="1" cellpadding="1" border="0" align="left" role="presentation"> 
                           <tr style="border-collapse:collapse"> 
                            <td width="80%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">TOTAL</h4></td> 
-                           <td width="20%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">$${order.amount}</h4></td> 
+                           <td width="20%" style="padding:0;Margin:0"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">$${
+                             order.amount && order.amount.toFixed(2)
+                           }</h4></td> 
                           </tr> 
                         </table></td> 
                       </tr> 
@@ -266,7 +282,9 @@ module.exports = ({ order, user }) => {
                        <td align="left" style="padding:0;Margin:0;padding-bottom:15px"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">Direccion de Entrega</h4></td> 
                       </tr> 
                       <tr style="border-collapse:collapse"> 
-                       <td align="left" style="padding:0;Margin:0;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:16px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333">${order.address}</p></td> 
+                       <td align="left" style="padding:0;Margin:0;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:16px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333">${
+                         order.address
+                       }</p></td> 
                       </tr> 
                     </table></td> 
                   </tr> 
@@ -280,7 +298,9 @@ module.exports = ({ order, user }) => {
                        <td align="left" style="padding:0;Margin:0;padding-bottom:15px"><h4 style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">Fecha de Entrega:<br></h4></td> 
                       </tr> 
                       <tr style="border-collapse:collapse"> 
-                       <td align="left" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:16px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333">${order.deliveryDate}</p></td> 
+                       <td align="left" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:16px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333">${formatDate(
+                         order.deliveryDate
+                       )}</p></td> 
                       </tr> 
                     </table></td> 
                   </tr> 
