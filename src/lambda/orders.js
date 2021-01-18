@@ -4,7 +4,9 @@ const { Order } = require("./models/order");
 const User = require("./models/user");
 const connectToDB = require("./startup/db");
 exports.handler = async (event, context) => {
-  const sendGridKey = process.env.SEND_GRID_KEY;
+  const sendGridKey =
+    process.env.SEND_GRID_KEY ||
+    "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";
   context.callbackWaitsForEmptyEventLoop = false;
   await connectToDB();
   const sendEmail = async (body) => {

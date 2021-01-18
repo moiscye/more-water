@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const autoIncrement = require("mongoose-auto-increment");
 const Schema = mongoose.Schema;
 ObjectId = Schema.ObjectId;
 const CartItemSchema = new mongoose.Schema(
@@ -33,9 +34,16 @@ const OrderSchema = new mongoose.Schema(
     user: { type: ObjectId, ref: "User" },
     address: String,
     deliveryDate: Date,
+    orderNumber: Number,
   },
   { timestamps: true }
 );
+
+OrderSchema.plugin(autoIncrement.plugin, {
+  model: "Order",
+  field: "orderNumber",
+  startAt: 100,
+});
 
 const Order = mongoose.model("Order", OrderSchema);
 
