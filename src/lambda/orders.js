@@ -11,9 +11,9 @@ exports.handler = async (event, context) => {
     sgMail.setApiKey(sendGridKey);
 
     const msg = {
-      to: "moiscye@gmail.com",
+      to: body.user.email,
       from: "info@angelopolis.com.au",
-      subject: "Nuevo Pedido",
+      subject: "Tu pedido esta siendo procesado",
       text: "message field",
       html: orderEmail(body),
     };
@@ -47,7 +47,7 @@ exports.handler = async (event, context) => {
         body = await sendEmail(body);
         response = {
           statusCode: 200,
-          body: JSON.stringify(order),
+          body: JSON.stringify(body),
         };
       } catch (e) {
         console.log(e);
