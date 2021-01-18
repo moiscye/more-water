@@ -45,7 +45,7 @@ export const mangueras = [
 ];
 
 export const extras = {
-  cisterna: { status: false, size: "", price: 0 },
-  tinaco: { status: false, size: "", price: 0 },
-  bomba: { status: false, size: "", price: 30 },
+  cisterna: { status: false, size: "", price: 0, name: "cisterna" },
+  tinaco: { status: false, size: "", price: 0, name: "tinaco" },
+  bomba: { status: false, size: "", price: 30, name: "bomba" },
 };

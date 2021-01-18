@@ -6,6 +6,7 @@ import {
   ADD_FECHA_ENTREGA,
   ADD_TOTAL,
   UPDATE_TOTAL,
+  SET_SUCCESS,
 } from "../actions/cartAction";
 import { pipas, mangueras, extras } from "../../helpers/data";
 
@@ -14,7 +15,8 @@ const initialState = {
   manguera: mangueras[0],
   extras,
   fechaEntrega: new Date(),
-  total: 0,
+  total: Number.parseFloat(pipas[0].price).toFixed(2),
+  success: false,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -31,6 +33,8 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, fechaEntrega: payload };
     case UPDATE_TOTAL:
       return { ...state, total: payload };
+    case SET_SUCCESS:
+      return { ...state, success: payload };
     case EMPTY_CART:
       return { ...state, ...initialState };
     default:

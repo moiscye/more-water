@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { ObjectId } = mongoose.Schema;
-
+ObjectId = Schema.ObjectId;
 const CartItemSchema = new mongoose.Schema(
   {
     name: {
@@ -9,10 +8,6 @@ const CartItemSchema = new mongoose.Schema(
       trim: true,
     },
     price: {
-      type: Number,
-      trim: true,
-    },
-    count: {
       type: Number,
       trim: true,
     },
@@ -33,9 +28,11 @@ const OrderSchema = new mongoose.Schema(
       enum: ["No Procesada", "Procesada", "Enviada", "Entregada", "Cancelada"],
     },
     paymentType: String,
+    deliveryInstructions: String,
     updated: Date,
     user: { type: ObjectId, ref: "User" },
     address: String,
+    deliveryDate: Date,
   },
   { timestamps: true }
 );

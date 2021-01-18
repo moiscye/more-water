@@ -1,13 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import FormContainer from "./FormContainer";
 import SingleColumnTable from "../tables/SingleColumnTable";
 import { ButtonContainer, SubmitButton } from "../misc/Buttons";
 import { Column, PriceContainer } from "../misc/Layouts";
 import { PriceTag } from "../misc/Headings";
 import formatDate from "helpers/formatDate";
+import { SET_SUCCESS } from "store/actions/cartAction";
 
 export default (props) => {
+  const dispatch = useDispatch();
   let {
     user,
     pipa,
@@ -86,7 +89,49 @@ export default (props) => {
     },
   ];
 
-  const handleSubmit = () => {};
+  const filterProducts = () => {
+    let cartList;
+    cartList = Object.values(extras).reduce((cartList, item) => {
+      if (item.status) {
+        cartList.push({ name: item.name, price: item.price });
+      }
+      return cartList;
+    }, []);
+    cartList.push({ name: pipa.name, price: pipa.price });
+    cartList.push({ name: manguera.name, price: manguera.price });
+    return cartList;
+  };
+
+  const handleSubmit = async () => {
+    let order = {
+      products: filterProducts(),
+      transaction_id: "Not Assigned",
+      paymentType: "Not Assigned",
+      amount: total,
+      address,
+      deliveryDate: new Date(fechaEntrega),
+      deliveryInstructions: user.message,
+    };
+    let createUser = {
+      email: user.email,
+      fullname: user.fullName,
+      phoneNumber: user.phoneNumber,
+      address,
+    };
+    let createOrderData = {
+      order,
+      user: createUser,
+    };
+
+    let res = await axios.post(`.netlify/functions/orders`, createOrderData);
+    if (res.status === 200) {
+      dispatch({ type: SET_SUCCESS, payload: true });
+
+      console.log("success");
+    } else if (res.status === 500) {
+      console.log("error");
+    }
+  };
 
   return (
     <FormContainer>
@@ -107,7 +152,9 @@ export default (props) => {
       </Column>
       {total && (
         <PriceContainer>
-          <PriceTag>Total: ${total}</PriceTag>
+          <PriceTag>
+            Total: ${total && Number.parseFloat(total).toFixed(2)}
+          </PriceTag>
         </PriceContainer>
       )}
 

@@ -2,7 +2,7 @@ export default ({ manguera, pipa, extras, distance = 10 }) => {
   let distanceTotal = calculateDistancePrice(distance);
   let extrasTotal = extras && extras.bomba.status ? extras.bomba.price : 0;
   let total = manguera.price + pipa.price + extrasTotal + distanceTotal;
-  return Number.parseFloat(total).toFixed(2);
+  return total;
 };
 
 const calculateDistancePrice = (d) => {

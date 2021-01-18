@@ -1,21 +1,21 @@
 const sgMail = require("@sendgrid/mail");
-const contactEmail = require("./services/emailTemplates/contactEmail");
-const ContactData = require("./models/contactData");
+const orderEmail = require("./services/emailTemplates/orderReceiptEmail");
+const { Order } = require("./models/order");
+const User = require("./models/user");
 const connectToDB = require("./startup/db");
 exports.handler = async (event, context) => {
   const sendGridKey = process.env.SEND_GRID_KEY;
   context.callbackWaitsForEmptyEventLoop = false;
   await connectToDB();
   const sendEmail = async (body) => {
-    const { subject } = body;
     sgMail.setApiKey(sendGridKey);
 
     const msg = {
       to: "moiscye@gmail.com",
       from: "info@angelopolis.com.au",
-      subject: subject,
+      subject: "Nuevo Pedido",
       text: "message field",
-      html: contactEmail(body),
+      html: orderEmail(body),
     };
 
     try {
@@ -31,18 +31,26 @@ exports.handler = async (event, context) => {
 
   if (event.httpMethod == "POST") {
     let body = event.body ? JSON.parse(event.body) : {};
-    console.log(body);
     let response;
     if (body) {
       try {
-        let email = new ContactData(body);
-        email = await email.save();
-        body = await sendEmail(body);
+        let user = await User.findOne({ email: body.user.email });
+        if (!user) {
+          user = new User(body.user);
+          user = await user.save();
+        }
+        body.order.user = user._id;
+        let order = new Order(body.order);
+        order = await order.save();
+        user.history.push(order._id);
+        await user.save();
+        sendEmail(body);
         response = {
           statusCode: 200,
-          body: JSON.stringify(body),
+          body: JSON.stringify(order),
         };
       } catch (e) {
+        console.log(e);
         response = {
           statusCode: 500,
           body: JSON.stringify(e),
