@@ -7,6 +7,7 @@ import {
   ADD_MANGUERA,
   ADD_EXTRAS,
   ADD_TOTAL,
+  EMPTY_CART,
 } from "store/actions/cartAction";
 import Checkbox from "rc-checkbox";
 import "rc-checkbox/assets/index.css";
@@ -78,7 +79,6 @@ export default (props) => {
       data.cisterna.status = !data.cisterna.status;
     else if (e.target.id === "bomba") data.bomba.status = !data.bomba.status;
     else {
-      console.log(e.target.id);
       return;
     }
     dispatch({
@@ -161,6 +161,13 @@ export default (props) => {
         <ButtonContainer>
           <SubmitButton type="button" value="Submit" onClick={handleClick}>
             Siguiente
+          </SubmitButton>
+          <SubmitButton
+            type="button"
+            value="Submit"
+            onClick={() => dispatch({ type: EMPTY_CART })}
+          >
+            Borrar
           </SubmitButton>
         </ButtonContainer>
       </Column>

@@ -37,7 +37,7 @@ export default () => {
   useEffect(() => {
     if (distance !== 0) {
       let newTotal = calculateTotal({ pipa, manguera, extras, distance });
-      console.log(distance);
+
       dispatch({
         type: UPDATE_TOTAL,
         payload: newTotal,

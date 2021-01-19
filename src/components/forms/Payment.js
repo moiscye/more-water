@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import FormContainer from "./FormContainer";
@@ -11,6 +11,7 @@ import { SET_SUCCESS } from "store/actions/cartAction";
 
 export default (props) => {
   const dispatch = useDispatch();
+  const [isSending, setIsSending] = useState(false);
   let {
     user,
     pipa,
@@ -99,10 +100,19 @@ export default (props) => {
     }, []);
     cartList.unshift({ name: manguera.description, price: manguera.price });
     cartList.unshift({ name: pipa.name, price: pipa.price });
+    let totalBeforeDelivery = cartList.reduce((sum, item) => {
+      return sum + item.price;
+    }, 0);
+
+    cartList.push({
+      name: "Costo de Entrega",
+      price: total - totalBeforeDelivery,
+    });
     return cartList;
   };
 
   const handleSubmit = async () => {
+    setIsSending(true);
     let order = {
       products: filterProducts(),
       transaction_id: "Not Assigned",
@@ -125,11 +135,11 @@ export default (props) => {
 
     let res = await axios.post(`.netlify/functions/orders`, createOrderData);
     if (res.status === 200) {
+      setIsSending(false);
       dispatch({ type: SET_SUCCESS, payload: true });
-
-      console.log("success");
     } else if (res.status === 500) {
-      console.log("error");
+      setIsSending(false);
+      console.error("error");
     }
   };
 
@@ -164,12 +174,18 @@ export default (props) => {
             type="button"
             value="Submit"
             onClick={props.previousStep}
+            disabled={isSending}
           >
             Atras
           </SubmitButton>
 
-          <SubmitButton type="button" value="Submit" onClick={handleSubmit}>
-            Hacer Pedido
+          <SubmitButton
+            disabled={isSending}
+            type="button"
+            value="Submit"
+            onClick={handleSubmit}
+          >
+            {isSending ? "Procesando Pedido..." : "Hacer Pedido"}
           </SubmitButton>
         </ButtonContainer>
       </Column>

@@ -2,17 +2,17 @@ export const pipas = [
   {
     id: "pipa5",
     name: "Pipa de 5,000 litros",
-    price: 420,
+    price: 430,
   },
   {
     id: "pipa10",
     name: "Pipa de 10,000 litros",
-    price: 570,
+    price: 585,
   },
   {
     id: "pipa20",
     name: "Pipa de 20,000 litros",
-    price: 1120,
+    price: 1155,
   },
 ];
 
@@ -24,22 +24,22 @@ export const mangueras = [
     price: 0,
   },
   {
-    id: "manguera60",
-    name: "60 metros",
-    description: "60 metros de Manguera",
-    price: 20,
+    id: "manguera55",
+    name: "55 metros",
+    description: "55 metros de Manguera",
+    price: 25,
   },
   {
-    id: "manguera85",
-    name: "85 metros",
-    description: "85 metros de Manguera",
-    price: 30,
+    id: "manguera80",
+    name: "80 metros",
+    description: "80 metros de Manguera",
+    price: 50,
   },
   {
     id: "manguera100",
     name: "100 metros",
     description: "100 metros de Manguera",
-    price: 50,
+    price: 75,
   },
   {
     id: "manguera100+",
@@ -55,20 +55,20 @@ export const extras = {
     size: "",
     price: 0,
     name: "cisterna",
-    description: "cisterna",
+    description: "Cisterna",
   },
   tinaco: {
     status: false,
     size: "",
     price: 0,
     name: "tinaco",
-    description: "tinaco",
+    description: "Tinaco",
   },
   bomba: {
     status: false,
     size: "",
     price: 30,
     name: "bomba",
-    description: "bomba",
+    description: "Bomba",
   },
 };

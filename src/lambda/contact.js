@@ -31,7 +31,7 @@ exports.handler = async (event, context) => {
 
   if (event.httpMethod == "POST") {
     let body = event.body ? JSON.parse(event.body) : {};
-    console.log(body);
+
     let response;
     if (body) {
       try {
