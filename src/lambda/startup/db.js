@@ -10,8 +10,9 @@ module.exports = async () => {
         useUnifiedTopology: true,
         useFindAndModify: false,
       });
+
       isConnected = db.connections[0].readyState;
-      console.log(`Connected to mongodb...`);
+      console.info(`Connected to mongodb...`);
     } catch (err) {
       console.error(err);
     }

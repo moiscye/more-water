@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import { motion } from "framer-motion";
+
 import axios from "axios";
 import {
   SectionHeading,
@@ -11,6 +11,7 @@ import {
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import EmailIllustrationSrc from "images/email-illustration.svg";
 import { ReactComponent as SvgPhone } from "images/phone.svg";
+import SuccessForm from "./SuccessForm";
 
 const PhoneIcon = tw(SvgPhone)`w-6 h-6 md:w-10 md:h-10 inline-block mr-2 `;
 const Container = tw.div`relative`;
@@ -111,6 +112,7 @@ export default ({
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSent, setIsSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   let { fullName, phoneNumber, email, message } = contactDetails;
   const myRef = useRef(null);
   const executeScroll = () => myRef.current.scrollIntoView();
@@ -122,6 +124,7 @@ export default ({
   };
 
   const handleSubmit = async (e) => {
+    setIsSending(true);
     e.preventDefault();
     if (!validateFields()) {
       setError(true);
@@ -136,9 +139,11 @@ export default ({
     if (res.status === 200) {
       setContactDetails(initialState);
       setIsSent(true);
+      setIsSending(false);
       executeScroll();
     } else if (res.status === 500) {
       setError(true);
+      setIsSending(false);
       setErrorMessage(
         !activeLanguageIndex
           ? "Hubo un problema al enviar el correo. Por favor intenta mas tarde."
@@ -218,7 +223,7 @@ export default ({
               : "Write your message here"
           }
         />
-        <SubmitButton type="submit">
+        <SubmitButton disabled={isSending} type="submit">
           {!activeLanguageIndex
             ? submitButtonText
             : languageOption.submitButtonTextEN}
@@ -228,37 +233,25 @@ export default ({
   );
 
   const sentMessage = () => (
-    <motion.section
-      initial={{ x: "150%" }}
-      animate={{
-        x: "0%",
-        transitionEnd: {
-          x: 0,
-        },
-      }}
-      transition={{ type: "spring", damping: 100 }}
-    >
-      <TextContent>
-        <Subheading>
-          {!activeLanguageIndex
-            ? "Contacto Exitoso!"
-            : "Message Sent Successfully"}
-        </Subheading>
-        <Heading>
-          {!activeLanguageIndex
-            ? "Gracias por ponerte en Contacto con Nosotros"
-            : "Thanks for getting in touch with us."}
-        </Heading>
-        <Description>
-          {!activeLanguageIndex
-            ? "Te responderemos lo antes posible. Si es algo sumamente urgente por favor llamanos al 222-436-2510"
-            : "We will get back to you as soon as posible. If you need an urgent service please call us on +61-048-121-6469"}
-        </Description>
-        <SubmitButton onClick={handleSendAgain} type="button">
-          {!activeLanguageIndex ? "Mandar Otro Mensaje" : "Send Again"}
-        </SubmitButton>
-      </TextContent>
-    </motion.section>
+    <SuccessForm
+      subheading={
+        !activeLanguageIndex ? "Contacto Exitoso!" : "Message Sent Successfully"
+      }
+      heading={
+        !activeLanguageIndex
+          ? "Gracias por ponerte en Contacto con Nosotros"
+          : "Thanks for getting in touch with us."
+      }
+      description={
+        !activeLanguageIndex
+          ? "Te responderemos lo antes posible. Si es algo sumamente urgente por favor llamanos al 222-436-2510"
+          : "We will get back to you as soon as posible. If you need an urgent service please call us on +61-048-121-6469"
+      }
+      submitButtonText={
+        !activeLanguageIndex ? "Mandar Otro Mensaje" : "Send Again"
+      }
+      submitButtonAction={handleSendAgain}
+    />
   );
 
   return (

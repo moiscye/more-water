@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+const autoIncrement = require("mongoose-auto-increment");
 const Schema = mongoose.Schema;
-const { ObjectId } = mongoose.Schema;
-
+ObjectId = Schema.ObjectId;
 const CartItemSchema = new mongoose.Schema(
   {
     name: {
@@ -9,10 +9,6 @@ const CartItemSchema = new mongoose.Schema(
       trim: true,
     },
     price: {
-      type: Number,
-      trim: true,
-    },
-    count: {
       type: Number,
       trim: true,
     },
@@ -33,12 +29,22 @@ const OrderSchema = new mongoose.Schema(
       enum: ["No Procesada", "Procesada", "Enviada", "Entregada", "Cancelada"],
     },
     paymentType: String,
+    deliveryInstructions: String,
     updated: Date,
     user: { type: ObjectId, ref: "User" },
     address: String,
+    deliveryDate: Date,
+    orderNumber: { type: Number, default: 0, unique: true },
   },
   { timestamps: true }
 );
+autoIncrement.initialize(mongoose.connection);
+OrderSchema.plugin(autoIncrement.plugin, {
+  model: "Order",
+  field: "orderNumber",
+  startAt: 100,
+  incrementBy: 1,
+});
 
 const Order = mongoose.model("Order", OrderSchema);
 

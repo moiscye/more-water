@@ -98,7 +98,7 @@ export default () => {
           imageBorder={true}
           imageDecoratorBlob={true}
           primaryButtonText="Pide tu pipa"
-          primaryButtonUrl="/contacto"
+          primaryButtonUrl="/cotizacion"
           textOnLeft={true}
         />
         <FeatureWithSteps
@@ -161,7 +161,7 @@ export default () => {
             },
           ]}
           primaryButtonText="Pide tu Pipa"
-          primaryButtonUrl="/contacto"
+          primaryButtonUrl="/cotizacion"
         />
 
         <Testimonial

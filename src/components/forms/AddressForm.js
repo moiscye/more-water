@@ -44,7 +44,9 @@ export default (props) => {
       </Column>
       {total && (
         <PriceContainer>
-          <PriceTag>Total: ${total}</PriceTag>
+          <PriceTag>
+            Total: ${total && Number.parseFloat(total).toFixed(2)}
+          </PriceTag>
         </PriceContainer>
       )}
       <Column>

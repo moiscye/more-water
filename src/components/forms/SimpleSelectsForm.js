@@ -78,7 +78,6 @@ export default (props) => {
       data.cisterna.status = !data.cisterna.status;
     else if (e.target.id === "bomba") data.bomba.status = !data.bomba.status;
     else {
-      console.log(e.target.id);
       return;
     }
     dispatch({
@@ -152,7 +151,9 @@ export default (props) => {
       </Column>
       {total ? (
         <PriceContainer>
-          <PriceTag>Total: ${total}</PriceTag>
+          <PriceTag>
+            Total: ${total && Number.parseFloat(total).toFixed(2)}
+          </PriceTag>
         </PriceContainer>
       ) : null}
       <Column>

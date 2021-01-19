@@ -5,3 +5,4 @@ export const ADD_EXTRAS = "ADD_EXTRAS";
 export const ADD_FECHA_ENTREGA = "ADD_FECHA_ENTREGA";
 export const ADD_TOTAL = "ADD_TOTAL";
 export const UPDATE_TOTAL = "UPDATE_TOTAL";
+export const SET_SUCCESS = "SET_SUCCESS";
