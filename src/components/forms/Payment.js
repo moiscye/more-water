@@ -78,11 +78,11 @@ export default (props) => {
     },
     {
       leftText: "Clabe",
-      rightText: "Num calbe",
+      rightText: "Num clabe",
     },
     {
       leftText: "Beneficiario",
-      rightText: "beneficiario",
+      rightText: "Beneficiario",
     },
     {
       leftText: "Instrucciones",

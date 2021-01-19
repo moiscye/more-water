@@ -36,9 +36,9 @@ export default ({ history }) => {
     scrollToTop();
     return (
       <SuccessForm
-        subheading="Ya casi tendras el servicio"
+        subheading="Gracias por tu confianza"
         heading="Tu Pedido ha sido procesado exitosamente!"
-        description="Te responderemos lo antes posible. Si es algo sumamente urgente por  favor llamanos al 222-436-2510"
+        description="Te mandamos la confirmacion de la orden al correo que nos proporcionaste. Si no lo ves, checa tu correo no deseado o llama al Tel: 2224362510."
         submitButtonText="Pedir Otra pipa"
         submitButtonAction={handleNewOrder}
       />
