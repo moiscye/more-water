@@ -46,6 +46,8 @@ exports.handler = async (event, context) => {
     );
     console.log("STAGING_SEND_GRID_KEY", process.env.STAGING_SEND_GRID_KEY);
     console.log("STAGING_MONGO_URI", process.env.STAGING_MONGO_URI);
+    console.log("==========================================================");
+    console.log(context);
 
     let response;
     if (body) {
