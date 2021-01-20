@@ -73,16 +73,24 @@ export default (props) => {
 
   const detallePago = [
     {
-      leftText: "Cuenta",
-      rightText: "Num cuenta",
+      leftText: "Banco",
+      rightText: "Santander",
     },
     {
-      leftText: "Clabe",
-      rightText: "Num clabe",
+      leftText: "Num. de Cuenta",
+      rightText: "60573554647",
+    },
+    {
+      leftText: "Clabe Interbancaria",
+      rightText: "014650605735546476",
+    },
+    {
+      leftText: "Sucursal",
+      rightText: "4501 PLAZA SAN ANGEL",
     },
     {
       leftText: "Beneficiario",
-      rightText: "Beneficiario",
+      rightText: "Jose Juan Librado Martinez Medel",
     },
     {
       leftText: "Instrucciones",
