@@ -86,7 +86,7 @@ export default (props) => {
     },
     {
       leftText: "Sucursal",
-      rightText: "4501 PLAZA SAN ANGEL",
+      rightText: "4501 Plaza San Angel",
     },
     {
       leftText: "Beneficiario",
