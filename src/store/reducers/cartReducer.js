@@ -15,7 +15,7 @@ const initialState = {
   manguera: mangueras[0],
   extras,
   fechaEntrega: new Date(),
-  total: Number.parseFloat(pipas[0].price).toFixed(2),
+  total: pipas[0].price,
   success: false,
 };
 

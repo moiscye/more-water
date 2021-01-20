@@ -15,6 +15,7 @@
     "google-map-react": "^2.1.9",
     "mongoose": "^5.11.10",
     "mongoose-auto-increment": "^5.0.1",
+    "netlify-plugin-contextual-env": "^0.3.0",
     "rc-checkbox": "^2.3.2",
     "react": "^16.13.1",
     "react-anchor-link-smooth-scroll": "^1.0.12",

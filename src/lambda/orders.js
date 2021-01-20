@@ -11,8 +11,8 @@ exports.handler = async (event, context) => {
     sgMail.setApiKey(sendGridKey);
 
     const msg = {
-      to: body.isAdmin ? "pipasangelopolis@gmail.com" : body.user.email,
-      from: "info@angelopolis.com.au",
+      to: body.isAdmin ? process.env.ADMIN_EMAIL_RECIPIENT : body.user.email,
+      from: process.env.ADMIN_EMAIL_SENDER,
       subject: body.isAdmin
         ? "Tienes un nuevo pedido"
         : "Tu pedido esta siendo procesado",
