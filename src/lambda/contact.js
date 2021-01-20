@@ -31,23 +31,6 @@ exports.handler = async (event, context) => {
 
   if (event.httpMethod == "POST") {
     let body = event.body ? JSON.parse(event.body) : {};
-    console.log("ADMIN_EMAIL_RECIPIENT", process.env.ADMIN_EMAIL_RECIPIENT);
-    console.log("ADMIN_EMAIL_SENDER", process.env.ADMIN_EMAIL_SENDER);
-    console.log("SEND_GRID_KEY", process.env.SEND_GRID_KEY);
-    console.log("MONGO_URI", process.env.MONGO_URI);
-    console.log("==========================================================");
-    console.log(
-      "STAGING_ADMIN_EMAIL_RECIPIENT",
-      process.env.STAGING_ADMIN_EMAIL_RECIPIENT
-    );
-    console.log(
-      "STAGING_ADMIN_EMAIL_SENDER",
-      process.env.STAGING_ADMIN_EMAIL_SENDER
-    );
-    console.log("STAGING_SEND_GRID_KEY", process.env.STAGING_SEND_GRID_KEY);
-    console.log("STAGING_MONGO_URI", process.env.STAGING_MONGO_URI);
-    console.log("==========================================================");
-    console.log(context);
 
     let response;
     if (body) {
