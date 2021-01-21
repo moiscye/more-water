@@ -70,19 +70,26 @@ export default (props) => {
       rightText: user && user.email,
     },
   ];
-
   const detallePago = [
     {
-      leftText: "Cuenta",
-      rightText: "Num cuenta",
+      leftText: "Banco",
+      rightText: "Santander",
     },
     {
-      leftText: "Clabe",
-      rightText: "Num clabe",
+      leftText: "Num. de Cuenta",
+      rightText: "60573554647",
+    },
+    {
+      leftText: "Clabe Interbancaria",
+      rightText: "014650605735546476",
+    },
+    {
+      leftText: "Sucursal",
+      rightText: "4501 Plaza San Angel",
     },
     {
       leftText: "Beneficiario",
-      rightText: "Beneficiario",
+      rightText: "Jose Juan Librado Martinez Medel",
     },
     {
       leftText: "Instrucciones",
