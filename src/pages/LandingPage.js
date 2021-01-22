@@ -35,13 +35,13 @@ export default () => {
           id="inicio"
           heading={
             <>
-              Estas buscando una{" "}
-              <HighlightedText>Pipa de Agua?</HighlightedText>
+              Pipas de Agua <HighlightedText>en Puebla.</HighlightedText>
             </>
           }
-          description="En Angelopolis contamos con agua de la mejor calidad, servicio inigualable y precio que ayuda a su economia."
+          description="Angelopolis es lider en pipas de agua en puebla. Somos tu mejor opcion en calidad, precio y atencion al cliente."
           imageSrc={DesignIllustration}
           imageCss={imageCss}
+          imageAlt="Pipas de agua en puebla"
           imageDecoratorBlob={true}
           primaryButtonText="Pide tu Pipa"
           watchVideoButtonText="Miranos en Accion"
@@ -52,8 +52,8 @@ export default () => {
           subheading={<Subheading>Lo que nos distingue</Subheading>}
           heading={
             <>
-              Tenemos el agua de la mejor{" "}
-              <HighlightedText>Calidad.</HighlightedText>
+              Agua de la mejor{" "}
+              <HighlightedText>Calidad y al mejor Precio.</HighlightedText>
             </>
           }
           description="El agua que ofrecemos proviene de pozos certificados."
