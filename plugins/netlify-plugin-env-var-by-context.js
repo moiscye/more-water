@@ -3,7 +3,7 @@ module.exports = {
     const context = process.env.CONTEXT;
     const branch = process.env.BRANCH.toUpperCase().replace(/-/g, "_");
     const defaultDevPrefix = "STAGING_";
-
+    process.env.CONT = context;
     if (context === "production") {
       console.log(
         "The current context is production, so we we'll only use default vars"

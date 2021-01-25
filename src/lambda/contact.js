@@ -1,8 +1,37 @@
 const sgMail = require("@sendgrid/mail");
 const contactEmail = require("./services/emailTemplates/contactEmail");
 const ContactData = require("./models/contactData");
-const connectToDB = require("./startup/db");
 exports.handler = async (event, context) => {
+  const contextEnv = process.env.CONTEXT;
+  console.log("awscontext", context);
+  console.log("contextEnv", contextEnv);
+  console.log("contextEnvPLUGIN", process.env.CONT);
+  console.log("NETLIFY_DEV", process.env.NETLIFY_DEV ? "DEV" : "PROD");
+  if (contextEnv === "production") {
+    console.log("PRODUCTION");
+  } else if (
+    contextEnv === "deploy-preview" ||
+    contextEnv === "branch-deploy"
+  ) {
+    console.log("STAGING");
+  }
+
+  console.log("MONGO_URI", process.env.MONGO_URI);
+  console.log("SEND_GRID_KEY", process.env.SEND_GRID_KEY);
+  console.log("ADMIN_EMAIL_RECIPIENT", process.env.ADMIN_EMAIL_RECIPIENT);
+  console.log("ADMIN_EMAIL_SENDER", process.env.ADMIN_EMAIL_SENDER);
+  console.log("STAGING_MONGO_URI", process.env.STAGING_MONGO_URI);
+  console.log("STAGING_SEND_GRID_KEY", process.env.STAGING_SEND_GRID_KEY);
+  console.log(
+    "STAGING_ADMIN_EMAIL_RECIPIENT",
+    process.env.STAGING_ADMIN_EMAIL_RECIPIENT
+  );
+  console.log(
+    "STAGING_ADMIN_EMAIL_SENDER",
+    process.env.STAGING_ADMIN_EMAIL_SENDER
+  );
+
+  const connectToDB = require("./startup/db")(process.env.MONGO_URI);
   const sendGridKey = process.env.SEND_GRID_KEY;
   context.callbackWaitsForEmptyEventLoop = false;
   await connectToDB();
@@ -35,9 +64,9 @@ exports.handler = async (event, context) => {
     let response;
     if (body) {
       try {
-        let email = new ContactData(body);
-        email = await email.save();
-        body = await sendEmail(body);
+        // let email = new ContactData(body);
+        // email = await email.save();
+        // body = await sendEmail(body);
         response = {
           statusCode: 200,
           body: JSON.stringify(body),
