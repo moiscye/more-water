@@ -70,7 +70,6 @@ export default (props) => {
       rightText: user && user.email,
     },
   ];
-
   const detallePago = [
     {
       leftText: "Banco",

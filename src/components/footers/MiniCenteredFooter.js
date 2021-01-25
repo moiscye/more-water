@@ -29,7 +29,9 @@ const SocialLink = styled.a`
   }
 `;
 const AddressText = tw.p`text-center mt-10 font-medium tracking-wide text-sm text-gray-600`;
-const CopyrightText = tw.p`text-center mt-10 font-medium tracking-wide text-sm text-gray-600`;
+const CopyrightText = tw(AddressText)``;
+const AboutCompanyContainer = tw.div`max-w-lg`;
+const AboutCompany = tw.h2`text-center mt-10 font-medium tracking-wide text-sm text-gray-600`;
 export default ({ id = "" }) => {
   return (
     <Container id={id}>
@@ -51,15 +53,21 @@ export default ({ id = "" }) => {
           <AddressText as="a" href="tel:2224362510">
             Tel: 222-436-2510
           </AddressText>
-          <AddressText>
-            <AddressText
-              target="_blank"
-              as="a"
-              href="mailto:pipasangelopolis@gmail.com"
-            >
-              email: pipasangelopolis@gmail.com
-            </AddressText>
+          <AddressText
+            target="_blank"
+            as="a"
+            href="mailto:pipasangelopolis@gmail.com"
+          >
+            email: pipasangelopolis@gmail.com
           </AddressText>
+          <AboutCompanyContainer>
+            <AboutCompany>
+              Servicio de pipas de agua en Puebla, Puebla Centro, Cholula.
+              Angelopolis es una empresa dedicada al transporte de agua potable
+              certificada. También contamos con lavado de cisternas y tinacos en
+              Puebla. Si buscas Pipas de agua en Puebla somos tu mejor opcion.
+            </AboutCompany>
+          </AboutCompanyContainer>
           <SocialLinksContainer>
             <SocialLink
               target="_blank"
@@ -73,8 +81,8 @@ export default ({ id = "" }) => {
           </SocialLinksContainer>
 
           <CopyrightText>
-            Pipas de Agua Angelopolis 2020. &copy; Todos los derechos
-            reservados.
+            Pipas de Agua Angelopolis {new Date().getFullYear()}. &copy; Todos
+            los derechos reservados.
           </CopyrightText>
         </Row>
       </Content>
