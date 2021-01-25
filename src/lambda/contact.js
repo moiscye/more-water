@@ -3,9 +3,7 @@ const contactEmail = require("./services/emailTemplates/contactEmail");
 const ContactData = require("./models/contactData");
 exports.handler = async (event, context) => {
   const contextEnv = process.env.CONTEXT;
-  console.log("awscontext", context);
-  console.log("contextEnv", contextEnv);
-  console.log("contextEnvPLUGIN", process.env.CONT);
+
   console.log("NETLIFY_DEV", process.env.NETLIFY_DEV ? "DEV" : "PROD");
   if (contextEnv === "production") {
     console.log("PRODUCTION");
