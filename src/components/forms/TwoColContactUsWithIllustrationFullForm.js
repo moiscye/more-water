@@ -159,6 +159,11 @@ export default ({
     setIsSent(false);
     executeScroll();
   };
+
+  const testEnv = async () => {
+    let res = await axios.get(`.netlify/functions/envir`);
+    console.log(res);
+  };
   const formTemplate = () => (
     <TextContent>
       {subheading && (
@@ -228,6 +233,7 @@ export default ({
             ? submitButtonText
             : languageOption.submitButtonTextEN}
         </SubmitButton>
+        <SubmitButton onClick={testEnv}>TEST ENV!</SubmitButton>
       </Form>
     </TextContent>
   );
