@@ -27,7 +27,7 @@ const DecoratorBlob2 = tw(
 )`absolute top-0 right-0 w-80 h-80 transform  translate-x-20 -translate-y-64 text-primary-700 opacity-50`;
 
 export default ({
-  textPrimary = "Companies Love us!",
+  textPrimary = "Companies Love US!",
   textSecondary = "Companies all over the world are happily using our products",
   primaryLinkText = "More Info",
   primaryLinkUrl = "https://www.google.com/",
