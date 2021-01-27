@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
-import Hero from "components/hero/TwoColumnWithVideo.js";
+
 import Features from "components/features/ThreeColSimple.js";
 import MainFeature from "components/features/TwoColWithButton.js";
 import MainFeature2 from "components/features/TwoColWithTwoHorizontalFeaturesAndButton.js";
@@ -14,39 +14,23 @@ import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import prototypeIllustrationImageSrc from "images/prototype-illustration.svg";
 import { ReactComponent as BriefcaseIcon } from "feather-icons/dist/icons/briefcase.svg";
 import { ReactComponent as MoneyIcon } from "feather-icons/dist/icons/dollar-sign.svg";
-import DesignIllustration from "../images/pipa.jpg";
+import girlImage from "images/chica.jpg";
+
 import mapIconImageSrc from "images/map-gps.svg";
 import tankIconImageSrc from "images/tank-truck.svg";
 import qualityIconImageSrc from "images/quality.svg";
-import driverImage from "images/foto-2.jpeg";
+import driverImage from "images/foto-2.jpg";
 
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
 
-  const imageCss = tw`rounded-4xl`;
   return (
     <>
       <FloatingButton href="tel:2224362510">
         <PhoneIcon />
       </FloatingButton>
       <AnimationRevealPage>
-        <Hero
-          id="inicio"
-          heading={
-            <>
-              Pipas de Agua <HighlightedText>en Puebla.</HighlightedText>
-            </>
-          }
-          description="Angelopolis es lider en pipas de agua en puebla. Somos tu mejor opcion en calidad, precio y atencion al cliente."
-          imageSrc={DesignIllustration}
-          imageCss={imageCss}
-          imageAlt="Pipas de agua en puebla"
-          imageDecoratorBlob={true}
-          primaryButtonText="Pide tu Pipa"
-          watchVideoButtonText="Miranos en Accion"
-          primaryButtonUrl="/cotizacion"
-        />
         <Features
           id="nosotros"
           subheading={<Subheading>Lo que nos distingue</Subheading>}
@@ -110,9 +94,7 @@ export default () => {
             </>
           }
           textOnLeft={false}
-          imageSrc={
-            "https://images.unsplash.com/photo-1574689049597-7e6ed3ca358e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1995&q=80"
-          }
+          imageSrc={girlImage}
           imageDecoratorBlob={true}
           decoratorBlobCss={tw`xl:w-40 xl:h-40 opacity-15 -translate-x-1/2 left-1/2`}
           steps={[

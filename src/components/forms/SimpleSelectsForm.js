@@ -18,7 +18,7 @@ import calculateTotal from "helpers/calculateTotal";
 const Select = tw.select`py-2 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600`;
 const Option = tw.option``;
 const InputContainer = tw.div`py-1 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600 z-50`;
-
+const WarningText = tw.span`block md:inline-block md:ml-3 text-red-700 text-lg font-medium`;
 export default (props) => {
   const [pipa, setPipa] = useState();
   const [manguera, setManguera] = useState();
@@ -139,10 +139,21 @@ export default (props) => {
         <InputContainer id="cisterna" onClick={handleCheckboxChange}>
           <Checkbox id="cisterna" checked={extra && extra.cisterna.status} />
           <label id="cisterna">&nbsp; Lavado de Cisterna</label>
+          {extra && extra.cisterna.status && (
+            <WarningText id="cisterna">
+              Aviso Importante! No lavamos contenedores con residuos toxicos.
+            </WarningText>
+          )}
         </InputContainer>
+
         <InputContainer id="tinaco" onClick={handleCheckboxChange}>
           <Checkbox id="tinaco" checked={extra && extra.tinaco.status} />
           <label id="tinaco">&nbsp; Lavado de Tinaco</label>
+          {extra && extra.tinaco.status && (
+            <WarningText id="tinaco">
+              Aviso Importante! No lavamos contenedores con residuos toxicos.
+            </WarningText>
+          )}
         </InputContainer>
         <InputContainer id="bomba" onClick={handleCheckboxChange}>
           <Checkbox id="bomba" checked={extra && extra.bomba.status} />

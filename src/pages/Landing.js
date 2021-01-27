@@ -2,24 +2,43 @@ import React from "react";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
+import Hero from "components/hero/TwoColumnWithVideo.js";
 import MainFeature from "components/features/TwoColWithButton.js";
+import FeatureWithSteps from "components/features/TwoColWithSteps.js";
 import Pricing from "components/pricing/ThreePlans.js";
-import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { pipas } from "../helpers/data";
+import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 // Images
-
-import lavadoImage from "images/lavado-cisterna.jpeg";
-
+import lavadoImage from "images/lavado-cisterna.jpg";
+import albercaImage from "images/alberca.jpg";
+import DesignIllustration from "../images/pipa.jpg";
 export default () => {
   const Subheading = tw.span`uppercase tracking-widest font-bold text-primary-500`;
   const HighlightedText = tw.span`text-primary-500`;
 
+  const imageCss = tw`rounded-4xl`;
   return (
     <>
       <FloatingButton href="tel:2224362510">
         <PhoneIcon />
       </FloatingButton>
       <AnimationRevealPage>
+        <Hero
+          id="inicio"
+          heading={
+            <>
+              Pipas de Agua <HighlightedText>en Puebla.</HighlightedText>
+            </>
+          }
+          description="Angelopolis es lider en pipas de agua en puebla. Somos tu mejor opcion en calidad, precio y atencion al cliente."
+          imageSrc={DesignIllustration}
+          imageCss={imageCss}
+          imageAlt="Pipas de agua en puebla"
+          imageDecoratorBlob={true}
+          primaryButtonText="Pide tu Pipa"
+          watchVideoButtonText="Miranos en Accion"
+          primaryButtonUrl="/cotizacion"
+        />
         <Pricing
           id="servicios"
           subheading={<Subheading>Servicios</Subheading>}
@@ -86,8 +105,38 @@ export default () => {
           imageBorder={true}
           imageDecoratorBlob={true}
           primaryButtonText="Mas info aqui"
-          primaryButtonUrl="/cotizacion"
+          primaryButtonUrl="/lavado"
           textOnLeft={false}
+        />
+
+        <FeatureWithSteps
+          subheading={<Subheading>Agua ideal para albercas.</Subheading>}
+          heading={
+            <>
+              Llenado de <HighlightedText>Albercas.</HighlightedText>
+            </>
+          }
+          textOnLeft={true}
+          imageSrc={albercaImage}
+          imageDecoratorBlob={true}
+          decoratorBlobCss={tw`xl:w-40 xl:h-40 opacity-15 -translate-x-1/2 left-1/2`}
+          steps={[
+            {
+              heading: "Entrega y llenado",
+              description: "en un plazo de 24 o 48 horas.",
+            },
+            {
+              heading: "Servimos todos los días",
+              description: "incluidos fines de semana.",
+            },
+            {
+              heading: "Nuestro personal especializado ",
+              description: "llenará su piscina en tiempo récord.",
+            },
+          ]}
+          showButton={true}
+          primaryButtonText="Aprende Mas"
+          primaryButtonUrl="/contacto"
         />
       </AnimationRevealPage>
     </>

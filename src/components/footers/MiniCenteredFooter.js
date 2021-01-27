@@ -43,7 +43,8 @@ export default ({ id = "" }) => {
           </LogoContainer>
           <LinksContainer>
             <Link to="/">Inicio</Link>
-            <Link to="/servicios">Servicios</Link>
+            <Link to="/lavado">Lavados</Link>
+            <Link to="/nosotros">Nosotros</Link>
             <Link to="/contacto">Contacto</Link>
             <Link to="/cotizacion">Cotizacion</Link>
           </LinksContainer>

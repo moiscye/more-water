@@ -1,14 +1,15 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import {
   SectionHeading,
   Subheading as SubheadingBase,
 } from "components/misc/Headings.js";
+import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import TeamIllustrationSrc from "images/team-illustration-2.svg";
 import { ReactComponent as SvgDotPattern } from "images/dot-pattern.svg";
-
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col md:flex-row justify-between max-w-screen-xl mx-auto py-20 md:py-24 items-center`;
 const Column = tw.div`w-full max-w-md mx-auto md:max-w-none md:mx-0`;
@@ -43,7 +44,10 @@ const StepNumber = tw.div`font-semibold text-4xl leading-none text-gray-400`;
 const StepText = tw.div`mt-3 md:mt-0 md:ml-6`;
 const StepHeading = tw.h6`leading-none text-xl font-semibold`;
 const StepDescription = tw.p`mt-3 max-w-xs leading-loose text-sm text-gray-600 font-medium`;
-
+const PrimaryButton = styled(PrimaryButtonBase)((props) => [
+  tw`mt-8 md:mt-8 text-sm inline-block mx-auto md:mx-0`,
+  props.buttonrounded === "true" && tw`rounded-full`,
+]);
 export default ({
   id = "",
   subheading = "Our Expertise",
@@ -60,6 +64,10 @@ export default ({
   textOnLeft = true,
   steps = null,
   decoratorBlobCss = null,
+  showButton = false,
+  primaryButtonText = "Learn More",
+  primaryButtonUrl = "https://google.com",
+  buttonRounded = "true",
 }) => {
   // The textOnLeft boolean prop can be used to display either the text on left or right side of the image.
 
@@ -111,6 +119,15 @@ export default ({
                 </Step>
               ))}
             </Steps>
+            {showButton && (
+              <PrimaryButton
+                buttonrounded={buttonRounded}
+                as={Link}
+                to={primaryButtonUrl}
+              >
+                {primaryButtonText}
+              </PrimaryButton>
+            )}
           </TextContent>
         </TextColumn>
       </TwoColumn>

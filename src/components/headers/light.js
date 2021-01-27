@@ -86,7 +86,8 @@ export default ({
   const defaultLinks = [
     <NavLinks key={1}>
       <NavLink to="/">Inicio</NavLink>
-      <NavLink to="/servicios">Servicios</NavLink>
+      <NavLink to="/lavado">Lavados</NavLink>
+      <NavLink to="/nosotros">Nosotros</NavLink>
       <NavLink to="/contacto">Contacto</NavLink>
       <NavLink to="/cotizacion">Cotizacion</NavLink>
       <SecondaryLink as="a" href="tel:2224362510" tw="lg:ml-12!">
