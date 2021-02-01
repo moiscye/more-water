@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import tw from "twin.macro";
 import ContactUsSimple from "components/forms/SimpleSelectsForm";
-import Payment from "components/forms/Payment";
+import Checkout from "components/forms/Checkout";
 import DateAndTimeForm from "components/forms/DateAndTimeForm";
 import PersonalInfoForm from "components/forms/PersonalInfoForm";
 import AddressForm from "components/forms/AddressForm";
@@ -52,7 +52,7 @@ export default ({ history }) => {
         <AddressForm hashKey={"direccion"} />
         <DateAndTimeForm hashKey={"fecha"} />
         <PersonalInfoForm hashKey={"informacion-personal"} />
-        <Payment hashKey={"pago"} />
+        <Checkout hashKey={"pago"} />
       </Steps>
     </StepWizardSimple>
   );
