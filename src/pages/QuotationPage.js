@@ -8,7 +8,6 @@ import PersonalInfoForm from "components/forms/PersonalInfoForm";
 import AddressForm from "components/forms/AddressForm";
 import StepWizardSimple from "components/steps/SingleWizardWithRoundSteps";
 import AnimationRevealPage from "../helpers/AnimationRevealPage.js";
-import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import SuccessForm from "components/forms/SuccessForm";
 import StepWizard from "react-step-wizard";
@@ -58,17 +57,12 @@ export default ({ history }) => {
   );
 
   return (
-    <>
-      <FloatingButton href="tel:2224362510">
-        <PhoneIcon />
-      </FloatingButton>
-      <AnimationRevealPage>
-        <Container>
-          <ContentWithPaddingLg>
-            {!success ? formSection() : successMessage()}
-          </ContentWithPaddingLg>
-        </Container>
-      </AnimationRevealPage>
-    </>
+    <AnimationRevealPage>
+      <Container>
+        <ContentWithPaddingLg>
+          {!success ? formSection() : successMessage()}
+        </ContentWithPaddingLg>
+      </Container>
+    </AnimationRevealPage>
   );
 };

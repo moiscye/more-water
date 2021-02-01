@@ -63,18 +63,21 @@ export default ({
       description:
         "We strictly only deal with vendors that provide top notch security.",
       url: "https://google.com",
+      clickEvent: null,
     },
     {
       imageSrc: SupportIconImage,
       title: "24/7 Support",
       description: "Lorem ipsum donor amet siti ceali placeholder text",
       url: "https://google.com",
+      clickEvent: null,
     },
     {
       imageSrc: CustomizeIconImage,
       title: "Customizable",
       description: "Lorem ipsum donor amet siti ceali placeholder text",
       url: "https://google.com",
+      clickEvent: null,
     },
   ],
   linkText = "Learn More",
@@ -100,7 +103,7 @@ export default ({
         <ThreeColumnContainer>
           {cards.map((card, i) => (
             <Column key={i}>
-              <Card to={card.url}>
+              <Card to={card.url} onClick={card.clickEvent}>
                 <span className="imageContainer" css={imageContainerCss}>
                   <img src={card.imageSrc} alt="" css={imageCss} />
                 </span>

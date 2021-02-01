@@ -42,6 +42,7 @@ export default ({
   imageCss = null,
   imageAlt = "Hero",
   imageDecoratorBlob = false,
+  clickEvent = null,
 }) => {
   return (
     <Container id={id}>
@@ -50,7 +51,7 @@ export default ({
           <Heading>{heading}</Heading>
           <Paragraph>{description}</Paragraph>
           <Actions>
-            <PrimaryButton to={primaryButtonUrl}>
+            <PrimaryButton to={primaryButtonUrl} onClick={clickEvent}>
               {primaryButtonText}
             </PrimaryButton>
           </Actions>

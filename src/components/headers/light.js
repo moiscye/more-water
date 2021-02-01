@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import { motion } from "framer-motion";
 // import AnchorLink from "react-anchor-link-smooth-scroll";
 import { Link } from "react-router-dom";
@@ -90,7 +91,17 @@ export default ({
       <NavLink to="/nosotros">Nosotros</NavLink>
       <NavLink to="/contacto">Contacto</NavLink>
       <NavLink to="/cotizacion">Cotizacion</NavLink>
-      <SecondaryLink as="a" href="tel:2224362510" tw="lg:ml-12!">
+      <SecondaryLink
+        as="a"
+        href="tel:2224362510"
+        tw="lg:ml-12!"
+        onClick={() =>
+          ReactGA.event({
+            category: "telefono click",
+            action: "Top Menu",
+          })
+        }
+      >
         <PhoneIcon />
         222-436-2510
       </SecondaryLink>
@@ -123,7 +134,16 @@ export default ({
           css={collapseBreakpointCss.mobileNavLinksContainer}
         >
           {logoLink}
-          <CenterPhoneLink as="a" href="tel:2224362510">
+          <CenterPhoneLink
+            as="a"
+            href="tel:2224362510"
+            onClick={() =>
+              ReactGA.event({
+                category: "telefono click",
+                action: "Top Menu Tablet",
+              })
+            }
+          >
             <PhoneIcon />
             222-436-2510
           </CenterPhoneLink>

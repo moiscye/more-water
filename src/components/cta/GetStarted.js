@@ -1,4 +1,5 @@
 import React from "react";
+
 import styled from "styled-components"; //eslint-disable-line
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -31,6 +32,7 @@ export default ({
   textSecondary = "Companies all over the world are happily using our products",
   primaryLinkText = "More Info",
   primaryLinkUrl = "https://www.google.com/",
+  clickEvent = null,
 }) => {
   return (
     <Container>
@@ -44,7 +46,11 @@ export default ({
               <TextSecondary>{textSecondary}</TextSecondary>
             </TextContainer>
             <LinksContainer>
-              <PrimaryLink href={primaryLinkUrl} target="_blank">
+              <PrimaryLink
+                href={primaryLinkUrl}
+                target="_blank"
+                onClick={clickEvent}
+              >
                 {primaryLinkText}
               </PrimaryLink>
             </LinksContainer>

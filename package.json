@@ -19,6 +19,7 @@
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-date-picker": "^8.0.6",
     "react-dom": "^16.13.1",
+    "react-ga": "^3.3.0",
     "react-hook-inview": "^4.3.6",
     "react-modal": "^3.11.2",
     "react-places-autocomplete": "^7.3.0",

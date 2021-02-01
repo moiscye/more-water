@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -48,16 +49,41 @@ export default ({ id = "" }) => {
             <Link to="/contacto">Contacto</Link>
             <Link to="/cotizacion">Cotizacion</Link>
           </LinksContainer>
-          <AddressText>
-            Cruz de Mayo 9511 , Col. Exhacienda Mayorazgo, 72480 Puebla, Puebla
+          <AddressText
+            target="_blank"
+            as="a"
+            href="http://maps.google.com/?q=Cruz de Mayo 9511, Col. Exhacienda Mayorazgo, 72480 Puebla, Puebla"
+            onClick={() =>
+              ReactGA.event({
+                category: "Direccion click",
+                action: "Footer",
+              })
+            }
+          >
+            Cruz de Mayo 9511, Col. Exhacienda Mayorazgo, 72480 Puebla, Puebla
           </AddressText>
-          <AddressText as="a" href="tel:2224362510">
+          <AddressText
+            as="a"
+            href="tel:2224362510"
+            onClick={() =>
+              ReactGA.event({
+                category: "telefono click",
+                action: "Footer",
+              })
+            }
+          >
             Tel: 222-436-2510
           </AddressText>
           <AddressText
             target="_blank"
             as="a"
             href="mailto:pipasangelopolis@gmail.com"
+            onClick={() =>
+              ReactGA.event({
+                category: "Email click",
+                action: "Footer",
+              })
+            }
           >
             email: pipasangelopolis@gmail.com
           </AddressText>
@@ -73,10 +99,25 @@ export default ({ id = "" }) => {
             <SocialLink
               target="_blank"
               href="https://facebook.com/pipasdeaguaangelopolis"
+              onClick={() =>
+                ReactGA.event({
+                  category: "facebook click",
+                  action: "Footer",
+                })
+              }
             >
               <FacebookIcon />
             </SocialLink>
-            <SocialLink target="_blank" href="https://twitter.com/PAngelopolis">
+            <SocialLink
+              target="_blank"
+              href="https://twitter.com/PAngelopolis"
+              onClick={() =>
+                ReactGA.event({
+                  category: "twitter click",
+                  action: "Footer",
+                })
+              }
+            >
               <TwitterIcon />
             </SocialLink>
           </SocialLinksContainer>
