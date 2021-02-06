@@ -26,7 +26,10 @@ exports.handler = async (event, context) => {
   } else if (event.httpMethod == "GET") {
     let response;
     try {
-      let products = await Product.find().populate("category").exec();
+      let products = await Product.find()
+        .populate("category")
+        .sort([["price", "asc"]])
+        .exec();
       response = {
         statusCode: 200,
         body: JSON.stringify(products),

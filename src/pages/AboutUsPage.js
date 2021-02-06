@@ -163,7 +163,7 @@ export default () => {
               profileImageSrc:
                 "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1355&q=80",
               quote:
-                "Excelente Servicio. Es una empresa de calidad, unidades modernas y cuidan el medio ambiente, un gusto haber hacer negocios con ellos.",
+                "Pedí una pipa de 10000 y por primera vez mi cisterna se llenó y sobro un poco de agua la cual el chofer me ayudó a ponerla en otra pileta pequeña que está al lado de mi cisterna, recomiendo este servicio ampliamente.",
               customerName: "Hector Rosas",
               customerTitle: "Cedicsa de C.V.",
             },

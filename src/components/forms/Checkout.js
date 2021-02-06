@@ -1,49 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import tw from "twin.macro";
-import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import axios from "axios";
-import Cards from "react-credit-cards";
-import "react-credit-cards/es/styles-compiled.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import FormContainer from "./FormContainer";
-import { ErrorMessage } from "../misc/Errors";
 import SingleColumnTable from "../tables/SingleColumnTable";
-import { ButtonContainer, SubmitButton } from "../misc/Buttons";
-import { Column, PriceContainer, ColumnStackable } from "../misc/Layouts";
-import { PriceTag } from "../misc/Headings";
+import { Column } from "../misc/Layouts";
 import formatDate from "helpers/formatDate";
-import { SET_SUCCESS } from "store/actions/cartAction";
-import {
-  formatCreditCardNumber,
-  formatCVC,
-  formatExpirationDate,
-} from "helpers/paymentUtils";
-import conektaLogo from "images/conekta.jpg";
-import ccLogo from "images/cc.jpg";
+import stripeLogo from "images/stripe.png";
+import Payment from "./Payment";
+const stripePromise = loadStripe(
+  "pk_test_51IEoDCFI1mR6QS5inxu8jW10CGOICnWLharZJ0ekrH0ZALHTtrTXriyoGe2Zt15txSaYeis8MunRaSWnpFUsVxyu00sIOca8Oy"
+);
 
-const In = tw.input`p-2 w-full rounded-md border border-solid  bg-white text-black text-base focus:outline-none  `;
-const Input = styled(In)((props) => [
-  props.error
-    ? tw`border-red-300 focus:border-red-900`
-    : tw`border-gray-300 focus:border-primary-600`,
-]);
-
-const Cell = tw.div`mt-2 self-center`;
-const InputContainer = tw(Cell)`mt-5 mx-2 md:mt-0`;
-const CardContainer = tw.div`mt-5 md:mt-0`;
 const TableContainer = tw.div`bg-white shadow-md rounded my-6 text-xl`;
-const Table = tw.table` table-auto text-left border-collapse `;
+const Table = tw.table`w-full table-auto text-left border-collapse `;
 const Th = tw.th`py-4 px-2 bg-gray-100 font-bold text-2xl text-gray-800 border-b border-gray-400 `;
 const Td = tw.td`py-4 px-2  border-b border-gray-400`;
 
-//6,2
 export default (props) => {
-  const dispatch = useDispatch();
-  const [isSending, setIsSending] = useState(false);
-
-  const [error, setError] = useState(false);
-
+  const [orderData, setOrderData] = useState(null);
+  const myRef = useRef(null);
   let {
     user,
     pipa,
@@ -58,6 +36,21 @@ export default (props) => {
     ...state.cartReducer,
   }));
 
+  const extrasText = () => {
+    let et =
+      extras &&
+      extras.map((el) => {
+        return {
+          leftText:
+            el.name === "Cisterna" || el.name === "Tinaco"
+              ? `Lavado de ${el.name}`
+              : el.name,
+          rightText: el.status ? "Si" : "No",
+        };
+      });
+    return et;
+  };
+
   const detallePedido = [
     {
       leftText: "Direccion de entrega",
@@ -69,20 +62,13 @@ export default (props) => {
     },
     {
       leftText: "Servicio",
-      rightText: pipa.name,
+      rightText: pipa && pipa.name,
     },
     {
       leftText: "Cantidad de manguera",
-      rightText: manguera.name,
+      rightText: manguera && manguera.name,
     },
-    {
-      leftText: "Lavado de Tinaco",
-      rightText: extras.cisterna.status ? "Si" : "No",
-    },
-    {
-      leftText: "Lavado de Cisterna",
-      rightText: extras.cisterna.status ? "Si" : "No",
-    },
+    ...extrasText(),
     {
       leftText: "Instrucciones",
       rightText: user && user.message,
@@ -131,14 +117,24 @@ export default (props) => {
 
   const filterProducts = () => {
     let cartList;
-    cartList = Object.values(extras).reduce((cartList, item) => {
-      if (item.status) {
-        cartList.push({ name: item.description, price: item.price });
-      }
-      return cartList;
-    }, []);
-    cartList.unshift({ name: manguera.description, price: manguera.price });
-    cartList.unshift({ name: pipa.name, price: pipa.price });
+    cartList =
+      extras &&
+      extras.reduce((cartList, item) => {
+        if (item.status) {
+          cartList.push({
+            name: item.description,
+            price: item.price,
+            _id: item._id,
+          });
+        }
+        return cartList;
+      }, []);
+    cartList.unshift({
+      name: manguera.description,
+      price: manguera.price,
+      _id: manguera._id,
+    });
+    cartList.unshift({ name: pipa.name, price: pipa.price, _id: pipa._id });
     let totalBeforeDelivery = cartList.reduce((sum, item) => {
       return sum + item.price;
     }, 0);
@@ -150,246 +146,86 @@ export default (props) => {
     return cartList;
   };
 
-  // const handleChange = (e) => {
-  //   var data = { ...paymentDetails };
-  //   data[e.target.name] = e.target.value;
-  //   setPaymentDetails(data);
-  //   setError(false);
-  // };
-  // const validateFields = () => {
-  //   return fullName && cardNumber;
-  // };
-  const [focus, setFocus] = useState("");
-  const [cardInfo, setCardInfo] = useState({
-    cvc: "",
-    expiry: "",
-    name: "",
-    number: "",
-  });
-
-  const handleInputFocus = (e) => {
-    setFocus(e.target.name);
-  };
-
-  const handleInputChange = (e) => {
-    let { name, value } = e.target;
-    console.log("outside", value);
-    if (name === "number") {
-      value = formatCreditCardNumber(value);
-    } else if (name === "expiry") {
-      value = formatExpirationDate(value);
-    } else if (name === "cvc") {
-      value = formatCVC(value);
-    }
-    console.log("after card", value);
-    const data = { ...cardInfo };
-    data[name] = value;
-    setCardInfo(data);
-  };
-
-  const handleSubmit = async () => {
-    setIsSending(true);
+  useEffect(() => {
     let order = {
-      products: filterProducts(),
+      products: pipa && manguera && extras && filterProducts(),
       transaction_id: "Not Assigned",
       paymentType: "Not Assigned",
-      amount: total,
+      amount: total && total,
       address,
       deliveryDate: new Date(fechaEntrega),
-      deliveryInstructions: user.message,
+      deliveryInstructions: user && user.message,
     };
     let createUser = {
-      email: user.email,
-      fullname: user.fullName,
-      phoneNumber: user.phoneNumber,
+      email: user && user.email,
+      fullname: user && user.fullName,
+      phoneNumber: user && user.phoneNumber,
       address,
     };
-    let createOrderData = {
-      order,
-      user: createUser,
-    };
+    setOrderData({ order, user: createUser });
 
-    let res = await axios.post(`.netlify/functions/orders`, createOrderData);
-    if (res.status === 200) {
-      setIsSending(false);
-      dispatch({ type: SET_SUCCESS, payload: true });
-    } else if (res.status === 500) {
-      setIsSending(false);
-      console.error("error");
-    }
-  };
-  const priceSection = () =>
-    total && (
-      <PriceContainer>
-        <PriceTag>
-          Total: ${total && Number.parseFloat(total).toFixed(2)}
-        </PriceTag>
-      </PriceContainer>
+    // eslint-disable-next-line
+  }, []);
+
+  const reviewOrderTable = () => {
+    return (
+      user &&
+      pipa &&
+      manguera &&
+      extras && (
+        <Column>
+          <SingleColumnTable
+            tableTitle="Detalles de tu pedido"
+            rows={detallePedido}
+          />
+          <SingleColumnTable
+            tableTitle="Datos de Contacto"
+            rows={detalleContacto}
+          />
+          <SingleColumnTable
+            tableTitle="Datos para realizar tu pago"
+            rows={detallePago}
+          />
+        </Column>
+      )
     );
-  const buttonSection = () => (
-    <Column>
-      <ButtonContainer>
-        <SubmitButton
-          type="button"
-          value="Submit"
-          onClick={props.previousStep}
-          disabled={isSending}
-        >
-          Atras
-        </SubmitButton>
-
-        <SubmitButton
-          disabled={isSending}
-          type="button"
-          value="Submit"
-          onClick={handleSubmit}
-        >
-          {isSending ? "Procesando Pedido..." : "Pagar"}
-        </SubmitButton>
-      </ButtonContainer>
-    </Column>
-  );
-  const reviewOrderTable = () => (
-    <Column>
-      <SingleColumnTable
-        tableTitle="Detalles de tu pedido"
-        rows={detallePedido}
-      />
-      <SingleColumnTable
-        tableTitle="Datos de Contacto"
-        rows={detalleContacto}
-      />
-      <SingleColumnTable
-        tableTitle="Datos para realizar tu pago"
-        rows={detallePago}
-      />
-    </Column>
-  );
+  };
 
   const paymentForm = () => (
-    <TableContainer>
+    <TableContainer ref={myRef}>
       <Table>
         <thead>
           <tr>
-            <Th>Pagar en Linea</Th>
+            <Th>
+              <span>Pagos en linea con</span>
+              <img
+                css={tw`inline w-40 md:w-56 my-0 py-0`}
+                src={stripeLogo}
+                alt="Logo de Stripe"
+              />
+            </Th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <Td>
-              <ColumnStackable>
-                <div>
-                  <span>Pagos Seguros con</span>
-
-                  <img
-                    css={tw`inline w-24 `}
-                    src={conektaLogo}
-                    alt="Logo de Conekta"
-                  />
-                </div>
-                <div css={tw`mt-4 md:mt-0`}>
-                  <span>Aceptamos todas las tarjetas de credito y debito</span>
-                  <img
-                    src={ccLogo}
-                    css={tw`inline w-24`}
-                    alt="Logo de tarjetas de debito y credito"
-                  />
-                </div>
-              </ColumnStackable>
-            </Td>
-          </tr>
-
-          <tr>
-            <Td>
-              <ColumnStackable inverted>
-                <InputContainer>
-                  <Cell>
-                    <Input
-                      onChange={handleInputChange}
-                      onFocus={handleInputFocus}
-                      type="text"
-                      name="name"
-                      required
-                      placeholder={"Titular de la tarjeta"}
-                      value={cardInfo.name}
-                      error={error}
-                    />
-                  </Cell>
-                  <Cell>
-                    <Input
-                      onChange={handleInputChange}
-                      onFocus={handleInputFocus}
-                      type="tel"
-                      name="number"
-                      pattern="[\d| ]{16,22}"
-                      required
-                      placeholder={"Numero de Tarjeta"}
-                      value={cardInfo.number}
-                      error={error}
-                    />
-                  </Cell>
-
-                  <ColumnStackable disabled>
-                    <Cell>
-                      <Input
-                        onChange={handleInputChange}
-                        onFocus={handleInputFocus}
-                        type="tel"
-                        name="expiry"
-                        pattern="\d\d/\d\d"
-                        required
-                        placeholder={"Expiracion"}
-                        value={cardInfo.expiry}
-                        error={error}
-                      />
-                    </Cell>
-                    <Cell>
-                      <Input
-                        onChange={handleInputChange}
-                        onFocus={handleInputFocus}
-                        type="tel"
-                        name="cvc"
-                        pattern="\d{3,4}"
-                        required
-                        placeholder={"CVV"}
-                        value={cardInfo.cvc}
-                        error={error}
-                      />
-                    </Cell>
-                  </ColumnStackable>
-                </InputContainer>
-                <CardContainer>
-                  <Cards
-                    cvc={cardInfo.cvc}
-                    expiry={cardInfo.expiry}
-                    focused={focus}
-                    name={cardInfo.name}
-                    number={cardInfo.number}
-                  />
-                </CardContainer>
-              </ColumnStackable>
-            </Td>
-          </tr>
-        </tbody>
+        {orderData && (
+          <tbody>
+            <tr>
+              <Td>
+                <Elements stripe={stripePromise}>
+                  <Payment {...props} orderData={orderData} tableRef={myRef} />
+                </Elements>
+              </Td>
+            </tr>
+          </tbody>
+        )}
       </Table>
     </TableContainer>
   );
 
-  const errorSection = () =>
-    error && (
-      <ErrorMessage>
-        Nombre, Numero de Tarjeta y Fecha de Vencimiento son requeridos
-      </ErrorMessage>
-    );
-  //integrate Column instead <>
   return (
     <FormContainer>
       <h2>Confirma tu Compra</h2>
       {reviewOrderTable()}
       {paymentForm()}
-      {priceSection()}
-      {errorSection()}
-      {buttonSection()}
     </FormContainer>
   );
 };

@@ -1,8 +1,13 @@
 export default ({ manguera, pipa, extras, distance = 10 }) => {
   let distanceTotal = calculateDistancePrice(distance);
-  let extrasTotal = extras && extras.bomba.status ? extras.bomba.price : 0;
+  let extrasTotal = extras && calculateExtras(extras);
   let total = manguera.price + pipa.price + extrasTotal + distanceTotal;
   return total;
+};
+const calculateExtras = (e) => {
+  return e.reduce((acc, item) => {
+    return item.status ? acc + item.price : acc;
+  }, 0);
 };
 
 const calculateDistancePrice = (d) => {

@@ -7,15 +7,15 @@ import {
   ADD_TOTAL,
   UPDATE_TOTAL,
   SET_SUCCESS,
+  FILL_CART,
 } from "../actions/cartAction";
-import { pipas, mangueras, extras } from "../../helpers/data";
 
 const initialState = {
-  pipa: pipas[0],
-  manguera: mangueras[0],
-  extras,
+  pipa: null,
+  manguera: null,
+  extras: null,
   fechaEntrega: new Date(),
-  total: pipas[0].price,
+  total: 0,
   success: false,
 };
 
@@ -28,13 +28,24 @@ export default (state = initialState, { type, payload }) => {
     case ADD_MANGUERA:
       return { ...state, manguera: payload.manguera, total: payload.total };
     case ADD_EXTRAS:
-      return { ...state, extras: payload.extras, total: payload.total };
+      return {
+        ...state,
+        extras: payload.extras,
+        total: payload.total || state.total,
+      };
     case ADD_FECHA_ENTREGA:
       return { ...state, fechaEntrega: payload };
     case UPDATE_TOTAL:
       return { ...state, total: payload };
     case SET_SUCCESS:
       return { ...state, success: payload };
+    case FILL_CART:
+      return {
+        ...state,
+        pipa: payload.pipa,
+        manguera: payload.manguera,
+        extras: payload.extras,
+      };
     case EMPTY_CART:
       return { ...state, ...initialState };
     default:
