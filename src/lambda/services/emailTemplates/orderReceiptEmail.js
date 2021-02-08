@@ -4,7 +4,7 @@ const es = require("dayjs/locale/es");
 dayjs.locale(es);
 dayjs.extend(localizedFormat);
 
-module.exports = ({ order, user, isAdmin = false }) => {
+module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
   const formatDate = (date) => {
     let dayOfWeek = dayjs(date).format("dddd");
     dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
@@ -198,7 +198,13 @@ module.exports = ({ order, user, isAdmin = false }) => {
                       </tr> 
                       <tr style="border-collapse:collapse"> 
                        <td align="center" style="padding:0;Margin:0;padding-bottom:10px"><h2 style="Margin:0;line-height:36px;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-size:30px;font-style:normal;font-weight:bold;color:#333333">${
-                         isAdmin ? "Tienes un Pedido" : "Gracias por tu Pedido!"
+                         isAdmin
+                           ? `Tienes Un nuevo Pedido ${
+                               onlyEmail
+                                 ? "El pago ya ha sido CONFIRMADO pero hubo un problema al guardar la orden"
+                                 : ""
+                             }`
+                           : "Gracias por tu Pedido!"
                        }</h2></td> 
                       </tr> 
                       <tr style="border-collapse:collapse"> 

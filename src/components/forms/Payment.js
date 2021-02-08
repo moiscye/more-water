@@ -1,6 +1,6 @@
-import React, { useMemo, useEffect, useState, useRef } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   useStripe,
   useElements,
@@ -15,6 +15,7 @@ import { PriceContainer } from "../misc/Layouts";
 import { ErrorMessage } from "../misc/Errors";
 import { PriceTag } from "../misc/Headings";
 import useResponsiveFontSize from "helpers/useResponsiveFontSize";
+import { SET_SUCCESS } from "store/actions/cartAction";
 
 const cssCardElements = tw`p-4 mb-6 w-full rounded-md border border-solid  bg-white text-black text-base focus:outline-none border-gray-300 focus:border-primary-600`;
 
@@ -48,12 +49,13 @@ export default ({ previousStep, orderData, tableRef }) => {
   const stripe = useStripe();
   const elements = useElements();
   const options = useOptions();
-  const myRef = useRef(null);
+  const dispatch = useDispatch();
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [clientName, setClientName] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
+  const [isDeliveryChanged, setIsDeliveryCharged] = useState(false);
+
   let { total } = useSelector((state) => ({
     ...state.cartReducer,
   }));
@@ -74,12 +76,25 @@ export default ({ previousStep, orderData, tableRef }) => {
       }
     );
     setClientSecret(res.data.clientSecret);
-    console.log(res.data.deliveryChargeSuccess);
+    setIsDeliveryCharged(res.data.deliveryChargeSuccess || false);
   };
 
   const handleChange = (e) => {
     setError(false);
     setClientName(e.target.value);
+  };
+  const createPaymentDetails = (paymentResult) => {
+    return {
+      paymentHolderName: clientName,
+      transactionId: paymentResult.paymentIntent.id
+        ? paymentResult.paymentIntent.id
+        : null,
+      paymentType:
+        paymentResult.paymentIntent.payment_method_types &&
+        paymentResult.paymentIntent.payment_method_types.length > 0
+          ? paymentResult.paymentIntent.payment_method_types[0]
+          : null,
+    };
   };
 
   const handleSubmit = async (event) => {
@@ -94,42 +109,84 @@ export default ({ previousStep, orderData, tableRef }) => {
       setProcessing(false);
       return;
     }
-    const cardElement = elements.getElement(CardNumberElement);
-
-    let payload = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: { name: clientName },
-      },
-    });
-    if (payload.error) {
-      setError(payload.error.message);
-      setProcessing(false);
-      console.log("[error]", payload.error);
-    } else {
-      setProcessing(false);
-      setIsPaymentCompleted(true);
-      setClientName("");
-      console.log("payment success", payload);
-      //saving order in db
-      let res = await axios.post(`.netlify/functions/orders`, orderData);
-      if (res.status === 200) {
-        console.log("payment success", res.data);
-      } else if (res.status === 500) {
-        console.error("error", res);
+    let paymentResult;
+    try {
+      const cardElement = elements.getElement(CardNumberElement);
+      paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: { name: clientName },
+        },
+      });
+      if (paymentResult.error) {
+        setError(paymentResult.error.message);
+        setProcessing(false);
+      } else {
+        let paymentDetails = createPaymentDetails(paymentResult);
+        orderData.order.paymentDetails = paymentDetails;
+        //saving order in db
+        let res = await axios.post(`.netlify/functions/orders`, orderData);
+        if (res.status === 200) {
+          setClientName("");
+          //validate if the deliveryfee was charged.
+          console.log("payment success", res.data);
+          setProcessing(false);
+          dispatch({ type: SET_SUCCESS, payload: true });
+        } else {
+          //If payment was completed. Send and email...
+          let ress = await handleOrderError();
+          if (ress.success) {
+            dispatch({ type: SET_SUCCESS, payload: true });
+          } else {
+            let message = buildErrorMessage();
+            setError(message);
+          }
+        }
+      }
+    } catch (e) {
+      if (!paymentResult.error) {
+        let ress = await handleOrderError();
+        if (ress.success) {
+          setProcessing(false);
+          dispatch({ type: SET_SUCCESS, payload: true });
+        } else {
+          let message = buildErrorMessage();
+          setError(message);
+        }
+      } else {
+        setError(
+          "Hubo un problema con el pago. Intenta mas tarde o llamanos al 222-436-2510"
+        );
+        setProcessing(false);
       }
     }
   };
+  const buildErrorMessage = () => {
+    return (
+      "Tu pago ha sido exitoso pero hubo un problema al procesar la order. Por favor ten a la mano esta clave: " +
+      orderData.order.paymentDetails.transactionId +
+      ". Llamanos al 222-436-2510 para darte una solucion. Agradecemos tu  preferencia. Si refrescas la Pagina se hara otra orden nueva y por consiguiente otro cargo."
+    );
+  };
 
+  const handleOrderError = async () => {
+    try {
+      let res = await axios.post(
+        `.netlify/functions/order-email-only`,
+        orderData
+      );
+      if (res.status === 200) return Promise.resolve({ success: true });
+    } catch (e) {
+      return Promise.resolve({ success: false, error: e });
+    }
+  };
   const errorSection = () => {
-    //window.scrollTo(0, myRef.current.offsetTop);
     tableRef.current.scrollIntoView({ behavior: "smooth" });
-    //scroll code
     return <ErrorMessage>{error}</ErrorMessage>;
   };
 
   return (
-    <section ref={myRef}>
+    <>
       {error && errorSection()}
       <label>
         Nombre del Titular*
@@ -178,6 +235,6 @@ export default ({ previousStep, orderData, tableRef }) => {
           Pagar
         </SubmitButton>
       </ButtonContainer>
-    </section>
+    </>
   );
 };
