@@ -9,6 +9,7 @@ import PersonalInfoForm from "components/forms/PersonalInfoForm";
 import AddressForm from "components/forms/AddressForm";
 import StepWizardSimple from "components/steps/SingleWizardWithRoundSteps";
 import AnimationRevealPage from "../helpers/AnimationRevealPage.js";
+import { FloatingButton, PhoneIcon } from "components/misc/Buttons";
 import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import SuccessForm from "components/forms/SuccessForm";
 import StepWizard from "react-step-wizard";
@@ -18,6 +19,7 @@ import {
   SET_SUCCESS,
   ADD_EXTRAS,
 } from "store/actions/cartAction.js";
+import calculateTotal from "helpers/calculateTotal.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;
 export default ({ history }) => {
@@ -36,9 +38,19 @@ export default ({ history }) => {
       let pip = res.data.filter((item) => item.category.name === "Pipas");
       let ex = res.data.filter((item) => item.category.name === "Extras");
       let man = res.data.filter((item) => item.category.name === "Mangueras");
+
       dispatch({
         type: FILL_CART,
-        payload: { pipa: pip[0], manguera: man[0], extras: ex },
+        payload: {
+          pipa: pip[0],
+          manguera: man[0],
+          extras: ex,
+          total: calculateTotal({
+            pipa: pip[0],
+            manguera: man[0],
+            extras: ex,
+          }),
+        },
       });
     }
     if (typeof extras === "object" && !Array.isArray(extras)) {
@@ -91,12 +103,17 @@ export default ({ history }) => {
   );
 
   return (
-    <AnimationRevealPage>
-      <Container>
-        <ContentWithPaddingLg>
-          {!success ? formSection() : successMessage()}
-        </ContentWithPaddingLg>
-      </Container>
-    </AnimationRevealPage>
+    <>
+      <FloatingButton href="tel:2224362510">
+        <PhoneIcon />
+      </FloatingButton>
+      <AnimationRevealPage>
+        <Container>
+          <ContentWithPaddingLg>
+            {!success ? formSection() : successMessage()}
+          </ContentWithPaddingLg>
+        </Container>
+      </AnimationRevealPage>
+    </>
   );
 };

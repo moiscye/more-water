@@ -45,6 +45,7 @@ export default (state = initialState, { type, payload }) => {
         pipa: payload.pipa,
         manguera: payload.manguera,
         extras: payload.extras,
+        total: payload.total,
       };
     case EMPTY_CART:
       return { ...state, ...initialState };
