@@ -24,7 +24,7 @@ export default () => (
       number={2}
       target="_blank"
       bgColor="green"
-      href="https://wa.link/jr5pke"
+      href="https://wa.link/5225y7"
       onClick={() =>
         ReactGA.event({
           category: "Whatsapp click",
