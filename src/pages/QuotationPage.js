@@ -18,6 +18,7 @@ import {
   FILL_CART,
   SET_SUCCESS,
   ADD_EXTRAS,
+  UPDATE_TOTAL,
 } from "store/actions/cartAction.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;
@@ -33,8 +34,6 @@ export default ({ history }) => {
 
   const loadProducts = async () => {
     if (manguera === null && pipa === null && extras === null) {
-      console.log("INSIDE FILL ONCE");
-
       let res = await axios.get(`.netlify/functions/product`);
       let pip = res.data.filter((item) => item.category.name === "Pipas");
       let ex = res.data.filter((item) => item.category.name === "Extras");
@@ -45,7 +44,6 @@ export default ({ history }) => {
       });
     }
     if (typeof extras === "object" && !Array.isArray(extras)) {
-      console.log("INSIDE extras object");
       let res = await axios.get(`.netlify/functions/product`);
       let ex = res.data.filter((item) => item.category.name === "Extras");
       dispatch({

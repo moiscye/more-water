@@ -10,9 +10,10 @@ import { Column } from "../misc/Layouts";
 import formatDate from "helpers/formatDate";
 import stripeLogo from "images/stripe.png";
 import Payment from "./Payment";
-const stripePromise = loadStripe(
-  "pk_test_51IEoDCFI1mR6QS5inxu8jW10CGOICnWLharZJ0ekrH0ZALHTtrTXriyoGe2Zt15txSaYeis8MunRaSWnpFUsVxyu00sIOca8Oy"
-);
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_CLIENT_KEY, {
+  locale: "es",
+});
 
 const TableContainer = tw.div`bg-white shadow-md rounded my-6 text-xl`;
 const Table = tw.table`w-full table-auto text-left border-collapse `;

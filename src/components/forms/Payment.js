@@ -54,7 +54,6 @@ export default ({ previousStep, orderData, tableRef }) => {
   const [error, setError] = useState(null);
   const [clientName, setClientName] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [isDeliveryChanged, setIsDeliveryCharged] = useState(false);
 
   let { total } = useSelector((state) => ({
     ...state.cartReducer,
@@ -76,7 +75,7 @@ export default ({ previousStep, orderData, tableRef }) => {
       }
     );
     setClientSecret(res.data.clientSecret);
-    setIsDeliveryCharged(res.data.deliveryChargeSuccess || false);
+    //check whether the delivery fee has been added here res.data.deliveryChargeSuccess
   };
 
   const handleChange = (e) => {
@@ -129,7 +128,6 @@ export default ({ previousStep, orderData, tableRef }) => {
         if (res.status === 200) {
           setClientName("");
           //validate if the deliveryfee was charged.
-          console.log("payment success", res.data);
           setProcessing(false);
           dispatch({ type: SET_SUCCESS, payload: true });
         } else {
@@ -228,11 +226,16 @@ export default ({ previousStep, orderData, tableRef }) => {
       </PriceContainer>
 
       <ButtonContainer>
-        <SubmitButton type="button" value="Submit" onClick={previousStep}>
+        <SubmitButton
+          disabled={processing || !stripe}
+          type="button"
+          value="Submit"
+          onClick={previousStep}
+        >
           Atras
         </SubmitButton>
         <SubmitButton disabled={processing || !stripe} onClick={handleSubmit}>
-          Pagar
+          {!processing ? "Pagar" : "Procesando..."}
         </SubmitButton>
       </ButtonContainer>
     </>
