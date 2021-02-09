@@ -18,7 +18,6 @@ import {
   FILL_CART,
   SET_SUCCESS,
   ADD_EXTRAS,
-  UPDATE_TOTAL,
 } from "store/actions/cartAction.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;

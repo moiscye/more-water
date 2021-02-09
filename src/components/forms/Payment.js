@@ -62,6 +62,7 @@ export default ({ previousStep, orderData, tableRef }) => {
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     createPaymentIntent();
+    // eslint-disable-next-line
   }, []);
 
   const createPaymentIntent = async () => {

@@ -21,7 +21,6 @@ const Option = tw.option``;
 const InputContainer = tw.div`py-1 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600 z-50`;
 const WarningText = tw.span`block md:inline-block md:ml-3 text-red-700 text-lg font-medium`;
 export default (props) => {
-  const [extras, setExtras] = useState([]);
   const [pipas, setPipas] = useState([]);
   const [mangueras, setMangueras] = useState([]);
   const [pipa, setPipa] = useState();
