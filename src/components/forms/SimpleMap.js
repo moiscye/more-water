@@ -28,7 +28,7 @@ export default () => {
     <div style={{ height: "50vh", width: "100%" }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyCSF2H74rDi12xbclgcwUy4dYcY2Z7qQFg" }}
-        defaultCenter={latLng.origin || { lat: 19.0041185, lng: -98.2450492 }}
+        defaultCenter={latLng.origin}
         defaultZoom={zoom}
         yesIWantToUseGoogleMapApiInternals
       >

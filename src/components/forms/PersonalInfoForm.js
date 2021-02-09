@@ -17,7 +17,6 @@ const initialState = {
   message: "",
 };
 
-//const Input = tw.input`mt-6 first:mt-0 border-b-2 py-3 focus:outline-none font-medium transition duration-300 hocus:border-primary-500`;
 const In = tw.input`py-2 mt-4 w-full p-4 rounded-md  border border-solid  bg-white text-black text-xl focus:outline-none  `;
 const Input = styled(In)((props) => [
   props.error

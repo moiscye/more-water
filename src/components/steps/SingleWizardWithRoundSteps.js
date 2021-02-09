@@ -10,8 +10,8 @@ const DecoratorBlob1 = tw(
 const DecoratorBlob2 = tw(SvgDecoratorBlob2)`
   pointer-events-none fill-current text-primary-500 opacity-25 absolute w-32 h-32 right-0 top-0 transform translate-x-16 -translate-y-16 -z-10`;
 
-const Container = tw.div`relative`;
-const ContentWithPaddingXl = tw.div`max-w-screen-xl mx-auto py-8 lg:py-12`;
+const Container = tw.div`relative `;
+const ContentWithPaddingXl = tw.div`max-w-screen-xl mx-auto py-8 lg:py-12 `;
 const Heading = tw(SectionHeading)``;
 
 export default ({ children, heading = "Quotation Page" }) => {

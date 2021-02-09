@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import tw from "twin.macro";
 import ContactUsSimple from "components/forms/SimpleSelectsForm";
-import Payment from "components/forms/Payment";
+import Checkout from "components/forms/Checkout";
 import DateAndTimeForm from "components/forms/DateAndTimeForm";
 import PersonalInfoForm from "components/forms/PersonalInfoForm";
 import AddressForm from "components/forms/AddressForm";
@@ -12,15 +13,43 @@ import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import SuccessForm from "components/forms/SuccessForm";
 import StepWizard from "react-step-wizard";
 import Nav from "components/misc/Nav";
-import { SET_SUCCESS } from "store/actions/cartAction.js";
+import {
+  FILL_CART,
+  SET_SUCCESS,
+  ADD_EXTRAS,
+} from "store/actions/cartAction.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;
 export default ({ history }) => {
   const dispatch = useDispatch();
-
-  const { success } = useSelector((state) => ({
+  const { success, pipa, manguera, extras } = useSelector((state) => ({
     ...state.cartReducer,
   }));
+  useEffect(() => {
+    loadProducts();
+    // eslint-disable-next-line
+  }, []);
+
+  const loadProducts = async () => {
+    if (manguera === null && pipa === null && extras === null) {
+      let res = await axios.get(`.netlify/functions/product`);
+      let pip = res.data.filter((item) => item.category.name === "Pipas");
+      let ex = res.data.filter((item) => item.category.name === "Extras");
+      let man = res.data.filter((item) => item.category.name === "Mangueras");
+      dispatch({
+        type: FILL_CART,
+        payload: { pipa: pip[0], manguera: man[0], extras: ex },
+      });
+    }
+    if (typeof extras === "object" && !Array.isArray(extras)) {
+      let res = await axios.get(`.netlify/functions/product`);
+      let ex = res.data.filter((item) => item.category.name === "Extras");
+      dispatch({
+        type: ADD_EXTRAS,
+        payload: { extras: ex },
+      });
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -46,12 +75,17 @@ export default ({ history }) => {
 
   const formSection = () => (
     <StepWizardSimple heading="Cotiza tu Pipa de Agua" subheading="Pasos">
-      <Steps onStepChange={scrollToTop} nav={<Nav />} isHashEnabled={true}>
+      <Steps
+        onStepChange={scrollToTop}
+        nav={<Nav />}
+        isHashEnabled={true}
+        isLazyMount={true}
+      >
         <ContactUsSimple hashKey={"servicios"} />
         <AddressForm hashKey={"direccion"} />
         <DateAndTimeForm hashKey={"fecha"} />
         <PersonalInfoForm hashKey={"informacion-personal"} />
-        <Payment hashKey={"pago"} />
+        <Checkout hashKey={"pago"} />
       </Steps>
     </StepWizardSimple>
   );

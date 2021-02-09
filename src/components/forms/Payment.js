@@ -1,201 +1,244 @@
-import React, { useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import FormContainer from "./FormContainer";
-import SingleColumnTable from "../tables/SingleColumnTable";
+import {
+  useStripe,
+  useElements,
+  CardNumberElement,
+  CardCvcElement,
+  CardExpiryElement,
+} from "@stripe/react-stripe-js";
+import tw from "twin.macro";
+import { css } from "styled-components/macro"; //eslint-disable-line
 import { ButtonContainer, SubmitButton } from "../misc/Buttons";
-import { Column, PriceContainer } from "../misc/Layouts";
+import { PriceContainer } from "../misc/Layouts";
+import { ErrorMessage } from "../misc/Errors";
 import { PriceTag } from "../misc/Headings";
-import formatDate from "helpers/formatDate";
+import useResponsiveFontSize from "helpers/useResponsiveFontSize";
 import { SET_SUCCESS } from "store/actions/cartAction";
 
-export default (props) => {
+const cssCardElements = tw`p-4 mb-6 w-full rounded-md border border-solid  bg-white text-black text-base focus:outline-none border-gray-300 focus:border-primary-600`;
+
+const useOptions = () => {
+  const fontSize = useResponsiveFontSize();
+  const options = useMemo(
+    () => ({
+      style: {
+        base: {
+          fontSize,
+          color: "#424770",
+          letterSpacing: "0.025em",
+          fontFamily:
+            "system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Source Code Pro, monospace",
+          "::placeholder": {
+            color: "#aab7c4",
+          },
+        },
+        invalid: {
+          color: "#ff0033",
+        },
+      },
+    }),
+    [fontSize]
+  );
+
+  return options;
+};
+
+export default ({ previousStep, orderData, tableRef }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const options = useOptions();
   const dispatch = useDispatch();
-  const [isSending, setIsSending] = useState(false);
-  let {
-    user,
-    pipa,
-    manguera,
-    extras,
-    fechaEntrega,
-    address,
-    total,
-  } = useSelector((state) => ({
-    ...state.authReducer,
-    ...state.addressReducer,
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState(null);
+  const [clientName, setClientName] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+
+  let { total } = useSelector((state) => ({
     ...state.cartReducer,
   }));
 
-  const detallePedido = [
-    {
-      leftText: "Direccion de entrega",
-      rightText: address,
-    },
-    {
-      leftText: "Fecha de Entrega",
-      rightText: formatDate(fechaEntrega),
-    },
-    {
-      leftText: "Servicio",
-      rightText: pipa.name,
-    },
-    {
-      leftText: "Cantidad de manguera",
-      rightText: manguera.name,
-    },
-    {
-      leftText: "Lavado de Tinaco",
-      rightText: extras.cisterna.status ? "Si" : "No",
-    },
-    {
-      leftText: "Lavado de Cisterna",
-      rightText: extras.cisterna.status ? "Si" : "No",
-    },
-    {
-      leftText: "Instrucciones",
-      rightText: user && user.message,
-    },
-  ];
-  const detalleContacto = [
-    {
-      leftText: "Nombre",
-      rightText: user && user.fullName,
-    },
-    {
-      leftText: "Telefono",
-      rightText: user && user.phoneNumber,
-    },
-    {
-      leftText: "Email",
-      rightText: user && user.email,
-    },
-  ];
-  const detallePago = [
-    {
-      leftText: "Banco",
-      rightText: "Santander",
-    },
-    {
-      leftText: "Num. de Cuenta",
-      rightText: "60573554647",
-    },
-    {
-      leftText: "Clabe Interbancaria",
-      rightText: "014650605735546476",
-    },
-    {
-      leftText: "Sucursal",
-      rightText: "4501 Plaza San Angel",
-    },
-    {
-      leftText: "Beneficiario",
-      rightText: "Jose Juan Librado Martinez Medel",
-    },
-    {
-      leftText: "Instrucciones",
-      rightText: `Una vez realizado tu deposito, envianos una copia o fotografía de tu comprobante por alguno de los siguientes medios: email: pipasangelopolis@gmail.com o al numero 222-436-2510`,
-    },
-  ];
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    createPaymentIntent();
+    // eslint-disable-next-line
+  }, []);
 
-  const filterProducts = () => {
-    let cartList;
-    cartList = Object.values(extras).reduce((cartList, item) => {
-      if (item.status) {
-        cartList.push({ name: item.description, price: item.price });
+  const createPaymentIntent = async () => {
+    let res = await axios.post(
+      `.netlify/functions/payment`,
+      { items: orderData.order.products },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-      return cartList;
-    }, []);
-    cartList.unshift({ name: manguera.description, price: manguera.price });
-    cartList.unshift({ name: pipa.name, price: pipa.price });
-    let totalBeforeDelivery = cartList.reduce((sum, item) => {
-      return sum + item.price;
-    }, 0);
-
-    cartList.push({
-      name: "Costo de Entrega",
-      price: total - totalBeforeDelivery,
-    });
-    return cartList;
+    );
+    setClientSecret(res.data.clientSecret);
+    //check whether the delivery fee has been added here res.data.deliveryChargeSuccess
   };
 
-  const handleSubmit = async () => {
-    setIsSending(true);
-    let order = {
-      products: filterProducts(),
-      transaction_id: "Not Assigned",
-      paymentType: "Not Assigned",
-      amount: total,
-      address,
-      deliveryDate: new Date(fechaEntrega),
-      deliveryInstructions: user.message,
+  const handleChange = (e) => {
+    setError(false);
+    setClientName(e.target.value);
+  };
+  const createPaymentDetails = (paymentResult) => {
+    return {
+      paymentHolderName: clientName,
+      transactionId: paymentResult.paymentIntent.id
+        ? paymentResult.paymentIntent.id
+        : null,
+      paymentType:
+        paymentResult.paymentIntent.payment_method_types &&
+        paymentResult.paymentIntent.payment_method_types.length > 0
+          ? paymentResult.paymentIntent.payment_method_types[0]
+          : null,
     };
-    let createUser = {
-      email: user.email,
-      fullname: user.fullName,
-      phoneNumber: user.phoneNumber,
-      address,
-    };
-    let createOrderData = {
-      order,
-      user: createUser,
-    };
+  };
 
-    let res = await axios.post(`.netlify/functions/orders`, createOrderData);
-    if (res.status === 200) {
-      setIsSending(false);
-      dispatch({ type: SET_SUCCESS, payload: true });
-    } else if (res.status === 500) {
-      setIsSending(false);
-      console.error("error");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setProcessing(true);
+    if (!stripe || !elements) {
+      setProcessing(false);
+      return;
     }
+    if (!clientName) {
+      setError("Nombre del titular requerido");
+      setProcessing(false);
+      return;
+    }
+    let paymentResult;
+    try {
+      const cardElement = elements.getElement(CardNumberElement);
+      paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: { name: clientName },
+        },
+      });
+      if (paymentResult.error) {
+        setError(paymentResult.error.message);
+        setProcessing(false);
+      } else {
+        let paymentDetails = createPaymentDetails(paymentResult);
+        orderData.order.paymentDetails = paymentDetails;
+        //saving order in db
+        let res = await axios.post(`.netlify/functions/orders`, orderData);
+        if (res.status === 200) {
+          setClientName("");
+          //validate if the deliveryfee was charged.
+          setProcessing(false);
+          dispatch({ type: SET_SUCCESS, payload: true });
+        } else {
+          //If payment was completed. Send and email...
+          let ress = await handleOrderError();
+          if (ress.success) {
+            dispatch({ type: SET_SUCCESS, payload: true });
+          } else {
+            let message = buildErrorMessage();
+            setError(message);
+          }
+        }
+      }
+    } catch (e) {
+      if (!paymentResult.error) {
+        let ress = await handleOrderError();
+        if (ress.success) {
+          setProcessing(false);
+          dispatch({ type: SET_SUCCESS, payload: true });
+        } else {
+          let message = buildErrorMessage();
+          setError(message);
+        }
+      } else {
+        setError(
+          "Hubo un problema con el pago. Intenta mas tarde o llamanos al 222-436-2510"
+        );
+        setProcessing(false);
+      }
+    }
+  };
+  const buildErrorMessage = () => {
+    return (
+      "Tu pago ha sido exitoso pero hubo un problema al procesar la order. Por favor ten a la mano esta clave: " +
+      orderData.order.paymentDetails.transactionId +
+      ". Llamanos al 222-436-2510 para darte una solucion. Agradecemos tu  preferencia. Si refrescas la Pagina se hara otra orden nueva y por consiguiente otro cargo."
+    );
+  };
+
+  const handleOrderError = async () => {
+    try {
+      let res = await axios.post(
+        `.netlify/functions/order-email-only`,
+        orderData
+      );
+      if (res.status === 200) return Promise.resolve({ success: true });
+    } catch (e) {
+      return Promise.resolve({ success: false, error: e });
+    }
+  };
+  const errorSection = () => {
+    tableRef.current.scrollIntoView({ behavior: "smooth" });
+    return <ErrorMessage>{error}</ErrorMessage>;
   };
 
   return (
-    <FormContainer>
-      <Column>
-        <h2>Confirma tu Compra</h2>
-        <SingleColumnTable
-          tableTitle="Detalles de tu pedido"
-          rows={detallePedido}
+    <>
+      {error && errorSection()}
+      <label>
+        Nombre del Titular*
+        <input
+          css={cssCardElements}
+          options={options}
+          onChange={handleChange}
+          placeholder="Nombre Completo"
         />
-        <SingleColumnTable
-          tableTitle="Datos de Contacto"
-          rows={detalleContacto}
+      </label>
+      <label>
+        Numero de Tarjeta*
+        <CardNumberElement
+          css={cssCardElements}
+          options={options}
+          onChange={() => setError(false)}
         />
-        <SingleColumnTable
-          tableTitle="Datos para realizar tu pago"
-          rows={detallePago}
+      </label>
+      <label>
+        Fecha de expiracion*
+        <CardExpiryElement
+          css={cssCardElements}
+          options={options}
+          onChange={() => setError(false)}
         />
-      </Column>
-      {total && (
-        <PriceContainer>
-          <PriceTag>
-            Total: ${total && Number.parseFloat(total).toFixed(2)}
-          </PriceTag>
-        </PriceContainer>
-      )}
+      </label>
+      <label>
+        CVC*
+        <CardCvcElement
+          css={cssCardElements}
+          options={options}
+          onChange={() => setError(false)}
+        />
+      </label>
+      <PriceContainer border={false}>
+        <PriceTag>
+          Total: ${total && Number.parseFloat(total).toFixed(2)}
+        </PriceTag>
+      </PriceContainer>
 
-      <Column>
-        <ButtonContainer>
-          <SubmitButton
-            type="button"
-            value="Submit"
-            onClick={props.previousStep}
-            disabled={isSending}
-          >
-            Atras
-          </SubmitButton>
-
-          <SubmitButton
-            disabled={isSending}
-            type="button"
-            value="Submit"
-            onClick={handleSubmit}
-          >
-            {isSending ? "Procesando Pedido..." : "Hacer Pedido"}
-          </SubmitButton>
-        </ButtonContainer>
-      </Column>
-    </FormContainer>
+      <ButtonContainer>
+        <SubmitButton
+          disabled={processing || !stripe}
+          type="button"
+          value="Submit"
+          onClick={previousStep}
+        >
+          Atras
+        </SubmitButton>
+        <SubmitButton disabled={processing || !stripe} onClick={handleSubmit}>
+          {!processing ? "Pagar" : "Procesando..."}
+        </SubmitButton>
+      </ButtonContainer>
+    </>
   );
 };

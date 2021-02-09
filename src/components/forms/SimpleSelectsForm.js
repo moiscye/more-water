@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import tw from "twin.macro";
-import { pipas, mangueras } from "../../helpers/data";
+// import { pipas, mangueras } from "../../helpers/data";
 import {
   ADD_PIPA,
   ADD_MANGUERA,
@@ -20,10 +21,11 @@ const Option = tw.option``;
 const InputContainer = tw.div`py-1 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600 z-50`;
 const WarningText = tw.span`block md:inline-block md:ml-3 text-red-700 text-lg font-medium`;
 export default (props) => {
+  const [pipas, setPipas] = useState([]);
+  const [mangueras, setMangueras] = useState([]);
   const [pipa, setPipa] = useState();
   const [manguera, setManguera] = useState();
   const [extra, setExtra] = useState();
-
   const dispatch = useDispatch();
   let { pipa: p, manguera: m, extras: e, total, distance } = useSelector(
     (state) => ({
@@ -36,12 +38,27 @@ export default (props) => {
     if (p) setPipa(p);
     if (m) setManguera(m);
     if (e) setExtra(e);
+
     // eslint-disable-next-line
   }, [p, m, e]);
 
+  useEffect(() => {
+    loadProducts();
+    // eslint-disable-next-line
+  }, []);
+
+  const loadProducts = async () => {
+    let res = await axios.get(`.netlify/functions/product`);
+    let pip = res.data.filter((item) => item.category.name === "Pipas");
+    let man = res.data.filter((item) => item.category.name === "Mangueras");
+    setPipas(pip);
+    setMangueras(man);
+  };
+
   const handleChange = (e) => {
     if (e.target.id === "pipa") {
-      let p = pipas.filter((item) => item.id === e.target.value);
+      let p = pipas.filter((item) => item._id === e.target.value);
+
       dispatch({
         type: ADD_PIPA,
         payload: {
@@ -55,7 +72,8 @@ export default (props) => {
         },
       });
     } else if (e.target.id === "manguera") {
-      let p = mangueras.filter((item) => item.id === e.target.value);
+      let p = mangueras.filter((item) => item._id === e.target.value);
+
       dispatch({
         type: ADD_MANGUERA,
         payload: {
@@ -72,14 +90,16 @@ export default (props) => {
   };
 
   const handleCheckboxChange = (e) => {
-    var data = { ...extra };
-    if (e.target.id === "tinaco") data.tinaco.status = !data.tinaco.status;
-    else if (e.target.id === "cisterna")
-      data.cisterna.status = !data.cisterna.status;
-    else if (e.target.id === "bomba") data.bomba.status = !data.bomba.status;
-    else {
-      return;
-    }
+    var data = [...extra];
+    if (
+      e.target.id === "Tinaco" ||
+      e.target.id === "Cisterna" ||
+      e.target.id === "Bomba"
+    ) {
+      let index = data.findIndex((el) => el.name === e.target.id);
+      data[index].status = !data[index].status;
+    } else return;
+
     dispatch({
       type: ADD_EXTRAS,
       payload: {
@@ -108,10 +128,10 @@ export default (props) => {
           name="pipa"
           id="pipa"
           onChange={handleChange}
-          value={pipa && pipa.id}
+          value={pipa && pipa._id}
         >
           {pipas.map((item) => (
-            <Option key={item.id} value={item.id}>
+            <Option key={item._id} value={item._id}>
               {item.name}
             </Option>
           ))}
@@ -124,10 +144,10 @@ export default (props) => {
           name="manguera"
           id="manguera"
           onChange={handleChange}
-          value={manguera && manguera.id}
+          value={manguera && manguera._id}
         >
           {mangueras.map((item) => (
-            <Option key={item.id} value={item.id}>
+            <Option key={item._id} value={item._id}>
               {item.name}
             </Option>
           ))}
@@ -136,7 +156,31 @@ export default (props) => {
 
       <Column>
         <h2>Extras</h2>
-        <InputContainer id="cisterna" onClick={handleCheckboxChange}>
+        {extra &&
+          extra.map((item) => (
+            <InputContainer
+              key={item._id}
+              id={item.name}
+              onClick={handleCheckboxChange}
+            >
+              <Checkbox id={item.name} checked={item.status} />
+              <label id={item.name}>
+                &nbsp;{" "}
+                {item.name === "Cisterna" || item.name === "Tinaco"
+                  ? `Lavado de ${item.name}`
+                  : item.name}
+              </label>
+              {(item.name === "Cisterna" || item.name === "Tinaco") &&
+                item.status && (
+                  <WarningText id={item.name}>
+                    Aviso Importante! No lavamos contenedores con residuos
+                    toxicos.
+                  </WarningText>
+                )}
+            </InputContainer>
+          ))}
+
+        {/* <InputContainer id="cisterna" onClick={handleCheckboxChange}>
           <Checkbox id="cisterna" checked={extra && extra.cisterna.status} />
           <label id="cisterna">&nbsp; Lavado de Cisterna</label>
           {extra && extra.cisterna.status && (
@@ -158,7 +202,7 @@ export default (props) => {
         <InputContainer id="bomba" onClick={handleCheckboxChange}>
           <Checkbox id="bomba" checked={extra && extra.bomba.status} />
           <label id="bomba">&nbsp; Bombeo</label>
-        </InputContainer>
+        </InputContainer> */}
       </Column>
       {total ? (
         <PriceContainer>
