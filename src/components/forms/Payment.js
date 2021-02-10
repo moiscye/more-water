@@ -144,7 +144,7 @@ export default ({ previousStep, orderData, tableRef }) => {
         }
       }
     } catch (e) {
-      if (!paymentResult.error) {
+      if (paymentResult && !paymentResult.error) {
         let ress = await handleOrderError();
         if (ress.success) {
           dispatch({ type: SET_SUCCESS, payload: true });
