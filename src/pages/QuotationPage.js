@@ -14,18 +14,16 @@ import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import SuccessForm from "components/forms/SuccessForm";
 import StepWizard from "react-step-wizard";
 import Nav from "components/misc/Nav";
-import {
-  FILL_CART,
-  SET_SUCCESS,
-  ADD_EXTRAS,
-} from "store/actions/cartAction.js";
+import { FILL_CART, SET_SUCCESS } from "store/actions/cartAction.js";
 import calculateTotal from "helpers/calculateTotal.js";
+import { UPDATE_LOAD } from "store/actions/authAction.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;
 export default ({ history }) => {
   const dispatch = useDispatch();
-  const { success, pipa, manguera, extras } = useSelector((state) => ({
+  const { success, loaded } = useSelector((state) => ({
     ...state.cartReducer,
+    ...state.authReducer,
   }));
   useEffect(() => {
     loadProducts();
@@ -33,7 +31,8 @@ export default ({ history }) => {
   }, []);
 
   const loadProducts = async () => {
-    if (manguera === null && pipa === null && extras === null) {
+    if (!loaded) {
+      console.log("FIRST LOAD");
       let res = await axios.get(`.netlify/functions/product`);
       let pip = res.data.filter((item) => item.category.name === "Pipas");
       let ex = res.data.filter((item) => item.category.name === "Extras");
@@ -52,14 +51,7 @@ export default ({ history }) => {
           }),
         },
       });
-    }
-    if (typeof extras === "object" && !Array.isArray(extras)) {
-      let res = await axios.get(`.netlify/functions/product`);
-      let ex = res.data.filter((item) => item.category.name === "Extras");
-      dispatch({
-        type: ADD_EXTRAS,
-        payload: { extras: ex },
-      });
+      dispatch({ type: UPDATE_LOAD, payload: true });
     }
   };
 

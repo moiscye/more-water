@@ -31,7 +31,7 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         extras: payload.extras,
-        total: payload.total || state.total,
+        total: payload.total,
       };
     case ADD_FECHA_ENTREGA:
       return { ...state, fechaEntrega: payload };
