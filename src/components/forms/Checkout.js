@@ -159,7 +159,7 @@ export default (props) => {
     };
     let createUser = {
       email: user && user.email,
-      fullname: user && user.fullName,
+      fullName: user && user.fullName,
       phoneNumber: user && user.phoneNumber,
       address,
     };

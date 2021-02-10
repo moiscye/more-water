@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import ReactGA from "react-ga";
+
 import {
   useStripe,
   useElements,
@@ -128,26 +128,18 @@ export default ({ previousStep, orderData, tableRef }) => {
         //saving order in db
         let res = await axios.post(`.netlify/functions/orders`, orderData);
         if (res.status === 200) {
-          setClientName("");
+          // setClientName("");
           //validate if the deliveryfee was charged.
-          setProcessing(false);
+          // setProcessing(false);
           dispatch({ type: SET_SUCCESS, payload: true });
         } else {
           //If payment was completed. Send and email...
           let ress = await handleOrderError();
           if (ress.success) {
-            ReactGA.event({
-              category: "Ventas",
-              action: "Completada",
-            });
             dispatch({ type: SET_SUCCESS, payload: true });
           } else {
             let message = buildErrorMessage();
             setError(message);
-            ReactGA.event({
-              category: "Ventas",
-              action: "Incompleta. Pagada. Sin Guardar en DB. Email NO enviado",
-            });
           }
         }
       }
@@ -155,28 +147,15 @@ export default ({ previousStep, orderData, tableRef }) => {
       if (!paymentResult.error) {
         let ress = await handleOrderError();
         if (ress.success) {
-          setProcessing(false);
-          ReactGA.event({
-            category: "Ventas",
-            action: "Completada Sin Guardar en DB. Email Enviado",
-          });
           dispatch({ type: SET_SUCCESS, payload: true });
         } else {
           let message = buildErrorMessage();
           setError(message);
-          ReactGA.event({
-            category: "Ventas",
-            action: "Incompleta. Pagada. Sin Guardar en DB. Email NO enviado",
-          });
         }
       } else {
         setError(
           "Hubo un problema con el pago. Intenta mas tarde o llamanos al 222-436-2510"
         );
-        ReactGA.event({
-          category: "Ventas",
-          action: "Incompleta. Pago NO Procesado.",
-        });
         setProcessing(false);
       }
     }

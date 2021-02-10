@@ -339,7 +339,11 @@ module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
                       </tr> 
                       <tr style="border-collapse:collapse"> 
                        <td align="left" style="padding:0;Margin:0;padding-top:15px;padding-bottom:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:16px;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#777777">
-                       <strong>${order.deliveryInstructions}</strong>
+                       <strong>${
+                         order.deliveryInstructions
+                           ? order.deliveryInstructions
+                           : ""
+                       }</strong>
                        <br></p></td> 
                       </tr> 
                       <tr style="border-collapse:collapse"> 
@@ -371,7 +375,7 @@ module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
                       <tr style="border-collapse:collapse"> 
                        <td align="center" style="padding:0;Margin:0;padding-top:25px"><h2 style="Margin:0;line-height:29px;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-size:24px;font-style:normal;font-weight:bold;color:#FFFFFF">${
                          isAdmin
-                           ? "Si quieres hablar con el cliente"
+                           ? `Si quieres hablar con ${user.fullName} este es su numero ${user.phoneNumber} o`
                            : "Si quieres hablar con nosotros."
                        }</h2></td> 
                       </tr> 
@@ -379,7 +383,7 @@ module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
                        <td align="center" style="Margin:0;padding-left:10px;padding-right:10px;padding-bottom:15px;padding-top:30px"><span class="es-button-border" style="border-style:solid;border-color:transparent;background:#66B3B7;border-width:0px;display:inline-block;border-radius:5px;width:auto"><a href=${
                          isAdmin ? user.phoneNumber : "tel:2224362510"
                        } class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-size:18px;color:#FFFFFF;border-style:solid;border-color:#66B3B7;border-width:15px 30px 15px 30px;display:inline-block;background:#66B3B7;border-radius:5px;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center">${
-    isAdmin ? "Marcale Aqui" : "Llamanos Aqui"
+    isAdmin ? "Click aqui para marcarle" : "Llamanos Aqui"
   }</a></span></td> 
                       </tr> 
                     </table></td> 

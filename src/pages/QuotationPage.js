@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import ReactGA from "react-ga";
 import { useDispatch, useSelector } from "react-redux";
 import tw from "twin.macro";
 import ContactUsSimple from "components/forms/SimpleSelectsForm";
@@ -21,10 +22,13 @@ import { UPDATE_LOAD } from "store/actions/authAction.js";
 const Steps = tw(StepWizard)`flex flex-col`;
 export default ({ history }) => {
   const dispatch = useDispatch();
-  const { success, loaded } = useSelector((state) => ({
+  const { success } = useSelector((state) => ({
     ...state.cartReducer,
+  }));
+  const { loaded } = useSelector((state) => ({
     ...state.authReducer,
   }));
+
   useEffect(() => {
     loadProducts();
     // eslint-disable-next-line
@@ -60,6 +64,10 @@ export default ({ history }) => {
 
   const handleNewOrder = () => {
     dispatch({ type: SET_SUCCESS, payload: false });
+    ReactGA.event({
+      category: "Ventas",
+      action: "Completada",
+    });
     history.push("/cotizacion");
   };
 

@@ -1,7 +1,5 @@
 import { ADD_USER, UPDATE_LOAD } from "store/actions/authAction";
 const initialState = {
-  success: null,
-  error: null,
   user: null,
   loaded: false,
 };
