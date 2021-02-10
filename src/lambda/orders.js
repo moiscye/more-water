@@ -44,6 +44,7 @@ exports.handler = async (event, context) => {
           user = await user.save();
         }
         body.order.user = user._id;
+        console.log("test");
         let order = new Order(body.order);
         order = await order.save();
         body.order.orderNumber = order.orderNumber;
