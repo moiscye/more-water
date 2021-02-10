@@ -99,7 +99,7 @@ export default (props) => {
       let index = data.findIndex((el) => el.name === e.target.id);
       data[index].status = !data[index].status;
     } else return;
-
+    console.log(data);
     dispatch({
       type: ADD_EXTRAS,
       payload: {

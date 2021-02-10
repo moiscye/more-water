@@ -5,7 +5,9 @@ export default ({ manguera, pipa, extras, distance = 10 }) => {
   return total;
 };
 const calculateExtras = (e) => {
+  console.log(e);
   return e.reduce((acc, item) => {
+    console.log(acc);
     return item.status ? acc + item.price : acc;
   }, 0);
 };
