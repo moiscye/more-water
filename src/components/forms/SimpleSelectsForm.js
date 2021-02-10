@@ -100,11 +100,18 @@ export default (props) => {
       data[index].status = !data[index].status;
     } else return;
     console.log(data);
+    let totalInExtras = calculateTotal({
+      pipa,
+      manguera,
+      extras: data,
+      distance,
+    });
+    console.log("total before dispatch", totalInExtras);
     dispatch({
       type: ADD_EXTRAS,
       payload: {
         extras: data,
-        total: calculateTotal({ pipa, manguera, extras: data, distance }),
+        total: totalInExtras,
       },
     });
   };
