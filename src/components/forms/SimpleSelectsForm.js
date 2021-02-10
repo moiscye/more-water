@@ -99,19 +99,17 @@ export default (props) => {
       let index = data.findIndex((el) => el.name === e.target.id);
       data[index].status = !data[index].status;
     } else return;
-    console.log(data);
-    let totalInExtras = calculateTotal({
-      pipa,
-      manguera,
-      extras: data,
-      distance,
-    });
-    console.log("total before dispatch", totalInExtras);
+
     dispatch({
       type: ADD_EXTRAS,
       payload: {
         extras: data,
-        total: totalInExtras,
+        total: calculateTotal({
+          pipa,
+          manguera,
+          extras: data,
+          distance,
+        }),
       },
     });
   };

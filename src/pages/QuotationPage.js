@@ -32,7 +32,6 @@ export default ({ history }) => {
 
   const loadProducts = async () => {
     if (!loaded) {
-      console.log("FIRST LOAD");
       let res = await axios.get(`.netlify/functions/product`);
       let pip = res.data.filter((item) => item.category.name === "Pipas");
       let ex = res.data.filter((item) => item.category.name === "Extras");

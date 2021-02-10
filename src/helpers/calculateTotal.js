@@ -1,17 +1,13 @@
-export default ({ manguera, pipa, extras, distance = 10 }) => {
+export default ({ manguera, pipa, extras, distance = 7 }) => {
   let distanceTotal = calculateDistancePrice(distance);
   let extrasTotal = extras && calculateExtras(extras);
-  console.log("extrasTotal", extrasTotal);
   let total = manguera.price + pipa.price + extrasTotal + distanceTotal;
-  console.log("total after adding everything", total);
   return total;
 };
 const calculateExtras = (e) => {
-  let sum = e.reduce((acc, item) => {
+  return e.reduce((acc, item) => {
     return item.status ? acc + item.price : acc;
   }, 0);
-  console.log("Sum inside calculateExtras", sum);
-  return sum;
 };
 
 const calculateDistancePrice = (d) => {
