@@ -342,7 +342,7 @@ module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
                        <strong>${
                          order.deliveryInstructions
                            ? order.deliveryInstructions
-                           : ""
+                           : "Ninguna"
                        }</strong>
                        <br></p></td> 
                       </tr> 
@@ -375,7 +375,7 @@ module.exports = ({ order, user, isAdmin = false, onlyEmail = false }) => {
                       <tr style="border-collapse:collapse"> 
                        <td align="center" style="padding:0;Margin:0;padding-top:25px"><h2 style="Margin:0;line-height:29px;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-size:24px;font-style:normal;font-weight:bold;color:#FFFFFF">${
                          isAdmin
-                           ? `Si quieres hablar con ${user.fullName} este es su numero ${user.phoneNumber} o`
+                           ? `Si quieres hablar con el cliente ${user.fullName} este es su numero ${user.phoneNumber} o`
                            : "Si quieres hablar con nosotros."
                        }</h2></td> 
                       </tr> 
