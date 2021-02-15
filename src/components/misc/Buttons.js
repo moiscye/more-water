@@ -13,18 +13,3 @@ export const SubmitButton = styled.button(({ disabled = false }) => [
 ]);
 
 export const ButtonContainer = tw.div`flex justify-end py-6`;
-
-export const RoundButton = tw.a`flex md:hidden items-center justify-center z-10 shadow-default hover:shadow-2xl rounded-full transition-default ease-in duration-200 focus:outline-none transform `;
-export const FloatingButton = styled(RoundButton)(
-  ({ number = 1, bgColor = "white" }) => [
-    `position: fixed;  
-    width: 3.5rem;
-    height: 3.5rem;
-      right: 20px;
-      bottom: ${number === 1 ? 40 : number * 80 - 40}px;
-      background-color: ${bgColor === "white" ? "white" : "white"};
- `,
-  ]
-);
-export const PhoneIcon = tw(SvgPhone)`w-10 h-10 inline-block`;
-export const WhatsappIcon = tw(SvgWhatsapp)`w-10 h-10 inline-block`;

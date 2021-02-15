@@ -12,7 +12,8 @@ import WashingPage from "pages/WashingPage";
 // import ServicesPage from "pages/ServicesPage";
 import ContactPage from "pages/ContactPage";
 import QuotationPage from "pages/QuotationPage";
-import FloatingButton from "helpers/FloatingButton";
+import FloatingMenu from "helpers/FloatingMenu";
+
 // initialize Google Analytics to collect traffic data
 ReactGA.initialize("UA-188553675-1");
 
@@ -22,7 +23,7 @@ export default function App() {
   return (
     <Router>
       <Header />
-      <FloatingButton />
+      <FloatingMenu />
       <ScrollToTop />
       <Switch>
         <Route path="/" exact component={LandingPage}></Route>
