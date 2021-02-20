@@ -10,7 +10,7 @@ import { Column, PriceContainer } from "../misc/Layouts";
 import { PriceTag } from "../misc/Headings";
 import DateP from "react-date-picker";
 import dayjs from "dayjs";
-import formatDate from "helpers/formatDate";
+import { formatDate } from "helpers/formatDate";
 
 const DatePicker = styled(DateP).attrs((props) => ({
   className: props.className,

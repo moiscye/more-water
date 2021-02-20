@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import FormContainer from "./FormContainer";
 import SingleColumnTable from "../tables/SingleColumnTable";
 import { Column } from "../misc/Layouts";
-import formatDate from "helpers/formatDate";
+import { formatDate } from "helpers/formatDate";
 import stripeLogo from "images/stripe.png";
 import Payment from "./Payment";
 

@@ -1,0 +1,55 @@
+type Product @model @auth(rules: [{ allow: owner, identityField: "sub" }]) {
+  id: ID!
+  name: String!
+  description: String!
+  price: Float!
+  categoryId: ID!
+  category: Category @connection(fields: ["categoryId"])
+  owner: String
+  createdAt: String
+}
+type Category @model @auth(rules: [{ allow: owner, identityField: "sub" }]) {
+  id: ID!
+  name: String!
+  createdAt: String
+}
+
+type User
+  @model(
+    queries: { get: "getUser" }
+    mutations: { create: "registerUser", update: "updateUser" }
+    subscriptions: null
+  ) {
+  id: ID!
+  email: String!
+  fullName: String!
+  phoneNumber: String
+  address: String
+  orders: [Order] @connection(name: "UserOrders", sortField: "createdAt")
+}
+
+type Order
+  @model(
+    queries: null
+    mutations: { create: "createOrder" }
+    subscriptions: null
+  ) {
+  id: ID!
+  product: [Product] @connection
+  user: User @connection(name: "UserOrders")
+  address: String
+  deliveryInstructions: String
+  deliveryDate: String
+  updatedAt: String
+  createdAt: String
+  orderNumber: Int
+}
+
+type Contact @model {
+  id: ID!
+  email: String!
+  fullName: String!
+  phoneNumber: String!
+  subject: String!
+  message: String!
+}
