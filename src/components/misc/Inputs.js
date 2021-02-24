@@ -9,7 +9,7 @@ export const Input = styled.input((props) => [
     : tw`border-gray-300 focus:border-primary-600`,
 ]);
 export const Select = styled.select((props) => [
-  tw`py-2 mt-4 w-full p-2 rounded-md  border border-solid  bg-white text-black text-xl focus:outline-none  `,
+  tw`py-2 my-4 w-full p-2 rounded-md  border border-solid  bg-white text-black text-xl focus:outline-none`,
   props.error
     ? tw`border-red-300 focus:border-red-900`
     : tw`border-gray-300 focus:border-primary-600`,

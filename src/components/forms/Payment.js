@@ -1,7 +1,5 @@
 import React, { useMemo, useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-
 import {
   useStripe,
   useElements,
@@ -17,7 +15,7 @@ import { ErrorMessage } from "../misc/Errors";
 import { PriceTag } from "../misc/Headings";
 import useResponsiveFontSize from "helpers/useResponsiveFontSize";
 import { SET_SUCCESS } from "store/actions/cartAction";
-
+import { createPaymentIntent, createOrder, handleOrderError } from "api/core";
 const cssCardElements = tw`p-4 mb-6 w-full rounded-md border border-solid  bg-white text-black text-base focus:outline-none border-gray-300 focus:border-primary-600`;
 
 const useOptions = () => {
@@ -62,21 +60,19 @@ export default ({ previousStep, orderData, tableRef }) => {
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    createPaymentIntent();
+    paymentIntent();
     // eslint-disable-next-line
   }, []);
 
-  const createPaymentIntent = async () => {
-    let res = await axios.post(
-      `.netlify/functions/payment`,
-      { items: orderData.order.products },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    setClientSecret(res.data.clientSecret);
+  const paymentIntent = async () => {
+    let { ok, error, data } = await createPaymentIntent({
+      items: orderData.order.products,
+    });
+    if (ok) {
+      setClientSecret(data.clientSecret);
+    } else {
+      console.error(error);
+    }
     //check whether the delivery fee has been added here res.data.deliveryChargeSuccess
   };
 
@@ -124,30 +120,26 @@ export default ({ previousStep, orderData, tableRef }) => {
         setProcessing(false);
       } else {
         let paymentDetails = createPaymentDetails(paymentResult);
+        //adding payment details the order data
         orderData.order.paymentDetails = paymentDetails;
         //saving order in db
-        let res = await axios.post(`.netlify/functions/orders`, orderData);
-        if (res.status === 200) {
-          // setClientName("");
+        let { ok } = await createOrder(orderData);
+        if (ok) {
           //validate if the deliveryfee was charged.
-          // setProcessing(false);
           dispatch({ type: SET_SUCCESS, payload: true });
         } else {
-          //If payment was completed. Send and email...
-          let ress = await handleOrderError();
-          if (ress.success) {
-            dispatch({ type: SET_SUCCESS, payload: true });
-          } else {
-            let message = buildErrorMessage();
-            setError(message);
-          }
+          // At this point the payment was completed. So we gonna use the
+          // catch block to send an email to inform that the payment was
+          // succesful but the order was not saved in the db.
+          throw new Error("The order was not saved in the database");
         }
       }
     } catch (e) {
       if (paymentResult && !paymentResult.error) {
-        let ress = await handleOrderError();
-        if (ress.success) {
+        let { ok } = await handleOrderError(orderData);
+        if (ok) {
           dispatch({ type: SET_SUCCESS, payload: true });
+          console.warn(e);
         } else {
           let message = buildErrorMessage();
           setError(message);
@@ -168,17 +160,6 @@ export default ({ previousStep, orderData, tableRef }) => {
     );
   };
 
-  const handleOrderError = async () => {
-    try {
-      let res = await axios.post(
-        `.netlify/functions/order-email-only`,
-        orderData
-      );
-      if (res.status === 200) return Promise.resolve({ success: true });
-    } catch (e) {
-      return Promise.resolve({ success: false, error: e });
-    }
-  };
   const errorSection = () => {
     tableRef.current.scrollIntoView({ behavior: "smooth" });
     return <ErrorMessage>{error}</ErrorMessage>;

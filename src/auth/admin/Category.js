@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import FormContainer from "components/forms/FormContainer";
 import { Input } from "components/misc/Inputs";
-import { ErrorMessage } from "../components/misc/Errors";
+import { ErrorMessage } from "../../components/misc/Errors";
 import Dashboard from "./Dashboard";
 import { dateFrom } from "helpers/formatDate";
 import { SubmitButton } from "components/misc/Buttons";
@@ -10,9 +10,9 @@ import {
   createCategory,
   deleteCategory,
   updateCategory,
-} from "../graphql/mutations";
+} from "../../graphql/mutations";
 
-import { listCategorys } from "../graphql/queries";
+import { listCategorys } from "../../graphql/queries";
 import Table from "./Table";
 import { Container } from "components/misc/Layouts";
 
@@ -21,7 +21,11 @@ export default () => {
   const [category, setCategory] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categoryList, setCategoryList] = useState(null);
-
+  const myRef = useRef(null);
+  const executeScroll = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    myRef.current.focus();
+  };
   useEffect(() => {
     loadCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,6 +73,9 @@ export default () => {
     }
   };
   const handleDelete = async ({ id }) => {
+    setCategory(null);
+    setCategoryId(null);
+    setError(null);
     let res = await API.graphql(
       graphqlOperation(deleteCategory, { input: { id } })
     );
@@ -77,8 +84,10 @@ export default () => {
     setCategoryList(data);
   };
   const setIdToBeUpdated = ({ id, name }) => {
+    setError(null);
     setCategory(name);
     setCategoryId(id);
+    executeScroll();
   };
 
   const filteredListToPopulateTable = () => {
@@ -96,12 +105,14 @@ export default () => {
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Container flex>
           <Input
+            ref={myRef}
             onChange={handleChange}
             type="text"
             name="category"
             placeholder={"Nombre de la Categoria"}
             error={error}
             value={category}
+            autoFocus
           />
           <SubmitButton onClick={handleSubmit}>
             {categoryId ? "Actualizar" : "Crear"}

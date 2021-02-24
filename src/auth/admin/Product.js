@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { listProducts, listCategorys } from "../graphql/queries";
+import { listProducts, listCategorys } from "../../graphql/queries";
 import Table from "./Table";
 import {
   createProduct,
   deleteProduct,
   updateProduct,
-} from "../graphql/mutations";
+} from "../../graphql/mutations";
 import FormContainer from "components/forms/FormContainer";
 import { Input, Select } from "components/misc/Inputs";
 import { ButtonContainer, SubmitButton } from "components/misc/Buttons";
-import { ErrorMessage } from "../components/misc/Errors";
+import { ErrorMessage } from "../../components/misc/Errors";
 import Dashboard from "./Dashboard";
 import { dateFrom } from "helpers/formatDate";
 const initialData = {
-  name: null,
-  description: null,
-  price: null,
-  categoryId: null,
+  name: "",
+  description: "",
+  price: 0,
+  categoryId: "",
 };
 export default () => {
   const [error, setError] = useState(false);
@@ -41,6 +41,16 @@ export default () => {
   const loadCategories = async () => {
     const result = await API.graphql(graphqlOperation(listCategorys));
     setCategoryList(result.data.listCategorys.items);
+    if (
+      result &&
+      result.data.listCategorys &&
+      result.data.listCategorys.items &&
+      result.data.listCategorys.items.length > 0
+    ) {
+      let newData = { ...data };
+      newData.categoryId = result.data.listCategorys.items[0].id;
+      setData(newData);
+    }
   };
   const loadProducts = async () => {
     const result = await API.graphql(graphqlOperation(listProducts));
@@ -78,18 +88,30 @@ export default () => {
         return item;
       });
       setProductList(tempData);
-      setData(initialData);
+      setData((prevData) => {
+        let catId = prevData.categoryId;
+        prevData = { ...initialData };
+        prevData.categoryId = catId;
+        return prevData;
+      });
       setProductId(null);
     } else {
       res = await API.graphql(graphqlOperation(createProduct, { input: data }));
-      console.log(res.data);
       let newData = [res.data.createProduct, ...productList];
       setProductList(newData);
-      setData(initialData);
+      setData((prevData) => {
+        let catId = prevData.categoryId;
+        prevData = { ...initialData };
+        prevData.categoryId = catId;
+        return prevData;
+      });
     }
   };
 
   const handleDelete = async ({ id }) => {
+    setProductId(null);
+    setData(initialData);
+    setError(null);
     let res = await API.graphql(
       graphqlOperation(deleteProduct, { input: { id } })
     );
@@ -98,7 +120,7 @@ export default () => {
     setProductList(data);
   };
   const setIdToBeUpdated = async (item) => {
-    console.log(item.id);
+    setError(null);
     setProductId(item.id);
     let itemToBeUpdated = productList.filter((i) => i.id === item.id);
     let { name, categoryId, description, price } = itemToBeUpdated[0];
@@ -129,6 +151,7 @@ export default () => {
           placeholder={"Nombre del Producto"}
           error={error}
           value={name}
+          autoFocus
         />
         <Input
           onChange={handleChange}
@@ -147,7 +170,12 @@ export default () => {
           value={price}
         />
 
-        <Select error={error} name="categoryId" onChange={handleChange}>
+        <Select
+          error={error}
+          name="categoryId"
+          onChange={handleChange}
+          value={categoryId}
+        >
           {categoryList &&
             categoryList.map((item) => (
               <option key={item.id} value={item.id}>
@@ -156,9 +184,8 @@ export default () => {
             ))}
         </Select>
 
-        <ButtonContainer>
+        <ButtonContainer margin>
           <SubmitButton onClick={handleSubmit}>
-            {" "}
             {productId ? "Actualizar" : "Crear"}
           </SubmitButton>
         </ButtonContainer>

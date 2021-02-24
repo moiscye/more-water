@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "morewaterc4c7bd35_identitypool_c4c7bd35",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "morewac4c7bd35",
-    "userPoolName": "morewaterc4c7bd35_userpool_c4c7bd35",
+    "identityPoolName": "morewater332b12a3_identitypool_332b12a3",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "morewa332b12a3",
+    "userPoolName": "morewater332b12a3_userpool_332b12a3",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "morewac4c7bd35_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "morewa332b12a3_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "c4c7bd35",
-    "resourceName": "morewaterc4c7bd35",
+    "sharedId": "332b12a3",
+    "resourceName": "morewater332b12a3332b12a3",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,11 +45,19 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
-    "usernameAttributes": [
-        "email"
+    "useDefault": "manual",
+    "thirdPartyAuth": false,
+    "userPoolGroups": true,
+    "adminQueries": false,
+    "triggers": "{}",
+    "hostedUI": false,
+    "userPoolGroupList": [
+        "admin"
     ],
-    "userPoolGroupList": [],
     "serviceName": "Cognito",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
     "dependsOn": []
 }

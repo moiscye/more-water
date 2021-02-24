@@ -1,4 +1,15 @@
-type Product @model @auth(rules: [{ allow: owner, identityField: "sub" }]) {
+type Product
+  @model
+  @auth(
+    rules: [
+      # allow admins to create, update and delete products
+      { allow: groups, groups: ["admin"] }
+      # allow all authenticated users to view products
+      { allow: private, operations: [read] }
+      # allow all guest users (not authenticated) to view products
+      { allow: public, operations: [read], provider: iam }
+    ]
+  ) {
   id: ID!
   name: String!
   description: String!
@@ -8,7 +19,18 @@ type Product @model @auth(rules: [{ allow: owner, identityField: "sub" }]) {
   owner: String
   createdAt: String
 }
-type Category @model @auth(rules: [{ allow: owner, identityField: "sub" }]) {
+type Category
+  @model
+  @auth(
+    rules: [
+      # allow admins to create, update and delete categories
+      { allow: groups, groups: ["admin"] }
+      # allow all authenticated users to view categories
+      { allow: private, operations: [read] }
+      # allow all guest users (not authenticated) to view categories
+      { allow: public, operations: [read], provider: iam }
+    ]
+  ) {
   id: ID!
   name: String!
   createdAt: String
@@ -19,6 +41,16 @@ type User
     queries: { get: "getUser" }
     mutations: { create: "registerUser", update: "updateUser" }
     subscriptions: null
+  )
+  @auth(
+    rules: [
+      # allow admins to create, update and delete users
+      { allow: groups, groups: ["admin"] }
+      # allow all authenticated users to create and view users
+      { allow: private, operations: [create, read] }
+      # allow all guest users (not authenticated) to create users
+      { allow: public, operations: [create], provider: iam }
+    ]
   ) {
   id: ID!
   email: String!
@@ -33,6 +65,16 @@ type Order
     queries: null
     mutations: { create: "createOrder" }
     subscriptions: null
+  )
+  @auth(
+    rules: [
+      # allow admins to create, update and delete orders
+      { allow: groups, groups: ["admin"] }
+      # allow all authenticated users to view orders
+      { allow: private, operations: [create, read] }
+      # allow all guest users (not authenticated) to view orders
+      { allow: public, operations: [create], provider: iam }
+    ]
   ) {
   id: ID!
   product: [Product] @connection
@@ -45,7 +87,18 @@ type Order
   orderNumber: Int
 }
 
-type Contact @model {
+type Contact
+  @model
+  @auth(
+    rules: [
+      # allow admins to create, update and delete orders
+      { allow: groups, groups: ["admin"] }
+      # allow all authenticated users to view orders
+      { allow: private, operations: [create, read] }
+      # allow all guest users (not authenticated) to view orders
+      { allow: public, operations: [create], provider: iam }
+    ]
+  ) {
   id: ID!
   email: String!
   fullName: String!
