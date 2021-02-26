@@ -15,7 +15,7 @@ import { ErrorMessage } from "../misc/Errors";
 import { PriceTag } from "../misc/Headings";
 import useResponsiveFontSize from "helpers/useResponsiveFontSize";
 import { SET_SUCCESS } from "store/actions/cartAction";
-import { createPaymentIntent, createOrder, handleOrderError } from "api/core";
+import { createPaymentIntent, createOrder, sendEmailOnly } from "api/core";
 const cssCardElements = tw`p-4 mb-6 w-full rounded-md border border-solid  bg-white text-black text-base focus:outline-none border-gray-300 focus:border-primary-600`;
 
 const useOptions = () => {
@@ -128,28 +128,22 @@ export default ({ previousStep, orderData, tableRef }) => {
           //validate if the deliveryfee was charged.
           dispatch({ type: SET_SUCCESS, payload: true });
         } else {
-          // At this point the payment was completed. So we gonna use the
-          // catch block to send an email to inform that the payment was
-          // succesful but the order was not saved in the db.
-          throw new Error("The order was not saved in the database");
+          // At this point the payment was completed. So we gonna send an email to
+          // inform that the payment was succesful but the order was not saved in the db.
+          let { ok } = await sendEmailOnly(orderData);
+          if (ok) {
+            dispatch({ type: SET_SUCCESS, payload: true });
+          } else {
+            let message = buildErrorMessage();
+            setError(message);
+          }
         }
       }
     } catch (e) {
-      if (paymentResult && !paymentResult.error) {
-        let { ok } = await handleOrderError(orderData);
-        if (ok) {
-          dispatch({ type: SET_SUCCESS, payload: true });
-          console.warn(e);
-        } else {
-          let message = buildErrorMessage();
-          setError(message);
-        }
-      } else {
-        setError(
-          "Hubo un problema con el pago. Intenta mas tarde o llamanos al 222-436-2510"
-        );
-        setProcessing(false);
-      }
+      setError(
+        "Hubo un problema con el pago. Intenta mas tarde o llamanos al 222-436-2510"
+      );
+      setProcessing(false);
     }
   };
   const buildErrorMessage = () => {

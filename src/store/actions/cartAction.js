@@ -7,3 +7,6 @@ export const ADD_TOTAL = "ADD_TOTAL";
 export const UPDATE_TOTAL = "UPDATE_TOTAL";
 export const SET_SUCCESS = "SET_SUCCESS";
 export const FILL_CART = "FILL_CART";
+
+export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";

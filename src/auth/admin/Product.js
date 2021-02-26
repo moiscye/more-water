@@ -13,6 +13,7 @@ import { ButtonContainer, SubmitButton } from "components/misc/Buttons";
 import { ErrorMessage } from "../../components/misc/Errors";
 import Dashboard from "./Dashboard";
 import { dateFrom } from "helpers/formatDate";
+import { SectionSubHeading } from "components/misc/Headings";
 const initialData = {
   name: "",
   description: "",
@@ -40,13 +41,13 @@ export default () => {
 
   const loadCategories = async () => {
     const result = await API.graphql(graphqlOperation(listCategorys));
-    setCategoryList(result.data.listCategorys.items);
-    if (
-      result &&
-      result.data.listCategorys &&
-      result.data.listCategorys.items &&
-      result.data.listCategorys.items.length > 0
-    ) {
+
+    if (result?.data?.listCategorys?.items?.length > 0) {
+      setCategoryList(
+        result.data.listCategorys.items.sort(
+          (a, b) => a.displayOrder - b.displayOrder
+        )
+      );
       let newData = { ...data };
       newData.categoryId = result.data.listCategorys.items[0].id;
       setData(newData);
@@ -54,7 +55,6 @@ export default () => {
   };
   const loadProducts = async () => {
     const result = await API.graphql(graphqlOperation(listProducts));
-
     setProductList(result.data.listProducts.items);
   };
   const handleChange = (e) => {
@@ -128,7 +128,7 @@ export default () => {
     executeScroll();
   };
   const validateFields = () => {
-    return categoryId && description && name && price;
+    return categoryId && description && name && price >= 0;
   };
 
   const filteredListToPopulateTable = () => {
@@ -137,66 +137,86 @@ export default () => {
       updatedAt = dateFrom(updatedAt);
       return { id, name, price, category: category.name, updatedAt };
     });
-    return data;
+    return data.sort((a, b) => sortStrings(a, b, "category"));
+  };
+
+  const sortStrings = (a, b, sortBy) => {
+    var nameA = a[sortBy].toUpperCase();
+    var nameB = b[sortBy].toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
   };
   return (
     <Dashboard>
-      <FormContainer noPadding>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Input
-          ref={myRef}
-          onChange={handleChange}
-          type="text"
-          name="name"
-          placeholder={"Nombre del Producto"}
-          error={error}
-          value={name}
-          autoFocus
-        />
-        <Input
-          onChange={handleChange}
-          type="text"
-          name="description"
-          placeholder={"Descripcion del Producto"}
-          error={error}
-          value={description}
-        />
-        <Input
-          onChange={handleChange}
-          type="number"
-          name="price"
-          placeholder={"Precio del Producto"}
-          error={error}
-          value={price}
-        />
+      {categoryList?.length > 0 ? (
+        <>
+          <FormContainer noPadding>
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            <Input
+              ref={myRef}
+              onChange={handleChange}
+              type="text"
+              name="name"
+              placeholder={"Nombre del Producto"}
+              error={error}
+              value={name}
+              autoFocus
+            />
+            <Input
+              onChange={handleChange}
+              type="text"
+              name="description"
+              placeholder={"Descripcion del Producto"}
+              error={error}
+              value={description}
+            />
+            <Input
+              onChange={handleChange}
+              type="number"
+              name="price"
+              placeholder={"Precio del Producto"}
+              error={error}
+              value={price}
+            />
 
-        <Select
-          error={error}
-          name="categoryId"
-          onChange={handleChange}
-          value={categoryId}
-        >
-          {categoryList &&
-            categoryList.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-        </Select>
+            <Select
+              error={error}
+              name="categoryId"
+              onChange={handleChange}
+              value={categoryId}
+            >
+              {categoryList &&
+                categoryList.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+            </Select>
 
-        <ButtonContainer margin>
-          <SubmitButton onClick={handleSubmit}>
-            {productId ? "Actualizar" : "Crear"}
-          </SubmitButton>
-        </ButtonContainer>
-      </FormContainer>
-      {productList && productList.length > 0 ? (
-        <Table
-          rows={filteredListToPopulateTable()}
-          deleteEvent={handleDelete}
-          updateEvent={setIdToBeUpdated}
-        />
-      ) : null}
+            <ButtonContainer margin>
+              <SubmitButton onClick={handleSubmit}>
+                {productId ? "Actualizar" : "Crear"}
+              </SubmitButton>
+            </ButtonContainer>
+          </FormContainer>
+          {productList && productList.length > 0 ? (
+            <Table
+              rows={filteredListToPopulateTable()}
+              deleteEvent={handleDelete}
+              updateEvent={setIdToBeUpdated}
+            />
+          ) : null}
+        </>
+      ) : (
+        <SectionSubHeading>
+          Tienes que crear una categoria antes de crear productos
+        </SectionSubHeading>
+      )}
     </Dashboard>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import ReactGA from "react-ga";
 import { useDispatch, useSelector } from "react-redux";
 import tw from "twin.macro";
@@ -17,6 +16,7 @@ import Nav from "components/misc/Nav";
 import { FILL_CART, SET_SUCCESS } from "store/actions/cartAction.js";
 import calculateTotal from "helpers/calculateTotal.js";
 import { UPDATE_LOAD } from "store/actions/authAction.js";
+import { getProducts } from "api/core.js";
 
 const Steps = tw(StepWizard)`flex flex-col`;
 export default ({ history }) => {
@@ -28,34 +28,37 @@ export default ({ history }) => {
     ...state.authReducer,
   }));
 
-  useEffect(() => {
-    loadProducts();
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   loadProducts();
+  //   // eslint-disable-next-line
+  // }, []);
 
-  const loadProducts = async () => {
-    if (!loaded) {
-      let res = await axios.get(`.netlify/functions/product`);
-      let pip = res.data.filter((item) => item.category.name === "Pipas");
-      let ex = res.data.filter((item) => item.category.name === "Extras");
-      let man = res.data.filter((item) => item.category.name === "Mangueras");
+  // const loadProducts = async () => {
+  //   if (!loaded) {
+  //     let { ok, data } = await getProducts();
 
-      dispatch({
-        type: FILL_CART,
-        payload: {
-          pipa: pip[0],
-          manguera: man[0],
-          extras: ex,
-          total: calculateTotal({
-            pipa: pip[0],
-            manguera: man[0],
-            extras: ex,
-          }),
-        },
-      });
-      dispatch({ type: UPDATE_LOAD, payload: true });
-    }
-  };
+  //     if (ok) {
+  //       let pip = data.filter((item) => item.category.name === "Pipas");
+  //       let ex = data.filter((item) => item.category.name === "Extras");
+  //       let man = data.filter((item) => item.category.name === "Mangueras");
+
+  //       dispatch({
+  //         type: FILL_CART,
+  //         payload: {
+  //           pipa: pip[0],
+  //           manguera: man[0],
+  //           extras: ex,
+  //           total: calculateTotal({
+  //             pipa: pip[0],
+  //             manguera: man[0],
+  //             extras: ex,
+  //           }),
+  //         },
+  //       });
+  //       dispatch({ type: UPDATE_LOAD, payload: true });
+  //     }
+  //   }
+  // };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

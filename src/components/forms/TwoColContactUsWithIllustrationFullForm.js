@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-
-import axios from "axios";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -12,6 +10,7 @@ import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import EmailIllustrationSrc from "images/email-illustration.svg";
 import { ReactComponent as SvgPhone } from "images/phone.svg";
 import SuccessForm from "./SuccessForm";
+import { sendContactEmail } from "api/core";
 
 const PhoneIcon = tw(SvgPhone)`w-6 h-6 md:w-10 md:h-10 inline-block mr-2 `;
 const Container = tw.div`relative`;
@@ -135,13 +134,13 @@ export default ({
       );
       return;
     }
-    let res = await axios.post(`.netlify/functions/contact`, contactDetails);
-    if (res.status === 200) {
+    let { ok } = await sendContactEmail(contactDetails);
+    if (ok) {
       setContactDetails(initialState);
       setIsSent(true);
       setIsSending(false);
       executeScroll();
-    } else if (res.status === 500) {
+    } else {
       setError(true);
       setIsSending(false);
       setErrorMessage(

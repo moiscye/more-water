@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
           body: JSON.stringify(product),
         };
       } catch (e) {
-        console.log(e);
+        console.error(e);
         response = {
           statusCode: 500,
           body: JSON.stringify(e),
@@ -35,7 +35,7 @@ exports.handler = async (event, context) => {
         body: JSON.stringify(products),
       };
     } catch (e) {
-      console.log(e);
+      console.error(e);
       response = {
         statusCode: 500,
         body: JSON.stringify(e),

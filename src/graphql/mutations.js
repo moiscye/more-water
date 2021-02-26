@@ -18,6 +18,7 @@ export const createProduct = /* GraphQL */ `
       category {
         id
         name
+        displayOrder
         createdAt
         updatedAt
       }
@@ -41,6 +42,7 @@ export const updateProduct = /* GraphQL */ `
       category {
         id
         name
+        displayOrder
         createdAt
         updatedAt
       }
@@ -64,6 +66,7 @@ export const deleteProduct = /* GraphQL */ `
       category {
         id
         name
+        displayOrder
         createdAt
         updatedAt
       }
@@ -78,6 +81,7 @@ export const createCategory = /* GraphQL */ `
     createCategory(input: $input, condition: $condition) {
       id
       name
+      displayOrder
       createdAt
       updatedAt
     }
@@ -91,6 +95,7 @@ export const updateCategory = /* GraphQL */ `
     updateCategory(input: $input, condition: $condition) {
       id
       name
+      displayOrder
       createdAt
       updatedAt
     }
@@ -104,6 +109,7 @@ export const deleteCategory = /* GraphQL */ `
     deleteCategory(input: $input, condition: $condition) {
       id
       name
+      displayOrder
       createdAt
       updatedAt
     }

@@ -75,6 +75,7 @@ export const getProduct = /* GraphQL */ `
       category {
         id
         name
+        displayOrder
         createdAt
         updatedAt
       }
@@ -100,6 +101,7 @@ export const listProducts = /* GraphQL */ `
         category {
           id
           name
+          displayOrder
           createdAt
           updatedAt
         }
@@ -118,6 +120,7 @@ export const listCategorys = /* GraphQL */ `
       items {
         id
         name
+        displayOrder
         createdAt
         updatedAt
       }
@@ -130,6 +133,7 @@ export const getCategory = /* GraphQL */ `
     getCategory(id: $id) {
       id
       name
+      displayOrder
       createdAt
       updatedAt
     }

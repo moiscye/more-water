@@ -204,17 +204,17 @@ export default () => {
           {
             question: "Cuanto tiempo se demoran en entregar el agua ?",
             answer:
-              "Depende del domicilio al cual se llevara la pipa. Normalmente la entregamos en 1 hora. Utiliza nuestro cotizador para que sepas el tiempo de entrega.",
+              "Depende del domicilio al cual se llevara la pipa. Normalmente la entregamos en 1 hora.",
           },
           {
             question: "Como puedo hacer el pago ?",
             answer:
-              "Por el momento aceptamos efectivo y depositos bancarios. Muy pronto tendremos opciones de pago con tarjeta y en otros establecimientos para tu comodidad.",
+              "Aceptamos Tarjetas de credito efectivo, depositos bancarios y efectivo. Muy pronto tendremos opciones de pago a meses sin intereses con tarjetas de credito para tu comodidad.",
           },
           {
             question: "Como pido una Pipa de Agua ?",
             answer:
-              "Puedes completar el formulario de cotizacion en esta pagina o llamar al telefono 222-436-2510 o mandar un email a pipasangelopolis@gmail.com ",
+              "Puedes completar el formulario de cotizacion en esta pagina, llamar al telefono 222-436-2510 o mandar un email a pipasangelopolis@gmail.com ",
           },
           {
             question: "Cual es el precio de una pipa de Agua ?",
