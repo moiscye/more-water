@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-//import tw from "twin.macro";
 import FormContainer from "./FormContainer";
-import { ButtonContainer, SubmitButton } from "../misc/Buttons";
-import { Column } from "../misc/Layouts";
+import { Grid } from "../misc/Layouts";
 import { getProducts } from "api/core";
 import Select from "react-select";
-import {
-  ADD_TO_CART,
-  EMPTY_CART,
-  REMOVE_FROM_CART,
-} from "store/actions/cartAction";
-//const Select = tw.select`py-2 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600`;
-//const Option = tw.option``;
-//const InputContainer = tw.div`py-1 mt-2 w-full p-4 rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600 z-50`;
-//const WarningText = tw.span`block md:inline-block md:ml-3 text-red-700 text-lg font-medium`;
-export default (props) => {
-  const dispatch = useDispatch();
+import { ADD_TO_CART, REMOVE_FROM_CART } from "store/actions/cartAction";
 
+export default () => {
+  const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -48,8 +38,6 @@ export default (props) => {
   };
 
   const handleChange = (e, selection) => {
-    console.log(e);
-    console.log(selection);
     if (!selection) {
       dispatch({ type: REMOVE_FROM_CART, payload: e });
       return;
@@ -57,43 +45,28 @@ export default (props) => {
     dispatch({ type: ADD_TO_CART, payload: selection.value });
   };
 
-  const handleClick = () => {
-    props.nextStep();
-  };
-
   return (
     <FormContainer>
-      {categories?.length > 0 &&
-        categories.map((item, index) => {
-          return (
-            <Column key={index}>
-              <h2>{`Selecciona tipo de ${item[0].category.name}`}</h2>
-              <Select
-                placeholder="Selecciona"
-                onChange={(value) => handleChange(item[0].category.name, value)}
-                options={item.map((a) => {
-                  return { value: a, label: a.name };
-                })}
-                isClearable
-              />
-            </Column>
-          );
-        })}
-
-      <Column>
-        <ButtonContainer>
-          <SubmitButton type="button" value="Submit" onClick={handleClick}>
-            Siguiente
-          </SubmitButton>
-          <SubmitButton
-            type="button"
-            value="Submit"
-            onClick={() => dispatch({ type: EMPTY_CART })}
-          >
-            Limpiar
-          </SubmitButton>
-        </ButtonContainer>
-      </Column>
+      <Grid>
+        {categories?.length > 0 &&
+          categories?.map((item, index) => {
+            return (
+              <div key={index}>
+                <h2>{`${item[0].category.name}:`}</h2>
+                <Select
+                  placeholder="Selecciona"
+                  onChange={(value) =>
+                    handleChange(item[0].category.name, value)
+                  }
+                  options={item.map((a) => {
+                    return { value: a, label: a.name };
+                  })}
+                  isClearable
+                />
+              </div>
+            );
+          })}
+      </Grid>
     </FormContainer>
   );
 };

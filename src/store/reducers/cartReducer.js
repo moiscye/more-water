@@ -13,7 +13,7 @@ import {
 } from "../actions/cartAction";
 
 const initialState = {
-  fechaEntrega: new Date(),
+  deliveryDate: new Date(),
   total: 0,
   success: false,
   cart: [],
@@ -23,18 +23,16 @@ export default (state = initialState, { type, payload }) => {
   switch (type) {
     case ADD_TO_CART:
       let cart = state.cart || [];
-      let total = state.total;
+      let total;
       // possible values of result:
       //false: if no item with given id has been found
       //true: if the item was found and updated
-      console.log(cart);
+
       let result = cart.reduce((found, item, index) => {
         //if the item is already in the array set found true
-        if (item.id === payload.id) {
-          found = true;
-        }
+        if (item.id === payload.id) found = true;
         //if the item with same category is in the array, its replaced by the new one and set found true
-        if (item.category.name == payload.category.name) {
+        if (item.category.name === payload.category.name) {
           cart[index] = payload;
           found = true;
         }
@@ -43,10 +41,13 @@ export default (state = initialState, { type, payload }) => {
 
       // if item was not found, then we add it here
       if (!result) {
-        console.log("result false");
         cart.push({ ...payload });
         total += payload.price;
       }
+      total = cart.reduce((acc, item) => {
+        return acc + item.price;
+      }, 0);
+
       return { ...state, cart, total };
     case REMOVE_FROM_CART:
       let cartR = state.cart || [];
@@ -58,8 +59,17 @@ export default (state = initialState, { type, payload }) => {
         }
         return true;
       });
-      console.log(cartR);
+      //check total
+
       return { ...state, cart: cartR, total: totalR };
+    // case UPDATE_TOTAL:
+    //   let cartUpdate = state.cart;
+    //   let totalUpdate = state.total;
+    //   let totalOnCart = cartUpdate.reduce((acc, item) => {
+    //     return acc + item.price;
+    //   }, 0);
+    //   console.log(totalOnCart);
+    //   return { ...state, total: totalUpdate + payload };
     case ADD_TOTAL:
       return { ...state, total: payload };
     case ADD_PIPA:
@@ -73,9 +83,8 @@ export default (state = initialState, { type, payload }) => {
         total: payload.total,
       };
     case ADD_FECHA_ENTREGA:
-      return { ...state, fechaEntrega: payload };
-    case UPDATE_TOTAL:
-      return { ...state, total: payload };
+      return { ...state, deliveryDate: payload };
+
     case SET_SUCCESS:
       return { ...state, success: payload };
     case FILL_CART:

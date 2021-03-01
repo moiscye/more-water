@@ -9,10 +9,10 @@ const FormContainerBase = styled.div`
     ${tw`mt-4`}
   }
   h2 {
-    ${tw`text-3xl sm:text-4xl font-black md:my-2`}
+    ${tw`text-2xl sm:text-2xl text-primary-500 md:my-2`}
   }
   p {
-    ${tw`text-lg sm:text-xl md:text-2xl `}
+    ${tw`text-base sm:text-lg md:text-xl `}
   }
 `;
 const FormContainer = styled(FormContainerBase)(({ noPadding }) => [

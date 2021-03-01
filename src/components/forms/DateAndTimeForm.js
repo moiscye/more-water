@@ -22,32 +22,24 @@ const DatePicker = styled(DateP).attrs((props) => ({
 
 export default (props) => {
   const dispatch = useDispatch();
-  const { fechaEntrega, total } = useSelector((state) => ({
+  const { deliveryDate, total } = useSelector((state) => ({
     ...state.cartReducer,
   }));
   const [startDate, setStartDate] = useState();
   useEffect(() => {
-    if (fechaEntrega) setStartDate(new Date(fechaEntrega));
-  }, [fechaEntrega]);
+    if (deliveryDate) setStartDate(new Date(deliveryDate));
+  }, [deliveryDate]);
 
   const handleDateChange = (date) => {
     dispatch({ type: ADD_FECHA_ENTREGA, payload: new Date(date) });
   };
   const updateDateToToday = () => {
     const today = dayjs(new Date());
-    const entrega = dayjs(new Date(fechaEntrega));
+    const entrega = dayjs(new Date(deliveryDate));
     if (entrega && entrega.isBefore(today))
       dispatch({ type: ADD_FECHA_ENTREGA, payload: new Date() });
   };
 
-  const handleSubmitNext = () => {
-    updateDateToToday();
-    props.nextStep();
-  };
-  const handleSubmitPrevious = () => {
-    updateDateToToday();
-    props.previousStep();
-  };
   return (
     <FormContainer>
       <Column>
@@ -62,27 +54,6 @@ export default (props) => {
           className="react-calendar"
           locale="es"
         />
-      </Column>
-      {total && (
-        <PriceContainer>
-          <PriceTag>
-            Total: ${total && Number.parseFloat(total).toFixed(2)}
-          </PriceTag>
-        </PriceContainer>
-      )}
-      <Column>
-        <ButtonContainer>
-          <SubmitButton
-            type="button"
-            value="Submit"
-            onClick={handleSubmitPrevious}
-          >
-            Atras
-          </SubmitButton>
-          <SubmitButton type="button" value="Submit" onClick={handleSubmitNext}>
-            Siguiente
-          </SubmitButton>
-        </ButtonContainer>
       </Column>
     </FormContainer>
   );

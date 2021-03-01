@@ -5,6 +5,7 @@ const initialState = {
   latLng: { origin: { lat: 19.0041185, lng: -98.2450492 }, destination: null },
   distance: 0,
   zoom: 12,
+  distancePrice: 0,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -18,7 +19,11 @@ export default (state = initialState, { type, payload }) => {
         latLng,
       };
     case UPDATE_DISTANCE:
-      return { ...state, distance: payload };
+      return {
+        ...state,
+        distance: payload.distance,
+        distancePrice: payload.distancePrice,
+      };
     case EMPTY:
       return { ...state, ...initialState };
     default:

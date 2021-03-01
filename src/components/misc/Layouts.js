@@ -11,7 +11,7 @@ export const ContentWithPadding2Xl = tw.div`max-w-screen-xl mx-auto py-8 lg:py-1
 export const ContentWithVerticalPadding = tw.div`py-20 lg:py-24 `;
 export const Content2Xl = tw.div`max-w-screen-2xl mx-auto `;
 export const Column = tw.div`flex flex-col my-6 `;
-
+export const Grid = tw.div`grid grid-cols-1 md:grid-cols-2 gap-8`;
 export const PriceContainer = styled.div(({ border = true }) => [
   border
     ? tw`text-right mt-2 border-t border-solid border-gray-300`

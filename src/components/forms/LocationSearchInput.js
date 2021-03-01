@@ -11,9 +11,7 @@ import {
   ADD_ADDRESS,
   UPDATE_DISTANCE,
 } from "../../store/actions/addressAction";
-import { UPDATE_TOTAL } from "store/actions/cartAction";
-import calculateTotal from "helpers/calculateTotal";
-
+import { calculateDistancePrice } from "helpers/utils";
 const Input = styled.input(() => [
   tw`mt-3 p-4 w-full rounded-md border-solid border border-gray-300 bg-white text-black text-xl focus:outline-none  focus:border-primary-600 z-50`,
 ]);
@@ -22,29 +20,21 @@ const InputContainer = styled.div`
   margin-top: 1.5rem;
 `;
 export default () => {
-  let { address: storedAddress, latLng, pipa, manguera, extras } = useSelector(
-    (state) => ({
-      ...state.addressReducer,
-      ...state.cartReducer,
-    })
-  );
+  let { address: storedAddress, latLng } = useSelector((state) => ({
+    ...state.addressReducer,
+    ...state.cartReducer,
+  }));
 
-  // const [distance, setDistance] = useAsyncState(0);
   const [address, setAddress] = useState("");
   const [distance, setDistance] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (distance !== 0) {
-      let newTotal = calculateTotal({ pipa, manguera, extras, distance });
-
-      dispatch({
-        type: UPDATE_TOTAL,
-        payload: newTotal,
-      });
+      let distancePrice = calculateDistancePrice(distance);
       dispatch({
         type: UPDATE_DISTANCE,
-        payload: distance,
+        payload: { distance, distancePrice },
       });
     }
     // eslint-disable-next-line
