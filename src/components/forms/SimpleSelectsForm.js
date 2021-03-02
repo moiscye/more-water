@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import FormContainer from "./FormContainer";
 import { Grid } from "../misc/Layouts";
@@ -6,10 +7,12 @@ import { getProducts } from "api/core";
 import Select from "react-select";
 import { ADD_TO_CART, REMOVE_FROM_CART } from "store/actions/cartAction";
 
-export default () => {
+export default ({ clearError }) => {
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
-
+  let { cart } = useSelector((state) => ({
+    ...state.cartReducer,
+  }));
   useEffect(() => {
     loadProducts();
     // eslint-disable-next-line
@@ -45,15 +48,23 @@ export default () => {
     dispatch({ type: ADD_TO_CART, payload: selection.value });
   };
 
+  const searchValueInCart = (cat) => {
+    let result = cart.filter((el) => el.category.name === cat);
+    if (result.length > 0) {
+      return { value: result[0], label: result[0].name };
+    }
+  };
+
   return (
     <FormContainer>
-      <Grid>
+      <Grid onClick={clearError}>
         {categories?.length > 0 &&
           categories?.map((item, index) => {
             return (
               <div key={index}>
                 <h2>{`${item[0].category.name}:`}</h2>
                 <Select
+                  defaultValue={searchValueInCart(item[0].category.name)}
                   placeholder="Selecciona"
                   onChange={(value) =>
                     handleChange(item[0].category.name, value)

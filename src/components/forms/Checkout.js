@@ -23,73 +23,57 @@ const Td = tw.td`py-4 px-2  border-b border-gray-400`;
 export default (props) => {
   const [orderData, setOrderData] = useState(null);
   const myRef = useRef(null);
-  let {
-    user,
-    pipa,
-    manguera,
-    extras,
-    fechaEntrega,
-    address,
-    total,
-  } = useSelector((state) => ({
-    ...state.authReducer,
-    ...state.addressReducer,
+  let { cart, deliveryDate, total } = useSelector((state) => ({
     ...state.cartReducer,
   }));
+  let { address, distancePrice } = useSelector((state) => ({
+    ...state.addressReducer,
+  }));
+  let { user } = useSelector((state) => ({
+    ...state.authReducer,
+  }));
 
-  const extrasText = () => {
-    let et =
-      extras &&
-      extras.map((el) => {
-        return {
-          leftText:
-            el.name === "Cisterna" || el.name === "Tinaco"
-              ? `Lavado de ${el.name}`
-              : el.name,
-          rightText: el.status ? "Si" : "No",
-        };
-      });
-    return et;
-  };
-
-  const detallePedido = [
+  const detallePedido = () => [
     {
       leftText: "Direccion de entrega",
       rightText: address,
     },
     {
       leftText: "Fecha de Entrega",
-      rightText: formatDate(fechaEntrega),
+      rightText: formatDate(deliveryDate),
     },
+    ...cartItems(),
     {
-      leftText: "Servicio",
-      rightText: pipa && pipa.name,
-    },
-    {
-      leftText: "Cantidad de manguera",
-      rightText: manguera && manguera.name,
-    },
-    ...extrasText(),
-    {
-      leftText: "Instrucciones",
-      rightText: user && user.message,
+      leftText: "Instrucciones de entrega",
+      rightText: user?.message ? user?.message : "Ninguna",
     },
   ];
-  const detalleContacto = [
+
+  const cartItems = () => {
+    let res = cart?.sort(
+      (a, b) => a.category.displayOrder - b.category.displayOrder
+    );
+    return res?.map((item) => {
+      return { leftText: item.category.name, rightText: item.name };
+    });
+
+    //  return res;
+  };
+  const detalleContacto = () => [
     {
       leftText: "Nombre",
-      rightText: user && user.fullName,
+      rightText: user?.fullName,
     },
     {
       leftText: "Telefono",
-      rightText: user && user.phoneNumber,
+      rightText: user?.phoneNumber,
     },
     {
       leftText: "Email",
-      rightText: user && user.email,
+      rightText: user?.email,
     },
   ];
-  const detallePago = [
+  const detallePago = () => [
     {
       leftText: "Banco",
       rightText: "Santander",
@@ -116,79 +100,48 @@ export default (props) => {
     },
   ];
 
-  const filterProducts = () => {
-    let cartList;
-    cartList =
-      extras &&
-      extras.reduce((cartList, item) => {
-        if (item.status) {
-          cartList.push({
-            name: item.description,
-            price: item.price,
-            _id: item._id,
-          });
-        }
-        return cartList;
-      }, []);
-    cartList.unshift({
-      name: manguera.description,
-      price: manguera.price,
-      _id: manguera._id,
-    });
-    cartList.unshift({ name: pipa.name, price: pipa.price, _id: pipa._id });
-    let totalBeforeDelivery = cartList.reduce((sum, item) => {
-      return sum + item.price;
-    }, 0);
-
-    cartList.push({
-      name: "Costo de Entrega",
-      price: total - totalBeforeDelivery,
-    });
-    return cartList;
-  };
-
   useEffect(() => {
     let order = {
-      products: pipa && manguera && extras && filterProducts(),
+      products: cart,
       transaction_id: "Not Assigned",
       paymentType: "Not Assigned",
-      amount: total && total,
+      amount: calculateTotal(),
       address,
-      deliveryDate: new Date(fechaEntrega),
-      deliveryInstructions: user && user.message,
+      deliveryDate: new Date(deliveryDate),
+      deliveryInstructions: user?.message,
     };
     let createUser = {
-      email: user && user.email,
-      fullName: user && user.fullName,
-      phoneNumber: user && user.phoneNumber,
+      email: user?.email,
+      fullName: user?.fullName,
+      phoneNumber: user?.phoneNumber,
       address,
     };
     setOrderData({ order, user: createUser });
 
     // eslint-disable-next-line
   }, []);
+  const calculateTotal = () => {
+    let x = total + distancePrice;
+    console.log(x, total, distancePrice);
+    return x;
+  };
 
   const reviewOrderTable = () => {
     return (
-      user &&
-      pipa &&
-      manguera &&
-      extras && (
-        <Column>
-          <SingleColumnTable
-            tableTitle="Detalles de tu pedido"
-            rows={detallePedido}
-          />
-          <SingleColumnTable
-            tableTitle="Datos de Contacto"
-            rows={detalleContacto}
-          />
-          <SingleColumnTable
-            tableTitle="Datos para realizar tu pago"
-            rows={detallePago}
-          />
-        </Column>
-      )
+      <Column>
+        <SingleColumnTable
+          tableTitle="Detalles de tu pedido"
+          rows={detallePedido()}
+        />
+        <SingleColumnTable
+          tableTitle="Datos de Contacto"
+          rows={detalleContacto()}
+        />
+        <SingleColumnTable
+          tableTitle="Datos para realizar tu pago"
+          rows={detallePago()}
+        />
+      </Column>
     );
   };
 

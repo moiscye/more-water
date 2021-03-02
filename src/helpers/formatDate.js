@@ -15,3 +15,11 @@ export const formatDate = (date) => {
 export const dateFrom = (date) => {
   return dayjs(date).fromNow();
 };
+
+export const isValidDate = (deliveryDate) => {
+  const today = dayjs(new Date());
+  const delivery = dayjs(new Date(deliveryDate));
+  return delivery.isAfter(today) || delivery.isSame(today, "day")
+    ? true
+    : false;
+};

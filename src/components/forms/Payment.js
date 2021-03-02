@@ -54,10 +54,6 @@ export default ({ previousStep, orderData, tableRef }) => {
   const [clientName, setClientName] = useState("");
   const [clientSecret, setClientSecret] = useState("");
 
-  let { total } = useSelector((state) => ({
-    ...state.cartReducer,
-  }));
-
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     paymentIntent();
@@ -197,7 +193,7 @@ export default ({ previousStep, orderData, tableRef }) => {
       </label>
       <PriceContainer border={false}>
         <PriceTag>
-          Total: ${total && Number.parseFloat(total).toFixed(2)}
+          Total: ${Number.parseFloat(orderData?.order?.amount).toFixed(2)}
         </PriceTag>
       </PriceContainer>
 

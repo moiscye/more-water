@@ -4,11 +4,9 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import FormContainer from "./FormContainer";
-import { ButtonContainer, SubmitButton } from "../misc/Buttons";
-import { Column, PriceContainer } from "../misc/Layouts";
-import { PriceTag } from "../misc/Headings";
-import { ErrorMessage } from "../misc/Errors";
+import { Column } from "../misc/Layouts";
 import { ADD_USER } from "store/actions/authAction";
+import { useDidMount } from "helpers/useDidMount";
 
 const initialState = {
   fullName: "",
@@ -28,14 +26,14 @@ const Textarea = styled(Input).attrs({ as: "textarea" })`
   ${tw`h-24`}
 `;
 
-export default (props) => {
+export default ({ clearError }) => {
   const dispatch = useDispatch();
-  let { user, total } = useSelector((state) => ({
+  const didMount = useDidMount();
+  let { user } = useSelector((state) => ({
     ...state.authReducer,
     ...state.cartReducer,
   }));
   const [contactDetails, setContactDetails] = useState();
-  const [error, setError] = useState(false);
   let { fullName, phoneNumber, email, message } =
     contactDetails || initialState;
 
@@ -43,45 +41,29 @@ export default (props) => {
     if (user) setContactDetails(user);
     // eslint-disable-next-line
   }, []);
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+
+  useEffect(() => {
+    if (didMount) dispatch({ type: ADD_USER, payload: contactDetails });
+    // eslint-disable-next-line
+  }, [contactDetails]);
 
   const handleChange = (e) => {
     var data = { ...contactDetails };
     data[e.target.name] = e.target.value;
     setContactDetails(data);
-    setError(false);
+    clearError();
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateFields()) {
-      setError(true);
-      scrollToTop();
-      return;
-    }
-    dispatch({ type: ADD_USER, payload: contactDetails });
-    props.nextStep();
-  };
-
-  const validateFields = () => {
-    return fullName && phoneNumber && email;
-  };
   return (
     <FormContainer>
       <Column>
         <h2>Informacion Personal</h2>
-        {error && (
-          <ErrorMessage>Nombre, Telefono e Email son requeridos</ErrorMessage>
-        )}
 
         <Input
           onChange={handleChange}
           type="text"
           name="fullName"
           placeholder={"Nombre Completo"}
-          error={error}
           value={fullName}
         />
         <Input
@@ -89,7 +71,6 @@ export default (props) => {
           type="text"
           name="phoneNumber"
           placeholder={"Telefono"}
-          error={error}
           value={phoneNumber}
         />
         <Input
@@ -97,7 +78,6 @@ export default (props) => {
           type="email"
           name="email"
           placeholder="Email"
-          error={error}
           value={email}
         />
 
@@ -107,29 +87,6 @@ export default (props) => {
           placeholder={"Instrucciones de Entrega"}
           value={message}
         />
-      </Column>
-      {total && (
-        <PriceContainer>
-          <PriceTag>
-            Total: ${total && Number.parseFloat(total).toFixed(2)}
-          </PriceTag>
-        </PriceContainer>
-      )}
-
-      <Column>
-        <ButtonContainer>
-          <SubmitButton
-            type="button"
-            value="Submit"
-            onClick={props.previousStep}
-          >
-            Atras
-          </SubmitButton>
-
-          <SubmitButton type="button" value="Submit" onClick={handleSubmit}>
-            Siguiente
-          </SubmitButton>
-        </ButtonContainer>
       </Column>
     </FormContainer>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactGA from "react-ga";
 import { useDispatch, useSelector } from "react-redux";
 import tw from "twin.macro";
@@ -13,27 +13,29 @@ import { Container, ContentWithPaddingLg } from "components/misc/Layouts";
 import SuccessForm from "components/forms/SuccessForm";
 import StepWizard from "react-step-wizard";
 import Nav from "components/misc/Nav";
-import { EMPTY_CART, SET_SUCCESS } from "store/actions/cartAction.js";
+import { SET_SUCCESS } from "store/actions/cartAction.js";
 import { ButtonContainer, SubmitButton } from "components/misc/Buttons";
 import { Column, PriceContainer } from "components/misc/Layouts";
 import { PriceTag } from "components/misc/Headings";
+import { ErrorMessage } from "components/misc/Errors";
+import { isValidDate } from "helpers/formatDate.js";
 const Steps = tw(StepWizard)`flex flex-col`;
+//step wizard payment position
+const PAYMENT_STEP = 4;
 export default ({ history }) => {
   const [wizardInstance, setWizardInstance] = useState(null);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const { success, total, cart } = useSelector((state) => ({
+  const { success, total, cart, deliveryDate } = useSelector((state) => ({
     ...state.cartReducer,
-  }));
-  const { loaded } = useSelector((state) => ({
-    ...state.authReducer,
   }));
   const { address, distancePrice } = useSelector((state) => ({
     ...state.addressReducer,
   }));
-  useEffect(() => {
-    console.log(wizardInstance);
-  });
+  const { user } = useSelector((state) => ({
+    ...state.authReducer,
+  }));
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -46,21 +48,39 @@ export default ({ history }) => {
     });
     history.push("/cotizacion");
   };
-  const handleNextStep = () => {
-    let goNextStep = false;
+
+  const validateFields = () => {
+    return user?.fullName && user?.phoneNumber && user?.email;
+  };
+  const handleNextStep = async () => {
     switch (wizardInstance?.state?.activeStep) {
       case 0:
-        console.log("here 1");
-        if (cart?.length > 0) goNextStep = true;
+        cart?.length > 0
+          ? wizardInstance.nextStep()
+          : setError("Tienes que escoger al menos un producto para continuar!");
         break;
       case 1:
-        if (address) goNextStep = true;
+        address
+          ? wizardInstance.nextStep()
+          : setError("Tienes que escoger tu direccion para continuar!");
+        break;
+      case 2:
+        isValidDate(deliveryDate)
+          ? wizardInstance.nextStep()
+          : setError(
+              "Tienes que escoger la fecha de hoy o alguna fecha en el futuro para continuar!"
+            );
+        break;
+      case 3:
+        validateFields()
+          ? wizardInstance.nextStep()
+          : setError(
+              "Tienes que llenar el  Nombre, Telefono e Email para continuar!"
+            );
         break;
       default:
         break;
     }
-    console.log("here", goNextStep);
-    let x = goNextStep ? wizardInstance?.nextStep() : setError(true);
   };
 
   const successMessage = () => {
@@ -76,25 +96,42 @@ export default ({ history }) => {
     );
   };
 
+  const handleStepChange = () => {
+    scrollToTop();
+    setError(false);
+  };
+
   const formSection = () => (
     <StepWizardSimple heading="Cotizacion" subheading="Pasos">
       <Steps
-        onStepChange={scrollToTop}
+        onStepChange={handleStepChange}
         nav={<Nav />}
         isHashEnabled={true}
         isLazyMount={true}
         instance={(SW) => setWizardInstance(SW)}
       >
-        <ContactUsSimple hashKey={"servicios"} />
-        <AddressForm hashKey={"direccion"} error={error} />
-        <DateAndTimeForm hashKey={"fecha"} />
-        <PersonalInfoForm hashKey={"informacion-personal"} />
+        <ContactUsSimple
+          hashKey={"servicios"}
+          clearError={() => setError(false)}
+        />
+        <AddressForm hashKey={"direccion"} clearError={() => setError(false)} />
+        <DateAndTimeForm hashKey={"fecha"} clearError={() => setError(false)} />
+        <PersonalInfoForm
+          hashKey={"informacion-personal"}
+          clearError={() => setError(false)}
+        />
         <Checkout hashKey={"pago"} />
       </Steps>
-      {totalSection()}
-      {buttonSection()}
+      {wizardInstance?.state?.activeStep !== PAYMENT_STEP && totalSection()}
+      {wizardInstance?.state?.activeStep !== PAYMENT_STEP &&
+        error &&
+        errorMessage()}
+      {wizardInstance?.state?.activeStep !== PAYMENT_STEP && buttonSection()}
     </StepWizardSimple>
   );
+  const errorMessage = () => {
+    return <ErrorMessage>{error}</ErrorMessage>;
+  };
 
   const buttonSection = () => {
     return (
@@ -110,12 +147,6 @@ export default ({ history }) => {
           <SubmitButton type="button" onClick={handleNextStep}>
             Siguiente
           </SubmitButton>
-          <SubmitButton
-            type="button"
-            onClick={() => dispatch({ type: EMPTY_CART })}
-          >
-            LImpiar
-          </SubmitButton>
         </ButtonContainer>
       </Column>
     );
@@ -127,25 +158,21 @@ export default ({ history }) => {
 
   const totalSection = () => {
     return (
-      total && (
-        <PriceContainer>
-          <PriceTag>
-            Total: ${total && Number.parseFloat(calculateTotal()).toFixed(2)}
-          </PriceTag>
-        </PriceContainer>
-      )
+      <PriceContainer>
+        <PriceTag>
+          Total: ${total && Number.parseFloat(calculateTotal()).toFixed(2)}
+        </PriceTag>
+      </PriceContainer>
     );
   };
 
   return (
-    <>
-      <AnimationRevealPage>
-        <Container>
-          <ContentWithPaddingLg>
-            {!success ? formSection() : successMessage()}
-          </ContentWithPaddingLg>
-        </Container>
-      </AnimationRevealPage>
-    </>
+    <AnimationRevealPage>
+      <Container>
+        <ContentWithPaddingLg>
+          {!success ? formSection() : successMessage()}
+        </ContentWithPaddingLg>
+      </Container>
+    </AnimationRevealPage>
   );
 };

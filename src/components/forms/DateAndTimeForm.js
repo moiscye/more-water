@@ -5,11 +5,8 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_FECHA_ENTREGA } from "store/actions/cartAction";
 import FormContainer from "./FormContainer";
-import { ButtonContainer, SubmitButton } from "../misc/Buttons";
-import { Column, PriceContainer } from "../misc/Layouts";
-import { PriceTag } from "../misc/Headings";
+import { Column } from "../misc/Layouts";
 import DateP from "react-date-picker";
-import dayjs from "dayjs";
 import { formatDate } from "helpers/formatDate";
 
 const DatePicker = styled(DateP).attrs((props) => ({
@@ -20,9 +17,9 @@ const DatePicker = styled(DateP).attrs((props) => ({
   }
 `;
 
-export default (props) => {
+export default ({ clearError }) => {
   const dispatch = useDispatch();
-  const { deliveryDate, total } = useSelector((state) => ({
+  const { deliveryDate } = useSelector((state) => ({
     ...state.cartReducer,
   }));
   const [startDate, setStartDate] = useState();
@@ -33,22 +30,16 @@ export default (props) => {
   const handleDateChange = (date) => {
     dispatch({ type: ADD_FECHA_ENTREGA, payload: new Date(date) });
   };
-  const updateDateToToday = () => {
-    const today = dayjs(new Date());
-    const entrega = dayjs(new Date(deliveryDate));
-    if (entrega && entrega.isBefore(today))
-      dispatch({ type: ADD_FECHA_ENTREGA, payload: new Date() });
-  };
 
   return (
     <FormContainer>
-      <Column>
+      <Column onClick={clearError}>
         <h2>Fecha de entrega:</h2>
         <p>{startDate && formatDate(startDate)}</p>
 
         <DatePicker
           onChange={handleDateChange}
-          minDate={new Date()}
+          //minDate={new Date()}
           value={startDate}
           clearIcon={null}
           className="react-calendar"

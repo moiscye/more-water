@@ -3,9 +3,6 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import { useHistory } from "react-router-dom";
-import { ADD_PIPA } from "store/actions/cartAction";
-import { useDispatch, useSelector } from "react-redux";
-import calculateTotal from "helpers/calculateTotal";
 import {
   SectionHeading,
   Subheading as SubheadingBase,
@@ -97,8 +94,7 @@ export default ({
   id = "threePlans",
 }) => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  let { manguera, extras } = useSelector((state) => ({ ...state.cartReducer }));
+
   const defaultPlans = [
     {
       name: "Personal",
@@ -175,14 +171,7 @@ export default ({
   ];
 
   const handleOrder = (data) => {
-    dispatch({
-      type: ADD_PIPA,
-      payload: {
-        pipa: data,
-        total: calculateTotal({ pipa: data, manguera, extras }),
-      },
-    });
-
+    console.log(data);
     history.push("/cotizacion");
   };
   return (
