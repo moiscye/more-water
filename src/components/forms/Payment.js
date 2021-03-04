@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   useStripe,
   useElements,
@@ -61,11 +61,12 @@ export default ({ previousStep, orderData, tableRef }) => {
   }, []);
 
   const paymentIntent = async () => {
-    let { ok, error, data } = await createPaymentIntent({
-      items: orderData.order.products,
-    });
+    let { ok, error, data } = await createPaymentIntent(
+      orderData.order.products
+    );
     if (ok) {
       setClientSecret(data.clientSecret);
+      console.log(data.clientSecret);
     } else {
       console.error(error);
     }

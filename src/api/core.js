@@ -3,13 +3,16 @@ import { API, Auth } from "aws-amplify";
 import { listProducts } from "../graphql/queries";
 
 export const createPaymentIntent = async (items) => {
+  console.log(items);
   try {
-    let res = await axios.post(`.netlify/functions/payment`, items, {
-      headers: {
-        "Content-Type": "application/json",
+    let res = await API.post(`paymentapi`, "/payment", {
+      body: {
+        amount: 100,
+        items,
       },
     });
-    return Promise.resolve({ ok: true, data: res.data });
+
+    return Promise.resolve({ ok: true, data: JSON.parse(res.data) });
   } catch (e) {
     return Promise.resolve({ ok: false, error: e });
   }

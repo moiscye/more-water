@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/payment",
+            "lambdaFunction": "paymentfunction",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "paymentapi",
+    "apiName": "paymentapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "paymentfunction"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-morewater-dev-141435-authRole",
+        "unAuthRoleName": "amplify-morewater-dev-141435-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "paymentfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "9d835e0a"
+}
